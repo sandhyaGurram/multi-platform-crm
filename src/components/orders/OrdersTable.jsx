@@ -50,7 +50,7 @@ const OrdersTable = ({ orders, onView }) => {
             >
 
               <td className="p-4">
-                {order.id}
+                {order.orderId}
               </td>
 
               <td className="p-4">

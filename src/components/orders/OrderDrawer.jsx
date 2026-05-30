@@ -1,222 +1,65 @@
-import { FaTimes } from "react-icons/fa";
+const OrderDrawer = ({ isOpen, onClose, order, setEditOpen, }) => {
 
-const OrderDrawer = ({ isOpen, onClose, order }) => {
+  if (!isOpen || !order) return null;
 
   return (
 
-    <>
+    <div className="fixed top-0 right-0 w-[400px] h-full bg-white shadow-2xl p-6 z-50">
 
-      {/* Overlay */}
-
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40"
-          onClick={onClose}
-        />
-      )}
-
-      {/* Drawer */}
-
-      <div
-        className={`
-          fixed top-0 right-0 h-full w-full md:w-[450px]
-          bg-white shadow-2xl z-50
-          transform transition-transform duration-300
-          ${isOpen ? "translate-x-0" : "translate-x-full"}
-        `}
+      <button
+        onClick={onClose}
+        className="mb-6 bg-black text-white px-4 py-2 rounded-lg"
       >
+        Close
+      </button>
 
-        {/* Header */}
+      <h2 className="text-2xl font-bold mb-6">
+        Order Details
+      </h2>
 
-        <div className="flex items-center justify-between p-5 border-b">
+      <div className="space-y-4">
 
-          <h2 className="text-2xl font-bold">
-            Order Details
-          </h2>
+        <p>
+          <strong>Order ID:</strong> {order.orderId}
+        </p>
 
-          <button onClick={onClose}>
-            <FaTimes size={22} />
-          </button>
+        <p>
+          <strong>Customer:</strong> {order.customer}
+        </p>
 
-        </div>
+        <p>
+          <strong>Amount:</strong> ₹{order.amount}
+        </p>
 
-        {/* Content */}
+        <p>
+          <strong>Status:</strong> {order.status}
+        </p>
 
-        <div className="p-5">
-
-          {order ? (
-
-            <div className="space-y-6">
-
-  {/* Basic Info */}
-
-  <div>
-
-    <p className="text-gray-500">
-      Order ID
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.id}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Customer
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.customer}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Phone
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.phone}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Email
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.email}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Platform
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.platform}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Tracking ID
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.trackingId}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Payment Status
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.payment}
-    </h3>
-
-  </div>
-
-  <div>
-
-    <p className="text-gray-500">
-      Shipping Status
-    </p>
-
-    <h3 className="font-bold text-lg">
-      {order.shipping}
-    </h3>
-
-  </div>
-
-  {/* Address */}
-
-  <div>
-
-    <p className="text-gray-500 mb-2">
-      Address
-    </p>
-
-    <div className="bg-gray-100 p-4 rounded-lg">
-
-      <p>
-        {order.address.city}
-      </p>
-
-      <p>
-        {order.address.state}
-      </p>
-
-      <p>
-        {order.address.pincode}
-      </p>
-
-    </div>
-
-  </div>
-
-  {/* Products */}
-
-  <div>
-
-    <p className="text-gray-500 mb-2">
-      Products
-    </p>
-
-    <div className="space-y-3">
-
-      {order.products.map((product, index) => (
-
-        <div
-          key={index}
-          className="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
-        >
-
-          <h3 className="font-semibold">
-            {product.name}
-          </h3>
-
-          <p>
-            Qty: {product.quantity}
-          </p>
-
-        </div>
-
-      ))}
-
-    </div>
-
-  </div>
-
-</div>
-
-          ) : (
-            <p>No Order Selected</p>
-          )}
-
-        </div>
+        <p>
+          <strong>Platform:</strong> {order.platform}
+        </p>
 
       </div>
+      <button
+  onClick={() => {
 
-    </>
+    onClose();
+
+    setEditOpen(true);
+
+  }}
+
+  className="bg-blue-500 text-white px-5 py-3 rounded-lg mt-6"
+>
+
+  Edit Order
+
+</button>
+
+    </div>
+
   );
+
 };
 
 export default OrderDrawer;
