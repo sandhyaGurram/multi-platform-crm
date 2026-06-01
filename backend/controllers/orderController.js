@@ -7,7 +7,27 @@ export const createOrder = async (req, res) => {
 
     try {
 
-        const order = await Order.create(req.body);
+        const {
+            orderId,
+            customer,
+            amount,
+            status,
+            platform,
+        } = req.body;
+
+        const order = await Order.create({
+
+            orderId,
+
+            customer,
+
+            amount: Number(amount),
+
+            status,
+
+            platform,
+
+        });
 
         res.status(201).json(order);
 
@@ -59,6 +79,27 @@ export const updateOrder = async (req, res) => {
         );
 
         res.json(updatedOrder);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message,
+        });
+
+    }
+
+};
+
+
+export const deleteOrder = async (req, res) => {
+
+    try {
+
+        await Order.findByIdAndDelete(req.params.id);
+
+        res.json({
+            message: "Order deleted successfully",
+        });
 
     } catch (error) {
 
