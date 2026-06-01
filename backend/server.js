@@ -26,6 +26,8 @@ import connectDB from "./config/db.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import importRoutes from "./routes/importRoutes.js";
+
 
 dotenv.config();
 
@@ -42,6 +44,8 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/import", importRoutes);
 
 app.get("/", (req, res) => {
 

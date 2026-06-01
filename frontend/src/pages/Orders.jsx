@@ -28,6 +28,8 @@ const Orders = ({ platform }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [excelFile, setExcelFile] = useState(null);
+
 const ordersPerPage = 5;
 
   const handleView = (order) => {
@@ -222,6 +224,49 @@ useEffect(() => {
   
 
 
+const handleImport = async () => {
+
+  if (!excelFile) return;
+
+  const formData = new FormData();
+
+  formData.append(
+    "file",
+    excelFile
+  );
+
+  try {
+
+    await axios.post(
+
+      "http://localhost:5000/api/import/orders",
+
+      formData,
+
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+
+    );
+
+    alert("Excel Imported");
+
+    fetchOrders();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+
+
+
   return (
     <div>
 
@@ -277,6 +322,34 @@ useEffect(() => {
   Add Order
       </button>
       </div>
+
+
+      
+      {/* upload excell file */}
+      <input
+
+  type="file"
+
+  accept=".xlsx,.xls,.csv"
+
+  onChange={(e) =>
+    setExcelFile(e.target.files[0])
+  }
+
+      />
+
+      <button
+
+  onClick={handleImport}
+
+  className="bg-green-600 text-white px-5 py-3 rounded-lg"
+
+>
+
+  Import Excel
+
+</button>
+      
 
       {/* Table */}
 

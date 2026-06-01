@@ -20,6 +20,20 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
             <th className="text-left p-4">
               Customer Name
             </th>
+            <th className="text-left p-4">
+  Phone
+            </th>
+            <th className="text-left p-4">
+  Order Date
+            </th>
+            
+            <th className="text-left p-4">
+  Payment
+            </th>
+            
+            <th className="text-left p-4">
+  Tracking ID
+</th>
 
             <th className="text-left p-4">
               Amount
@@ -56,6 +70,27 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
               <td className="p-4">
                 {order.customerName || order.customer}
               </td>
+              <td className="p-4">
+  {order.customerPhone}
+              </td>
+              
+              <td className="p-4">
+
+  {order.orderDate
+    ? new Date(
+        order.orderDate
+      ).toLocaleDateString()
+    : "-"}
+
+              </td>
+              
+              <td className="p-4">
+  {order.paymentMethod || "-"}
+              </td>
+              
+              <td className="p-4">
+  {order.trackingId || "-"}
+</td>
 
               <td className="p-4">
                 {order.amount}
