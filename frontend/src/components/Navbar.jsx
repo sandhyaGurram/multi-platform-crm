@@ -7,6 +7,10 @@ import {
 
 const Navbar = ({ setSidebarOpen }) => {
 
+  const user = JSON.parse(
+  localStorage.getItem("crmUser")
+);
+
   return (
     <div className="bg-white shadow-md px-4 md:px-6 py-4 flex items-center justify-between">
 
@@ -60,12 +64,12 @@ const Navbar = ({ setSidebarOpen }) => {
           <div className="hidden md:block">
 
             <p className="font-bold">
-              Admin
-            </p>
+  {user?.name}
+</p>
 
-            <p className="text-sm text-gray-500">
-              CRM Manager
-            </p>
+<p className="text-sm text-gray-500">
+  {user?.email}
+</p>
 
           </div>
 

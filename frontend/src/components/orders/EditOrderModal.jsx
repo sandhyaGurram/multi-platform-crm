@@ -23,7 +23,7 @@ const EditOrderModal = ({
 
       setFormData({
 
-        customer: order.customer || "",
+        customer: order.customerName || "",
         amount: order.amount || "",
         status: order.status || "",
         platform: order.platform || "",
@@ -52,13 +52,23 @@ const EditOrderModal = ({
 
     try {
 
-      await axios.put(
+      const user = JSON.parse(
+  localStorage.getItem("crmUser")
+);
 
-        `http://localhost:5000/api/orders/${order._id}`,
+await axios.put(
 
-        formData
+  `http://localhost:5000/api/orders/${order._id}`,
 
-      );
+  formData,
+
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+
+);
 
       refreshOrders();
 

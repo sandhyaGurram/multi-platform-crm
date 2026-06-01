@@ -35,10 +35,23 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
     try {
 
-      await axios.post(
-        "http://localhost:5000/api/orders",
-        formData
-      );
+      const user = JSON.parse(
+  localStorage.getItem("crmUser")
+);
+
+await axios.post(
+
+  "http://localhost:5000/api/orders",
+
+  formData,
+
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+
+);
 
       refreshOrders();
 

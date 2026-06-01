@@ -24,7 +24,7 @@ const OrderDrawer = ({ isOpen, onClose, order, setEditOpen, }) => {
         </p>
 
         <p>
-          <strong>Customer:</strong> {order.customer}
+          <strong>Customer:</strong> {order.customerName || order.customer}
         </p>
 
         <p>

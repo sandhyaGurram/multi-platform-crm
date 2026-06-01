@@ -1,7 +1,7 @@
 import Badge from "../ui/Badge";
 import Button from "../ui/Button";
 
-const OrdersTable = ({ orders, onView }) => {
+const OrdersTable = ({ orders, onView, onDelete }) => {
 
   return (
 
@@ -18,7 +18,7 @@ const OrdersTable = ({ orders, onView }) => {
             </th>
 
             <th className="text-left p-4">
-              Customer
+              Customer Name
             </th>
 
             <th className="text-left p-4">
@@ -54,7 +54,7 @@ const OrdersTable = ({ orders, onView }) => {
               </td>
 
               <td className="p-4">
-                {order.customer}
+                {order.customerName || order.customer}
               </td>
 
               <td className="p-4">
@@ -82,11 +82,34 @@ const OrdersTable = ({ orders, onView }) => {
 
 </td>
 
-              <td className="p-4">
+              {/* <td className="p-4">
                 <div onClick={() => onView(order)}>
   <Button text="View" />
 </div>
-              </td>
+              </td> */}
+              <td className="p-4">
+
+  <div className="flex gap-3">
+
+    <div onClick={() => onView(order)}>
+
+      <Button text="View" />
+
+    </div>
+
+    <button
+
+      onClick={() => onDelete(order._id)}
+
+      className="bg-red-500 text-white px-4 py-2 rounded-lg"
+
+    >
+      Delete
+    </button>
+
+  </div>
+
+</td>
 
             </tr>
 

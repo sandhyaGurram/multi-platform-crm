@@ -10,7 +10,7 @@ import AddOrderModal from "../components/orders/AddOrderModal";
 import EditOrderModal from "../components/orders/EditOrderModal";
 
 
-const Orders = () => {
+const Orders = ({ platform }) => {
 
   const [orders, setOrders] = useState([]);
 
@@ -21,7 +21,14 @@ const Orders = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
+
   const [dateFilter, setDateFilter] = useState("All Orders");
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+const ordersPerPage = 5;
 
   const handleView = (order) => {
     setSelectedOrder(order);
@@ -30,7 +37,13 @@ const Orders = () => {
 
   const today = new Date();
 
+
+
+  
+
 const filteredOrders = orders.filter((order) => {
+
+  // DATE FILTER
 
   const orderDate = new Date(order.date);
 
@@ -38,39 +51,108 @@ const filteredOrders = orders.filter((order) => {
 
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
+  let matchesDate = true;
+
   if (dateFilter === "Today") {
 
-    return orderDate.toDateString() === today.toDateString();
+    matchesDate =
+      orderDate.toDateString() === today.toDateString();
 
   }
 
-  if (dateFilter === "Yesterday") {
+  else if (dateFilter === "Yesterday") {
 
-    return diffDays >= 1 && diffDays < 2;
-
-  }
-
-  if (dateFilter === "Last 7 Days") {
-
-    return diffDays <= 7;
+    matchesDate =
+      diffDays >= 1 && diffDays < 2;
 
   }
 
-  if (dateFilter === "Last 30 Days") {
+  else if (dateFilter === "Last 7 Days") {
 
-    return diffDays <= 30;
-
-  }
-
-  if (dateFilter === "Last Year") {
-
-    return diffDays <= 365;
+    matchesDate = diffDays <= 7;
 
   }
 
-  return true;
+  else if (dateFilter === "Last 30 Days") {
+
+    matchesDate = diffDays <= 30;
+
+  }
+
+  else if (dateFilter === "Last Year") {
+
+    matchesDate = diffDays <= 365;
+
+  }
+
+  // SEARCH FILTER
+
+  const matchesSearch =
+
+    order.orderId
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase())
+
+    ||
+
+    order.customerName || order.customer
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase())
+
+    ||
+
+    order.platform
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+  return matchesDate && matchesSearch;
 
 });
+  
+  
+  const platformOrders = platform
+
+  ? filteredOrders.filter(
+      (order) =>
+        order.platform === platform
+    )
+
+    : filteredOrders;
+  
+  
+  // page indexing
+
+  const platformFilteredOrders = platform
+
+  ? filteredOrders.filter(
+      (order) =>
+        order.platform === platform
+    )
+
+  : filteredOrders;
+
+  const lastOrderIndex =
+  currentPage * ordersPerPage;
+
+const firstOrderIndex =
+  lastOrderIndex - ordersPerPage;
+
+const currentOrders =
+  platformFilteredOrders.slice(
+    firstOrderIndex,
+    lastOrderIndex
+  );
+
+const totalPages = Math.ceil(
+  filteredOrders.length / ordersPerPage
+  );
+  
+
+  
+
+  const user = JSON.parse(
+  localStorage.getItem("crmUser")
+  );
   
   
   const fetchOrders = async () => {
@@ -78,8 +160,16 @@ const filteredOrders = orders.filter((order) => {
   try {
 
     const { data } = await axios.get(
-      "http://localhost:5000/api/orders"
-    );
+
+  "http://localhost:5000/api/orders",
+
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+
+);
 
     setOrders(data);
 
@@ -96,6 +186,41 @@ useEffect(() => {
   fetchOrders();
 
 }, []);
+  
+  
+  const handleDelete = async (id) => {
+
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this order?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+
+    await axios.delete(
+
+  `http://localhost:5000/api/orders/${id}`,
+
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+
+);
+
+    fetchOrders();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+  };
+  
+
 
   return (
     <div>
@@ -105,14 +230,18 @@ useEffect(() => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 
         <h1 className="text-3xl font-bold">
-          Orders Management
+          {platform
+  ? `${platform} Orders`
+  : "Orders Management"}
         </h1>
 
         <input
-          type="text"
-          placeholder="Search Orders..."
-          className="bg-white px-4 py-3 rounded-lg shadow outline-none"
-        />
+  type="text"
+  placeholder="Search Orders..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="bg-white px-4 py-3 rounded-lg shadow outline-none"
+/>
 
       </div>
 
@@ -152,9 +281,52 @@ useEffect(() => {
       {/* Table */}
 
       <OrdersTable
-        orders={filteredOrders}
+        orders={platformOrders}
         onView={handleView}
+        onDelete={handleDelete}
       />
+
+      
+      {/* pagination */}
+      <div className="flex justify-center items-center gap-3 mt-8">
+
+  <button
+
+    disabled={currentPage === 1}
+
+    onClick={() =>
+      setCurrentPage(currentPage - 1)
+    }
+
+    className="bg-gray-200 px-4 py-2 rounded-lg disabled:opacity-50"
+
+  >
+    Previous
+  </button>
+
+  <span className="font-bold">
+
+    Page {currentPage} of {totalPages}
+
+  </span>
+
+  <button
+
+    disabled={currentPage === totalPages}
+
+    onClick={() =>
+      setCurrentPage(currentPage + 1)
+    }
+
+    className="bg-gray-200 px-4 py-2 rounded-lg disabled:opacity-50"
+
+  >
+    Next
+  </button>
+
+      </div>
+      
+
 
       <AddOrderModal
   isOpen={modalOpen}
