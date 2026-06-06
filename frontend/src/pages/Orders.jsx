@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AddOrderModal from "../components/orders/AddOrderModal";
 import EditOrderModal from "../components/orders/EditOrderModal";
+import SearchBar from "../components/common/SearchBar";
+
+import { searchFilter } from "../utils/searchFilter";
 
 
 const Orders = ({ platform }) => {
@@ -29,6 +32,8 @@ const Orders = ({ platform }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [excelFile, setExcelFile] = useState(null);
+
+  
 
 const ordersPerPage = 5;
 
@@ -89,37 +94,14 @@ const filteredOrders = orders.filter((order) => {
 
   // SEARCH FILTER
 
-  const matchesSearch =
 
-    order.orderId
-      ?.toLowerCase()
-      .includes(searchTerm.toLowerCase())
 
-    ||
-
-    order.customerName || order.customer
-      ?.toLowerCase()
-      .includes(searchTerm.toLowerCase())
-
-    ||
-
-    order.platform
-      ?.toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
-  return matchesDate && matchesSearch;
+  return matchesDate;
 
 });
   
   
-  const platformOrders = platform
 
-  ? filteredOrders.filter(
-      (order) =>
-        order.platform === platform
-    )
-
-    : filteredOrders;
   
   
   // page indexing
@@ -131,7 +113,28 @@ const filteredOrders = orders.filter((order) => {
         order.platform === platform
     )
 
-  : filteredOrders;
+    : filteredOrders;
+  
+  
+  const searchFilteredOrders = searchFilter(
+
+  platformFilteredOrders,
+
+  searchTerm,
+
+  [
+    "orderId",
+    "customer",
+    "amount",
+    "status",
+    "customerName",
+    "customerPhone",
+    "customerEmail",
+    "platform",
+    "trackingId"
+  ]
+
+);
 
   const lastOrderIndex =
   currentPage * ordersPerPage;
@@ -139,15 +142,32 @@ const filteredOrders = orders.filter((order) => {
 const firstOrderIndex =
   lastOrderIndex - ordersPerPage;
 
+
+
+  console.log("Search:", searchTerm);
+
+console.log(
+  "Platform Orders:",
+  platformFilteredOrders
+);
+
+console.log(
+  "Search Results:",
+  searchFilteredOrders
+  );
+  
+
+
 const currentOrders =
-  platformFilteredOrders.slice(
+  searchFilteredOrders.slice(
     firstOrderIndex,
     lastOrderIndex
   );
 
 const totalPages = Math.ceil(
-  filteredOrders.length / ordersPerPage
-  );
+  searchFilteredOrders.length /
+  ordersPerPage
+);
   
 
   
@@ -280,12 +300,10 @@ const handleImport = async () => {
   : "Orders Management"}
         </h1>
 
-        <input
-  type="text"
-  placeholder="Search Orders..."
+ <SearchBar
   value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  className="bg-white px-4 py-3 rounded-lg shadow outline-none"
+  onChange={setSearchTerm}
+  placeholder="Search Orders..."
 />
 
       </div>
@@ -354,10 +372,10 @@ const handleImport = async () => {
       {/* Table */}
 
       <OrdersTable
-        orders={platformOrders}
-        onView={handleView}
-        onDelete={handleDelete}
-      />
+  orders={currentOrders}
+  onView={handleView}
+  onDelete={handleDelete}
+/>
 
       
       {/* pagination */}
