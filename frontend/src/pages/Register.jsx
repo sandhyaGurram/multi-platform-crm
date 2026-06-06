@@ -3,77 +3,48 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-
     name: "",
     email: "",
     password: "",
-
   });
 
   const handleChange = (e) => {
-
     setFormData({
-
       ...formData,
 
       [e.target.name]: e.target.value,
-
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
       const { data } = await axios.post(
-
         "http://localhost:5000/api/auth/register",
 
-        formData
-
+        formData,
       );
 
-      localStorage.setItem(
-        "crmUser",
-        JSON.stringify(data)
-      );
+      localStorage.setItem("crmUser", JSON.stringify(data));
 
       navigate("/");
-
     } catch (error) {
-
       console.log(error);
 
       alert("Registration Failed");
-
     }
-
   };
 
   return (
-
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
 
-        <h1 className="text-3xl font-bold mb-8 text-center">
-
-          Register
-
-        </h1>
-
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5"
-        >
-
+        <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="text"
             name="name"
@@ -104,15 +75,10 @@ const Register = () => {
           >
             Register
           </button>
-
         </form>
-
       </div>
-
     </div>
-
   );
-
 };
 
 export default Register;

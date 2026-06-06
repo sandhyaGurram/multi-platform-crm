@@ -11,42 +11,27 @@ import {
 
 import axios from "axios";
 
-import { NavLink, useNavigate} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    const user = JSON.parse(localStorage.getItem("crmUser"));
 
-  const user = JSON.parse(
-    localStorage.getItem("crmUser")
-  );
+    try {
+      await axios.post(`http://localhost:5000/api/auth/logout/${user._id}`);
+    } catch (error) {
+      console.log(error);
+    }
 
-  try {
+    localStorage.removeItem("crmUser");
 
-    await axios.post(
-
-      `http://localhost:5000/api/auth/logout/${user._id}`
-
-    );
-
-  } catch (error) {
-
-    console.log(error);
-
-  }
-
-  localStorage.removeItem("crmUser");
-
-  navigate("/login");
-
-};
+    navigate("/login");
+  };
 
   return (
-
     <>
-
       {/* Overlay */}
 
       {sidebarOpen && (
@@ -67,7 +52,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           md:translate-x-0
         `}
       >
-
         {/* Close Button Mobile */}
 
         <button
@@ -77,214 +61,202 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <FaTimes size={22} />
         </button>
 
-        <h1 className="text-3xl font-bold mb-10">
-          CRM PANEL
-        </h1>
+        <h1 className="text-3xl font-bold mb-10">CRM PANEL</h1>
 
         <div className="flex flex-col gap-2">
+          {/* Dashboard */}
 
-  {/* Dashboard */}
-
-  <NavLink
-    to="/"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaTachometerAlt />
-    Dashboard
-  </NavLink>
+            }
+          >
+            <FaTachometerAlt />
+            Dashboard
+          </NavLink>
 
-  {/* Orders Section */}
+          {/* Orders Section */}
 
-  <div className="mt-2">
+          <div className="mt-2">
+            <div className="flex items-center gap-3 px-4 py-3 text-white font-semibold">
+              <FaShoppingCart />
 
-    <div className="flex items-center gap-3 px-4 py-3 text-white font-semibold">
+              <span>Orders</span>
+            </div>
 
-      <FaShoppingCart />
-
-      <span>Orders</span>
-
-    </div>
-
-    <div className="ml-6 flex flex-col gap-1 border-l border-gray-700 pl-4">
-
-      <NavLink
-        to="/orders"
-        className={({ isActive }) =>
-          `px-3 py-2 rounded-lg transition
+            <div className="ml-6 flex flex-col gap-1 border-l border-gray-700 pl-4">
+              <NavLink
+                to="/orders"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition
           ${
             isActive
               ? "bg-white text-black font-bold"
               : "text-gray-400 hover:text-white hover:bg-gray-800"
           }`
-        }
-      >
-        All Orders
-      </NavLink>
+                }
+              >
+                All Orders
+              </NavLink>
 
-      <NavLink
-        to="/orders/shopify"
-        className={({ isActive }) =>
-          `px-3 py-2 rounded-lg transition
+              <NavLink
+                to="/orders/shopify"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition
           ${
             isActive
               ? "bg-green-500 text-white font-bold"
               : "text-gray-400 hover:text-green-400 hover:bg-gray-800"
           }`
-        }
-      >
-        Shopify Orders
-      </NavLink>
+                }
+              >
+                Shopify Orders
+              </NavLink>
 
-      <NavLink
-        to="/orders/amazon"
-        className={({ isActive }) =>
-          `px-3 py-2 rounded-lg transition
+              <NavLink
+                to="/orders/amazon"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition
           ${
             isActive
               ? "bg-yellow-500 text-black font-bold"
               : "text-gray-400 hover:text-yellow-400 hover:bg-gray-800"
           }`
-        }
-      >
-        Amazon Orders
-      </NavLink>
+                }
+              >
+                Amazon Orders
+              </NavLink>
 
-      <NavLink
-        to="/orders/flipkart"
-        className={({ isActive }) =>
-          `px-3 py-2 rounded-lg transition
+              <NavLink
+                to="/orders/flipkart"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition
           ${
             isActive
               ? "bg-blue-500 text-white font-bold"
               : "text-gray-400 hover:text-blue-400 hover:bg-gray-800"
           }`
-        }
-      >
-        Flipkart Orders
-      </NavLink>
+                }
+              >
+                Flipkart Orders
+              </NavLink>
 
-      <NavLink
-        to="/orders/meesho"
-        className={({ isActive }) =>
-          `px-3 py-2 rounded-lg transition
+              <NavLink
+                to="/orders/meesho"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition
           ${
             isActive
               ? "bg-pink-500 text-white font-bold"
               : "text-gray-400 hover:text-pink-400 hover:bg-gray-800"
           }`
-        }
-      >
-        Meesho Orders
-      </NavLink>
+                }
+              >
+                Meesho Orders
+              </NavLink>
+            </div>
+          </div>
 
-    </div>
+          {/* Products */}
 
-  </div>
-
-  {/* Products */}
-
-  <NavLink
-    to="/products"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaBoxOpen />
-    Products
-  </NavLink>
+            }
+          >
+            <FaBoxOpen />
+            Products
+          </NavLink>
 
-  {/* Customers */}
+          {/* Customers */}
 
-  <NavLink
-    to="/customers"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/customers"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaUsers />
-    Customers
-  </NavLink>
+            }
+          >
+            <FaUsers />
+            Customers
+          </NavLink>
 
-  {/* Analytics */}
+          {/* Analytics */}
 
-  <NavLink
-    to="/analytics"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/analytics"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaChartBar />
-    Analytics
-  </NavLink>
+            }
+          >
+            <FaChartBar />
+            Analytics
+          </NavLink>
 
-  {/* Settings */}
+          {/* Settings */}
 
-  <NavLink
-    to="/settings"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaCog />
-    Settings
-  </NavLink>
+            }
+          >
+            <FaCog />
+            Settings
+          </NavLink>
 
-  {/* Users */}
+          {/* Users */}
 
-  <NavLink
-    to="/users"
-    className={({ isActive }) =>
-      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          <NavLink
+            to="/users"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-    }
-  >
-    <FaUsers />
-    Users
-  </NavLink>
-
-</div>
+            }
+          >
+            <FaUsers />
+            Users
+          </NavLink>
+        </div>
 
         <button
-  onClick={handleLogout}
-  className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
->
+          onClick={handleLogout}
+          className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
+        >
           <FaSignOutAlt />
           Logout
         </button>
-
       </div>
-
     </>
   );
 };

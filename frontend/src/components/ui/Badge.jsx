@@ -1,5 +1,4 @@
 const Badge = ({ status }) => {
-
   const colors = {
     Delivered: "bg-green-100 text-green-600",
     Pending: "bg-yellow-100 text-yellow-600",

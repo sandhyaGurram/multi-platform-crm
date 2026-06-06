@@ -15,54 +15,41 @@ import Users from "../pages/Users";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-
       <Routes>
-
         <Route path="/login" element={<Login />} />
 
-<Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
 
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
 
-<Route path="/" element={<MainLayout />}>
+          <Route path="orders" element={<Orders />} />
 
-  <Route index element={<Dashboard />} />
+          <Route path="products" element={<Products />} />
 
-  <Route path="orders" element={<Orders />} />
+          <Route path="customers" element={<Customers />} />
 
-  <Route path="products" element={<Products />} />
-
-  <Route path="customers" element={<Customers />} />
-
-  <Route path="analytics" element={<Analytics />} />
+          <Route path="analytics" element={<Analytics />} />
 
           <Route path="settings" element={<Settings />} />
 
           <Route path="users" element={<Users />} />
 
           <Route
-  path="orders/shopify"
-  element={<Orders platform="Shopify" />}
-/>
+            path="orders/shopify"
+            element={<Orders platform="Shopify" />}
+          />
 
-<Route
-  path="orders/amazon"
-  element={<Orders platform="Amazon" />}
-/>
+          <Route path="orders/amazon" element={<Orders platform="Amazon" />} />
 
-<Route
-  path="orders/flipkart"
-  element={<Orders platform="Flipkart" />}
-/>
+          <Route
+            path="orders/flipkart"
+            element={<Orders platform="Flipkart" />}
+          />
 
-<Route
-  path="orders/meesho"
-  element={<Orders platform="Meesho" />}
-/>
-
-</Route>
-
+          <Route path="orders/meesho" element={<Orders platform="Meesho" />} />
+        </Route>
       </Routes>
-
     </BrowserRouter>
   );
 };
