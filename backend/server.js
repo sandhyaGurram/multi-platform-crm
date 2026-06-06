@@ -27,6 +27,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import importRoutes from "./routes/importRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 
 dotenv.config();
@@ -46,6 +47,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
 app.use("/api/import", importRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
 

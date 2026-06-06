@@ -8,12 +8,80 @@
 
 // export default Dashboard;
 import OrdersTable from "../components/orders/OrdersTable";
-import orders from "../data/orders";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 
 const Dashboard = () => {
 
   const [dateFilter, setDateFilter] = useState("All Orders");
+
+  const [orders, setOrders] = useState([]);
+
+const [stats, setStats] = useState({
+  totalOrders: 0,
+  revenue: 0,
+  shopifyOrders: 0,
+  amazonOrders: 0,
+  flipkartOrders: 0,
+  meeshoOrders: 0,
+});
+  
+  
+  const user = JSON.parse(
+  localStorage.getItem("crmUser")
+  );
+  
+
+  const fetchDashboardData = async () => {
+
+     try {
+
+    const { data } = await axios.get(
+
+      `http://localhost:5000/api/dashboard?filter=${dateFilter}`
+
+    );
+
+    setStats(data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+//   try {
+
+//     const dashboardRes = await axios.get(
+//       "http://localhost:5000/api/dashboard"
+//     );
+
+//     const ordersRes = await axios.get(
+//   "http://localhost:5000/api/orders",
+//   {
+//     headers: {
+//       Authorization: `Bearer ${user.token}`,
+//     },
+//   }
+// );
+
+//     setStats(dashboardRes.data);
+
+//     setOrders(ordersRes.data);
+
+//   } catch (error) {
+
+//     console.log(error);
+
+//   }
+  };
+  
+    useEffect(() => {
+
+    fetchDashboardData();
+
+  }, [dateFilter]);
 
   const today = new Date();
 
@@ -114,7 +182,7 @@ const meeshoOrders = filteredOrders.filter(
           </h2>
 
           <p className="text-4xl font-bold mt-3">
-            1245
+            {stats.totalOrders}
           </p>
         </div>
 
@@ -124,7 +192,7 @@ const meeshoOrders = filteredOrders.filter(
           </h2>
 
           <p className="text-4xl font-bold mt-3">
-            ₹3.2L
+            ₹{stats.revenue}
           </p>
         </div>
 
@@ -161,7 +229,7 @@ const meeshoOrders = filteredOrders.filter(
     </h2>
 
     <p className="text-4xl font-bold mt-3">
-      {shopifyOrders}
+      {stats.shopifyOrders}
     </p>
 
   </div>
@@ -175,7 +243,7 @@ const meeshoOrders = filteredOrders.filter(
     </h2>
 
     <p className="text-4xl font-bold mt-3">
-      {amazonOrders}
+      {stats.amazonOrders}
     </p>
 
   </div>
@@ -189,7 +257,7 @@ const meeshoOrders = filteredOrders.filter(
     </h2>
 
     <p className="text-4xl font-bold mt-3">
-      {flipkartOrders}
+      {stats.flipkartOrders}
     </p>
 
   </div>
@@ -203,7 +271,7 @@ const meeshoOrders = filteredOrders.filter(
     </h2>
 
     <p className="text-4xl font-bold mt-3">
-      {meeshoOrders}
+      {stats.meeshoOrders}
     </p>
 
   </div>
@@ -215,7 +283,9 @@ const meeshoOrders = filteredOrders.filter(
     Recent Orders
   </h2>
 
-  <OrdersTable orders={filteredOrders} />
+  <OrdersTable
+  orders={filteredOrders.slice(0, 5)}
+/>
 
 </div>
 
