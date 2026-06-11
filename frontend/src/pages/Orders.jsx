@@ -7,7 +7,7 @@ import axios from "axios";
 import AddOrderModal from "../components/orders/AddOrderModal";
 import EditOrderModal from "../components/orders/EditOrderModal";
 import SearchBar from "../components/common/SearchBar";
-
+import { API_URL } from "../config/api";
 import { searchFilter } from "../utils/searchFilter";
 
 const Orders = ({ platform }) => {
@@ -112,7 +112,8 @@ const Orders = ({ platform }) => {
   const fetchOrders = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/orders",
+        // "http://localhost:5000/api/orders",
+        `${API_URL}/api/orders`,
 
         {
           headers: {
@@ -140,7 +141,8 @@ const Orders = ({ platform }) => {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/orders/${id}`,
+        // `http://localhost:5000/api/orders/${id}`,
+        `${API_URL}/api/orders/${id}`,
 
         {
           headers: {
@@ -164,7 +166,8 @@ const Orders = ({ platform }) => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/import/orders",
+        // "http://localhost:5000/api/import/orders",
+        `${API_URL}/api/import/orders`,
 
         formData,
 

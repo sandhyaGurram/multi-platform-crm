@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/users");
+      const { data } = await axios.get(`${API_URL}/api/users`);
 
       setUsers(data);
     } catch (error) {

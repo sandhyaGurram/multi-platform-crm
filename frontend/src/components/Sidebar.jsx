@@ -20,7 +20,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     const user = JSON.parse(localStorage.getItem("crmUser"));
 
     try {
-      await axios.post(`http://localhost:5000/api/auth/logout/${user._id}`);
+      await axios.post(`https://multi-platform-crm.onrender.com/api/auth/logout/${user._id}`);
     } catch (error) {
       console.log(error);
     }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../config/api";
 
 const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
@@ -41,7 +42,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
 await axios.post(
 
-  "http://localhost:5000/api/orders",
+  `${API_URL}/api/orders`,
 
   formData,
 

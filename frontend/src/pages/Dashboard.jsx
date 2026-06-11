@@ -10,6 +10,7 @@
 import OrdersTable from "../components/orders/OrdersTable";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 const Dashboard = () => {
   const [dateFilter, setDateFilter] = useState("All Orders");
@@ -30,7 +31,8 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/api/dashboard?filter=${dateFilter}`,
+        // `http://localhost:5000/api/dashboard?filter=${dateFilter}`,
+        `${API_URL}/api/dashboard?filter=${dateFilter}`,
       );
 
       setStats(data);
