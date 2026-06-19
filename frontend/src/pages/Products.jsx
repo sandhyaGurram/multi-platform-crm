@@ -1,7 +1,7 @@
 import ProductsTable from "../components/products/ProductsTable";
 
 import products from "../data/products";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductDrawer from "../components/products/ProductDrawer";
 
 const Products = () => {
@@ -13,6 +13,10 @@ const Products = () => {
     setSelectedProduct(product);
     setDrawerOpen(true);
   };
+
+  useEffect(() => {
+    document.title = "ARM - Products";
+  }, []);
 
   return (
     <div>

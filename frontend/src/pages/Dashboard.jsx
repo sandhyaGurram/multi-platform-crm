@@ -70,6 +70,10 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [dateFilter]);
 
+  useEffect(() => {
+    document.title = "ARM - Dashboard";
+  }, []);
+
   const today = new Date();
 
   const filteredOrders = orders.filter((order) => {

@@ -3,30 +3,100 @@ import Order from "../models/Order.js";
 
 // CREATE ORDER
 
+// export const createOrder = async (req, res) => {
+
+//     try {
+
+//         const {
+//             orderId,
+//             customerName,
+//             productName,
+//             amount,
+//             status,
+//             platform,
+
+//             sku,
+//             variant,
+//             quantity,
+
+//             category,
+//             customerPhone,
+//             customerEmail,
+//             brand,
+
+//         } = req.body;
+
+//         const order = await Order.create({
+
+//             orderId,
+
+//             customerName,
+
+//             amount: Number(amount),
+
+//             status,
+
+//             platform,
+
+//             sku,
+
+//             category,
+
+//             productName,
+
+//             customerPhone,
+
+//             customerEmail,
+
+
+//         });
+
+//         res.status(201).json(order);
+
+//     } catch (error) {
+
+//         res.status(500).json({
+//             message: error.message,
+//         });
+
+//     }
+
+// };
+
+
 export const createOrder = async (req, res) => {
 
     try {
 
+        console.log(req.body); // <-- ADD HERE
+
         const {
             orderId,
-            customer,
+            customerName,
+            productName,
             amount,
             status,
             platform,
+            sku,
+            variant,
+            quantity,
+            category,
+            customerPhone,
+            customerEmail,
+            brand,
         } = req.body;
 
         const order = await Order.create({
-
             orderId,
-
-            customer,
-
+            customerName,
             amount: Number(amount),
-
             status,
-
             platform,
-
+            sku,
+            category,
+            productName,
+            customerPhone,
+            customerEmail,
         });
 
         res.status(201).json(order);

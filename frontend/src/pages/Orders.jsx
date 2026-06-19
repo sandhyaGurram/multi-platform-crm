@@ -80,13 +80,16 @@ const Orders = ({ platform }) => {
     [
       "orderId",
       "customer",
-      "amount",
-      "status",
       "customerName",
       "customerPhone",
       "customerEmail",
       "platform",
       "trackingId",
+      "status",
+      "productName",
+      "sku",
+      "category",
+      "brand",
     ],
   );
 
@@ -131,6 +134,10 @@ const Orders = ({ platform }) => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    document.title = platform ? `ARM - ${platform} Orders` : "ARM - Orders";
+  }, [platform]);
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(

@@ -128,6 +128,8 @@ const orderSchema = new mongoose.Schema(
 
         variant: String,
 
+        unitPrice: Number,
+
         // ANALYTICS
 
         taxAmount: Number,
@@ -143,6 +145,8 @@ const orderSchema = new mongoose.Schema(
         orderDate: Date,
 
         deliveryDate: Date,
+        category: String,
+        brand: String,
 
     },
 

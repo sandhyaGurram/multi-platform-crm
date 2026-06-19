@@ -20,9 +20,52 @@ const OrderDrawer = ({ isOpen, onClose, order, setEditOpen }) => {
         <p>
           <strong>Customer:</strong> {order.customerName || order.customer}
         </p>
+        <p>
+          <strong>Product:</strong>
+          {order.productName}
+        </p>
+
+        <p>
+          <strong>SKU:</strong>
+          {order.sku}
+        </p>
+
+        <p>
+          <strong>Variant:</strong>
+          {order.variant}
+        </p>
+
+        <p>
+          <strong>Quantity:</strong>
+          {order.quantity}
+        </p>
 
         <p>
           <strong>Amount:</strong> ₹{order.amount}
+        </p>
+
+        <p>
+          <strong>Category:</strong> {order.category}
+        </p>
+
+        <p>
+          <strong>Brand:</strong> {order.brand}
+        </p>
+
+        <p>
+          <strong>Unit Price:</strong> ₹{order.unitPrice}
+        </p>
+
+        <p>
+          <strong>Phone:</strong> {order.customerPhone}
+        </p>
+
+        <p>
+          <strong>Email:</strong> {order.customerEmail}
+        </p>
+
+        <p>
+          <strong>Tracking:</strong> {order.trackingId}
         </p>
 
         <p>

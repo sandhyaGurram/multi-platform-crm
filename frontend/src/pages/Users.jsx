@@ -19,6 +19,10 @@ const Users = () => {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    document.title = "ARM - Users";
+  }, []);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Users Management</h1>

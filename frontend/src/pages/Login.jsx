@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
@@ -39,6 +39,10 @@ const Login = () => {
       alert("Invalid Login");
     }
   };
+
+  useEffect(() => {
+    document.title = "ARM - Login";
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

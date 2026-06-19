@@ -1,21 +1,41 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import { API_URL } from "../../config/api"
+
 const EditOrderModal = ({ isOpen, onClose, order, refreshOrders }) => {
   const [formData, setFormData] = useState({
-    customer: "",
-    amount: "",
-    status: "",
-    platform: "",
+     orderId: "",
+  customerName: "",
+  productName: "",
+  sku: "",
+  variant: "",
+  quantity: "",
+  unitPrice: "",
+    category: "",
+  customerPhone: "",
+    customerEmail: "",
+  brand: "",
+  status: "",
+  platform: "",
   });
 
   useEffect(() => {
     if (order) {
       setFormData({
-        customer: order.customerName || "",
-        amount: order.amount || "",
-        status: order.status || "",
-        platform: order.platform || "",
+        orderId: order.orderId || "",
+  customerName: order.customerName || "",
+  productName: order.productName || "",
+  sku: order.sku || "",
+  variant: order.variant || "",
+  quantity: order.quantity || "",
+  unitPrice: order.unitPrice || "",
+        category: order.category || "",
+        customerPhone: order.customerPhone || "",
+  customerEmail:order.customerEmail||"",
+  brand: order.brand || "",
+  status: order.status || "",
+  platform: order.platform || "",
       });
     }
   }, [order]);
@@ -35,7 +55,7 @@ const EditOrderModal = ({ isOpen, onClose, order, refreshOrders }) => {
       const user = JSON.parse(localStorage.getItem("crmUser"));
 
       await axios.put(
-        `http://localhost:5000/api/orders/${order._id}`,
+        `${API_URL}/api/orders/${order._id}`,
 
         formData,
 
@@ -50,7 +70,12 @@ const EditOrderModal = ({ isOpen, onClose, order, refreshOrders }) => {
 
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
+
+alert(
+  error.response?.data?.message ||
+  "Failed to update order"
+);
     }
   };
 
@@ -62,27 +87,110 @@ const EditOrderModal = ({ isOpen, onClose, order, refreshOrders }) => {
         <h2 className="text-2xl font-bold mb-6">Edit Order</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
+          <input
+  type="text"
+  name="orderId"
+  value={formData.orderId}
+  onChange={handleChange}
+  placeholder="Order ID"
+  className="w-full border p-3 rounded-lg"
+/>
+
           <input
             type="text"
-            name="customer"
-            value={formData.customer}
+            name="customerName"
+            value={formData.customerName}
             onChange={handleChange}
+            placeholder="customer name"
             className="w-full border p-3 rounded-lg"
           />
 
           <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
+  type="text"
+  className="w-full border p-3 rounded-lg"
+            name="productName"
+            placeholder="Product Name"
+  value={formData.productName}
+  onChange={handleChange}
+/>
+
+<input
+  type="text"
+  className="w-full border p-3 rounded-lg"
+            name="sku"
+            placeholder="SKU"
+  value={formData.sku}
+  onChange={handleChange}
+/>
+
+<input
+  type="text"
+  className="w-full border p-3 rounded-lg"
+            name="variant"
+            placeholder="Variant"
+  value={formData.variant}
+  onChange={handleChange}
+/>
+
+<input
+  type="number"
             className="w-full border p-3 rounded-lg"
+            placeholder="quantity"
+  name="quantity"
+  value={formData.quantity}
+  onChange={handleChange}
+/>
+
+<input
+  type="number"
+            className="w-full border p-3 rounded-lg"
+            placeholder="unit price"
+  name="unitPrice"
+  value={formData.unitPrice}
+  onChange={handleChange}
+/>
+<input
+  type="text"
+  name="category"
+  value={formData.category}
+  onChange={handleChange}
+  placeholder="Category"
+  className="w-full border p-3 rounded-lg"
+/>
+
+          <input
+  type="text"
+  name="customerPhone"
+  value={formData.customerPhone}
+  onChange={handleChange}
+  placeholder="customerPhone"
+  className="w-full border p-3 rounded-lg"
           />
+          <input
+  type="text"
+  name="customerEmail"
+  value={formData.customerEmail}
+  onChange={handleChange}
+  placeholder="customerEmail"
+  className="w-full border p-3 rounded-lg"
+/>
+<input
+  type="text"
+  name="brand"
+  value={formData.brand}
+  onChange={handleChange}
+  placeholder="Brand"
+  className="w-full border p-3 rounded-lg"
+/>
+         
 
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
             className="w-full border p-3 rounded-lg"
+            placeholder="Status"
           >
             <option>Pending</option>
 
@@ -96,6 +204,7 @@ const EditOrderModal = ({ isOpen, onClose, order, refreshOrders }) => {
             value={formData.platform}
             onChange={handleChange}
             className="w-full border p-3 rounded-lg"
+            placeholder="platform"
           >
             <option>Shopify</option>
 
