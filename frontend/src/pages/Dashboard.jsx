@@ -119,27 +119,27 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6  gap-6 ">
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-gray-500">Total Orders</h2>
+          <h4 className="text-gray-500">Total Orders</h4>
 
-          <p className="text-2xl font-bold mt-3">{stats.totalOrders}</p>
+          <p className=" font-bold mt-3">{stats.totalOrders}</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-gray-500">Revenue</h2>
+          <h4 className="text-gray-500">Revenue</h4>
 
-          <p className="text-2xl font-bold mt-3">₹{stats.revenue}</p>
+          <p className=" font-bold mt-3">₹{stats.revenue}</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-gray-500">Customers</h2>
+          <h4 className="text-gray-500">Customers</h4>
 
-          <p className="text-2xl font-bold mt-3">845</p>
+          <p className=" font-bold mt-3">845</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-gray-500">Returns</h2>
+          <h4 className="text-gray-500">Returns</h4>
 
-          <p className="text-2xl font-bold mt-3">42</p>
+          <p className=" font-bold mt-3">42</p>
         </div>
       </div>
 
@@ -147,7 +147,7 @@ const Dashboard = () => {
         {/* Shopify */}
 
         <div className="bg-green-100 p-6 rounded-xl shadow">
-          <h2 className="text-green-700 font-semibold">Shopify Orders</h2>
+          <h4 className="text-green-700 font-semibold">Shopify Orders</h4>
 
           <p className=" font-bold mt-3">{stats.shopifyOrders}</p>
         </div>
@@ -155,37 +155,37 @@ const Dashboard = () => {
         {/* Amazon */}
 
         <div className="bg-yellow-100 p-6 rounded shadow">
-          <h2 className="text-yellow font-semibold">Amazon Orders</h2>
+          <h4 className="text-yellow font-semibold">Amazon Orders</h4>
 
-          <p className="text-xl font-bold mt-3">{stats.amazonOrders}</p>
+          <p className=" font-bold mt-3">{stats.amazonOrders}</p>
         </div>
 
         {/* Flipkart */}
 
         <div className="bg-blue-100 p-6 rounded-xl shadow">
-          <h2 className="text-blue-700 font-semibold">Flipkart Orders</h2>
+          <h4 className="text-blue-700 font-semibold">Flipkart Orders</h4>
 
-          <p className="text-2xl font-bold mt-3">{stats.flipkartOrders}</p>
+          <p className=" font-bold mt-3">{stats.flipkartOrders}</p>
         </div>
 
         {/* Meesho */}
 
         <div className="bg-pink-100 p-6 rounded-xl shadow">
-          <h2 className="text-pink-700 font-semibold">Meesho Orders</h2>
+          <h4 className="text-pink-700 font-semibold">Meesho Orders</h4>
 
-          <p className="text-2xl font-bold mt-3">{stats.meeshoOrders}</p>
+          <p className="font-bold mt-3">{stats.meeshoOrders}</p>
         </div>
 
         {/* Deposites */}
 
-        <div className="bg-orange-100 p-6 rounded-xl shadow">
-          <h2 className="text-pink-700 font-semibold">Deposite Orders</h2>
+        <div className="bg-red-100 p-6 rounded-xl shadow">
+          <h4 className="text-red-700 font-semibold">Deposite Orders</h4>
 
-          <p className="text-2xl font-bold mt-3">{stats.depositeOrders}</p>
+          <p className="font-bold mt-3">{stats.depositeOrders}</p>
         </div>
       </div>
       <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-5">Recent Orders</h2>
+        <h4 className=" font-bold mb-5">Recent Orders</h4>
 
         <OrdersTable orders={filteredOrders.slice(0, 5)} />
       </div>

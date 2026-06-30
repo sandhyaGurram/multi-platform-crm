@@ -48,6 +48,11 @@ const AppRoutes = () => {
           />
 
           <Route path="orders/meesho" element={<Orders platform="Meesho" />} />
+
+          <Route
+            path="orders/deposite"
+            element={<Orders platform="Deposite" />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
