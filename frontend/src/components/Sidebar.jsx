@@ -20,7 +20,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     const user = JSON.parse(localStorage.getItem("crmUser"));
 
     try {
-      await axios.post(`https://multi-platform-crm.onrender.com/api/auth/logout/${user._id}`);
+      await axios.post(
+        `https://multi-platform-crm.onrender.com/api/auth/logout/${user._id}`,
+      );
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +63,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <FaTimes size={22} />
         </button>
 
-        <h1 className="text-3xl font-bold mb-10">CRM PANEL</h1>
+        {/* <h1 className="text-3xl font-bold mb-10">CRM PANEL</h1> */}
 
         <div className="flex flex-col gap-2">
           {/* Dashboard */}

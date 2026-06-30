@@ -1,12 +1,3 @@
-// const Dashboard = () => {
-//   return (
-//     <div className="text-3xl font-bold">
-//       Dashboard Page
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
 import OrdersTable from "../components/orders/OrdersTable";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,6 +15,7 @@ const Dashboard = () => {
     amazonOrders: 0,
     flipkartOrders: 0,
     meeshoOrders: 0,
+    diposites: 0,
   });
 
   const user = JSON.parse(localStorage.getItem("crmUser"));
@@ -39,31 +31,6 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error);
     }
-
-    //   try {
-
-    //     const dashboardRes = await axios.get(
-    //       "http://localhost:5000/api/dashboard"
-    //     );
-
-    //     const ordersRes = await axios.get(
-    //   "http://localhost:5000/api/orders",
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${user.token}`,
-    //     },
-    //   }
-    // );
-
-    //     setStats(dashboardRes.data);
-
-    //     setOrders(ordersRes.data);
-
-    //   } catch (error) {
-
-    //     console.log(error);
-
-    //   }
   };
 
   useEffect(() => {
@@ -122,10 +89,15 @@ const Dashboard = () => {
     (order) => order.platform === "Meesho",
   ).length;
 
+  const depositeOrders = filteredOrders.filter(
+    (order) => order.platform === "Deposite",
+  ).length;
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      <div className="flex justify-end mb-6">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="flex items-center justify-between mb-2 gap-end">
+        <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
+        {/* <div className="flex justify-end mb-6"> */}
         <select
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
@@ -145,47 +117,47 @@ const Dashboard = () => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6  gap-6 ">
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-gray-500">Total Orders</h2>
 
-          <p className="text-4xl font-bold mt-3">{stats.totalOrders}</p>
+          <p className="text-2xl font-bold mt-3">{stats.totalOrders}</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-gray-500">Revenue</h2>
 
-          <p className="text-4xl font-bold mt-3">₹{stats.revenue}</p>
+          <p className="text-2xl font-bold mt-3">₹{stats.revenue}</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-gray-500">Customers</h2>
 
-          <p className="text-4xl font-bold mt-3">845</p>
+          <p className="text-2xl font-bold mt-3">845</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="text-gray-500">Returns</h2>
 
-          <p className="text-4xl font-bold mt-3">42</p>
+          <p className="text-2xl font-bold mt-3">42</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mt-8">
         {/* Shopify */}
 
         <div className="bg-green-100 p-6 rounded-xl shadow">
           <h2 className="text-green-700 font-semibold">Shopify Orders</h2>
 
-          <p className="text-4xl font-bold mt-3">{stats.shopifyOrders}</p>
+          <p className=" font-bold mt-3">{stats.shopifyOrders}</p>
         </div>
 
         {/* Amazon */}
 
-        <div className="bg-yellow-100 p-6 rounded-xl shadow">
-          <h2 className="text-yellow-700 font-semibold">Amazon Orders</h2>
+        <div className="bg-yellow-100 p-6 rounded shadow">
+          <h2 className="text-yellow font-semibold">Amazon Orders</h2>
 
-          <p className="text-4xl font-bold mt-3">{stats.amazonOrders}</p>
+          <p className="text-xl font-bold mt-3">{stats.amazonOrders}</p>
         </div>
 
         {/* Flipkart */}
@@ -193,7 +165,7 @@ const Dashboard = () => {
         <div className="bg-blue-100 p-6 rounded-xl shadow">
           <h2 className="text-blue-700 font-semibold">Flipkart Orders</h2>
 
-          <p className="text-4xl font-bold mt-3">{stats.flipkartOrders}</p>
+          <p className="text-2xl font-bold mt-3">{stats.flipkartOrders}</p>
         </div>
 
         {/* Meesho */}
@@ -201,7 +173,15 @@ const Dashboard = () => {
         <div className="bg-pink-100 p-6 rounded-xl shadow">
           <h2 className="text-pink-700 font-semibold">Meesho Orders</h2>
 
-          <p className="text-4xl font-bold mt-3">{stats.meeshoOrders}</p>
+          <p className="text-2xl font-bold mt-3">{stats.meeshoOrders}</p>
+        </div>
+
+        {/* Deposites */}
+
+        <div className="bg-orange-100 p-6 rounded-xl shadow">
+          <h2 className="text-pink-700 font-semibold">Deposite Orders</h2>
+
+          <p className="text-2xl font-bold mt-3">{stats.depositeOrders}</p>
         </div>
       </div>
       <div className="mt-10">

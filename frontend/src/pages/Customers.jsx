@@ -28,7 +28,7 @@ const Customers = () => {
       {/* Header */}
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <h1 className="text-3xl font-bold">Customers Management</h1>
+        <h1 className=" font-bold">Customers Management</h1>
 
         <input
           type="text"
