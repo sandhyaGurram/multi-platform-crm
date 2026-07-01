@@ -111,6 +111,12 @@ export const getDashboardStats = async (req, res) => {
             "meesho"
     ).length;
 
+    const depositeOrders = orders.filter(
+        (order) =>
+            order.platform?.toLowerCase() ===
+            "deposite"
+    ).length;
+
     res.json({
         totalOrders,
         revenue,
@@ -118,6 +124,7 @@ export const getDashboardStats = async (req, res) => {
         amazonOrders,
         flipkartOrders,
         meeshoOrders,
+        depositeOrders,
     });
 
 };

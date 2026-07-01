@@ -103,22 +103,6 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
           />
 
           <input
-            type="text"
-            placeholder="SKU"
-            name="sku"
-            className="w-full border p-2 rounded-lg"
-            onChange={handleChange}
-          />
-
-          <input
-            type="text"
-            placeholder="Variant"
-            name="variant"
-            className="w-full border p-2 rounded-lg"
-            onChange={handleChange}
-          />
-
-          <input
             type="number"
             placeholder="Quantity"
             name="quantity"
@@ -202,6 +186,8 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             <option>Flipkart</option>
 
             <option>Meesho</option>
+
+            <option>Deposite</option>
           </select>
 
           {/* Buttons */}
