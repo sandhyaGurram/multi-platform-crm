@@ -65,10 +65,13 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-lg">
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6">Add Order</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
           {/* Order ID */}
 
           <input
@@ -76,7 +79,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             name="orderId"
             placeholder="Order ID"
             onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
           />
 
           {/* Customer */}
@@ -86,7 +89,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             name="customerName"
             placeholder="Customer Name"
             onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
           />
 
           {/* Amount */}
@@ -95,7 +98,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             placeholder="Product Name"
             name="productName"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -103,7 +106,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             placeholder="SKU"
             name="sku"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -111,7 +114,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             placeholder="Variant"
             name="variant"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -119,7 +122,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="number"
             placeholder="Quantity"
             name="quantity"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -127,7 +130,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="number"
             placeholder="Unit Price"
             name="unitPrice"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -135,7 +138,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             name="customerPhone"
             placeholder="Customer Phone"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -143,7 +146,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="email"
             name="customerEmail"
             placeholder="Customer Email"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -151,7 +154,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="number"
             name="amount"
             placeholder="Order Amount"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -159,7 +162,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             name="paymentMethod"
             placeholder="Payment Method"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -167,7 +170,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
             type="text"
             name="trackingId"
             placeholder="Tracking ID"
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
 
@@ -176,7 +179,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
           <select
             name="status"
             onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg md:col-span-2"
           >
             <option>Pending</option>
 
@@ -190,7 +193,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
           <select
             name="platform"
             onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
+            className="w-full border p-2 rounded-lg md:col-span-2"
           >
             <option>Shopify</option>
 
@@ -203,18 +206,18 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
           {/* Buttons */}
 
-          <div className="flex justify-end gap-4 pt-4">
+          <div className="flex justify-end gap-4 pt-4 ">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-3 bg-gray-200 rounded-lg"
+              className=" w-full p-2 bg-gray-200 rounded-lg"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-5 py-3 bg-black text-white rounded-lg"
+              className="w-full p-2  bg-black text-white rounded-lg whitespace-nowrap"
             >
               Save Order
             </button>
