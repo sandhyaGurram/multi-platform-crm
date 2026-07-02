@@ -2,80 +2,97 @@ const OrderDrawer = ({ isOpen, onClose, order, setEditOpen }) => {
   if (!isOpen || !order) return null;
 
   return (
-    <div className="fixed top-0 right-0 w-[400px] h-full bg-white shadow-2xl p-6 z-50">
-      <button
-        onClick={onClose}
-        className="mb-6 bg-black text-white px-4 py-2 rounded-lg"
-      >
-        Close
-      </button>
+    <div className="fixed right-0 top-0 h-screen w-[450px] bg-white shadow-xl p-6 z-[9999] overflow-y-auto">
+      <div className="flex justify-between items-center border-b pb-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold">Order Details</h2>
+          <p className="text-sm text-gray-500">#{order.orderId}</p>
+        </div>
 
-      <h2 className="text-2xl font-bold mb-6">Order Details</h2>
-
-      <div className="space-y-4">
-        <p>
-          <strong>Order ID:</strong> {order.orderId}
-        </p>
-
-        <p>
-          <strong>Customer:</strong> {order.customerName || order.customer}
-        </p>
-        <p>
-          <strong>Product:</strong>
-          {order.productName}
-        </p>
-
-        <p>
-          <strong>SKU:</strong>
-          {order.sku}
-        </p>
-
-        <p>
-          <strong>Variant:</strong>
-          {order.variant}
-        </p>
-
-        <p>
-          <strong>Quantity:</strong>
-          {order.quantity}
-        </p>
-
-        <p>
-          <strong>Amount:</strong> ₹{order.amount}
-        </p>
-
-        <p>
-          <strong>Category:</strong> {order.category}
-        </p>
-
-        <p>
-          <strong>Brand:</strong> {order.brand}
-        </p>
-
-        <p>
-          <strong>Unit Price:</strong> ₹{order.unitPrice}
-        </p>
-
-        <p>
-          <strong>Phone:</strong> {order.customerPhone}
-        </p>
-
-        <p>
-          <strong>Email:</strong> {order.customerEmail}
-        </p>
-
-        <p>
-          <strong>Tracking:</strong> {order.trackingId}
-        </p>
-
-        <p>
-          <strong>Status:</strong> {order.status}
-        </p>
-
-        <p>
-          <strong>Platform:</strong> {order.platform}
-        </p>
+        <button
+          onClick={onClose}
+          className="text-gray-500 hover:text-black text-2xl"
+        >
+          ✕
+        </button>
       </div>
+
+      <div className="bg-gray-50 rounded-xl p-2 mb-4">
+        {/* <h3 className="font-semibold mb-3">Order Information</h3> */}
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Order Id</span>
+          <span className="font-medium">{order.orderId}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Platform</span>
+          <span className="font-medium">{order.platform}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Status</span>
+          <span className="font-medium">{order.status}</span>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 rounded-xl p-2 mb-4">
+        {/* <h3 className="font-semibold mb-3">Customer Information</h3> */}
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Customer</span>
+          <span className="font-medium">{order.customerName}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Phone No. </span>
+          <span className="font-medium">{order.customerPhone}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Address</span>
+          <span className="font-medium">{order.customerAddress}</span>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 rounded-xl p-2 mb-4">
+        {/* <h3 className="font-semibold mb-3">Product Information</h3> */}
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Product</span>
+          <span className="font-medium">{order.productName}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Quantity</span>
+          <span className="font-medium">{order.quantity}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Unit Price</span>
+          <span className="font-medium">{order.unitPrice}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Total Amount</span>
+          <span className="font-medium">{order.amount}</span>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 rounded-xl p-2 mb-4">
+        {/* <h3 className="font-semibold mb-3">Shipping Information</h3> */}
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Tracking Id</span>
+          <span className="font-medium">{order.trackingId}</span>
+        </div>
+
+        <div className="flex justify-between py-1 border-b">
+          <span className="text-gray-500">Payment Method</span>
+          <span className="font-medium">{order.paymentMethod}</span>
+        </div>
+      </div>
+
       <button
         onClick={() => {
           onClose();

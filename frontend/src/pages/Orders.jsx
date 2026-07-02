@@ -25,11 +25,7 @@ const Orders = ({ platform }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1);
-
   const [excelFile, setExcelFile] = useState(null);
-
-  const ordersPerPage = 5;
 
   const handleView = (order) => {
     setSelectedOrder(order);
@@ -93,22 +89,11 @@ const Orders = ({ platform }) => {
     ],
   );
 
-  const lastOrderIndex = currentPage * ordersPerPage;
-
-  const firstOrderIndex = lastOrderIndex - ordersPerPage;
-
   console.log("Search:", searchTerm);
 
   console.log("Platform Orders:", platformFilteredOrders);
 
   console.log("Search Results:", searchFilteredOrders);
-
-  const currentOrders = searchFilteredOrders.slice(
-    firstOrderIndex,
-    lastOrderIndex,
-  );
-
-  const totalPages = Math.ceil(searchFilteredOrders.length / ordersPerPage);
 
   const user = JSON.parse(localStorage.getItem("crmUser"));
 
@@ -256,13 +241,13 @@ const Orders = ({ platform }) => {
       {/* Table */}
 
       <OrdersTable
-        orders={currentOrders}
+        orders={searchFilteredOrders}
         onView={handleView}
         onDelete={handleDelete}
       />
 
       {/* pagination */}
-      <div className="flex justify-center items-center gap-3 mt-8">
+      {/* <div className="flex justify-center items-center gap-3 mt-8">
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
@@ -282,7 +267,7 @@ const Orders = ({ platform }) => {
         >
           Next
         </button>
-      </div>
+      </div> */}
 
       <AddOrderModal
         isOpen={modalOpen}

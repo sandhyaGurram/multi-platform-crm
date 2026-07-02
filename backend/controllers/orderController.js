@@ -83,6 +83,8 @@ export const createOrder = async (req, res) => {
             category,
             customerPhone,
             customerEmail,
+            trackingId,
+            customerAddress,
             brand,
         } = req.body;
 
@@ -97,6 +99,8 @@ export const createOrder = async (req, res) => {
             productName,
             customerPhone,
             customerEmail,
+            trackingId,
+            customerAddress,
         });
 
         res.status(201).json(order);

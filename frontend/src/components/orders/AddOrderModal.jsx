@@ -128,8 +128,8 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
 
           <input
             type="email"
-            name="customerEmail"
-            placeholder="Customer Email"
+            name="customerAddress"
+            placeholder="customer Address"
             className="w-full border p-2 rounded-lg"
             onChange={handleChange}
           />
