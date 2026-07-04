@@ -85,6 +85,7 @@ export const createOrder = async (req, res) => {
             customerEmail,
             trackingId,
             customerAddress,
+            paymentMethod,
             brand,
         } = req.body;
 
@@ -101,6 +102,7 @@ export const createOrder = async (req, res) => {
             customerEmail,
             trackingId,
             customerAddress,
+            paymentMethod,
         });
 
         res.status(201).json(order);

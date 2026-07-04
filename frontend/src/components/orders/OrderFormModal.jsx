@@ -13,11 +13,10 @@ const emptyForm = {
 
   productName: "",
   sku: "",
-  variant: "",
+
   quantity: "",
   unitPrice: "",
   category: "",
-  brand: "",
 
   customerPhone: "",
   customerEmail: "",
@@ -34,6 +33,7 @@ const OrderFormModal = ({
   mode = "add",
   order = null,
   onSubmit,
+  isSubmitting = false,
 }) => {
   const [formData, setFormData] = useState(emptyForm);
 
@@ -61,7 +61,7 @@ const OrderFormModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (isSubmitting) return;
     await onSubmit(formData);
   };
 
@@ -137,7 +137,7 @@ const OrderFormModal = ({
               />
             </FormSection>
 
-            <FormSection title="Customer Information">
+            <FormSection>
               <FloatingInput
                 label="Customer Name"
                 name="customerName"
@@ -180,7 +180,7 @@ const OrderFormModal = ({
               />
             </FormSection>
 
-            <FormSection title="Product Information">
+            <FormSection>
               <FloatingInput
                 label="Product Name"
                 name="productName"
@@ -196,23 +196,9 @@ const OrderFormModal = ({
               />
 
               <FloatingInput
-                label="Variant"
-                name="variant"
-                value={formData.variant}
-                onChange={handleChange}
-              />
-
-              <FloatingInput
                 label="Category"
                 name="category"
                 value={formData.category}
-                onChange={handleChange}
-              />
-
-              <FloatingInput
-                label="Brand"
-                name="brand"
-                value={formData.brand}
                 onChange={handleChange}
               />
 
@@ -233,7 +219,7 @@ const OrderFormModal = ({
               />
             </FormSection>
 
-            <FormSection title="Payment & Shipping">
+            <FormSection>
               <FloatingInput
                 label="Payment Method"
                 name="paymentMethod"
@@ -276,8 +262,8 @@ const OrderFormModal = ({
 
 const FormSection = ({ title, children }) => {
   return (
-    <section className="border-b py-6 first:pt-0 last:border-0">
-      <h3 className="mb-4 text-sm font-semibold text-gray-900">{title}</h3>
+    <section className="border-b py-1 first:pt-0 last:border-0">
+      <h3 className="mb-2 text-sm font-semibold text-gray-900">{title}</h3>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{children}</div>
     </section>

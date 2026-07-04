@@ -2,7 +2,8 @@ import OrdersTable from "../components/orders/OrdersTable";
 import OrderDrawer from "../components/orders/OrderDrawer";
 
 // import orders from "../data/orders";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FileSpreadsheet, Upload, X } from "lucide-react";
 import axios from "axios";
 import AddOrderModal from "../components/orders/AddOrderModal";
 import EditOrderModal from "../components/orders/EditOrderModal";
@@ -26,6 +27,10 @@ const Orders = ({ platform }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [excelFile, setExcelFile] = useState(null);
+
+  const [isImporting, setIsImporting] = useState(false);
+
+  const fileInputRef = useRef(null);
 
   const handleView = (order) => {
     setSelectedOrder(order);
@@ -79,6 +84,7 @@ const Orders = ({ platform }) => {
       "customerName",
       "customerPhone",
       "customerEmail",
+      "paymentMethod",
       "platform",
       "trackingId",
       "status",
@@ -225,18 +231,69 @@ const Orders = ({ platform }) => {
       </div>
 
       {/* upload excell file */}
-      <input
+      {/* <input
         type="file"
         accept=".xlsx,.xls,.csv"
         onChange={(e) => setExcelFile(e.target.files[0])}
-      />
+      /> */}
 
-      <button
+      {/* FILE IMPORT */}
+
+      <div className="mb-6 flex w-full max-w-2xl">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".xlsx,.xls,.csv"
+          onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
+          className="
+      block min-w-0 flex-1
+      rounded-l-lg
+      border border-r-0 border-gray-300
+      bg-white text-sm text-gray-600
+
+      file:mr-4
+      file:border-0
+      file:border-r
+      file:border-gray-300
+      file:bg-gray-100
+      file:px-4
+      file:py-3
+      file:text-sm
+      file:text-gray-700
+
+      hover:file:bg-gray-200
+      focus:outline-none
+    "
+        />
+
+        <button
+          type="button"
+          onClick={handleImport}
+          disabled={!excelFile || isImporting}
+          className="
+      whitespace-nowrap
+      rounded-r-lg
+      border border-gray-300
+      bg-white
+      px-5
+      text-sm font-medium text-gray-700
+
+      hover:bg-gray-100
+
+      disabled:cursor-not-allowed
+      disabled:opacity-50
+    "
+        >
+          {isImporting ? "Importing..." : "Import Excel"}
+        </button>
+      </div>
+
+      {/* <button
         onClick={handleImport}
         className="bg-green-600 text-white px-5 py-3 rounded-lg"
       >
         Import Excel
-      </button>
+      </button> */}
 
       {/* Table */}
 
