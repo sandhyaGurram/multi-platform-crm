@@ -98,7 +98,11 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
               ? "bg-yellow-100 text-yellow-700"
               : row.platform === "Flipkart"
                 ? "bg-blue-100 text-blue-700"
-                : "bg-gray-100 text-gray-700";
+                : row.platform === "Meesho"
+                  ? "bg-pink-100 text-pink-700"
+                  : row.platform === "Deposite"
+                    ? "bg-red-100 text-red-700"
+                    : "bg-gray-100 text-gray-700";
 
         return (
           <span
