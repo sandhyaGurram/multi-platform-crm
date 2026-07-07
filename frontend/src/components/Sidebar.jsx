@@ -16,6 +16,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("crmUser"));
+
   const handleLogout = async () => {
     const user = JSON.parse(localStorage.getItem("crmUser"));
 
@@ -265,13 +267,31 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </NavLink>
         </div>
 
-        <button
+        {/* <button
           onClick={handleLogout}
           className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
         >
           <FaSignOutAlt />
           Logout
-        </button>
+        </button> */}
+
+        {user ? (
+          <button
+            onClick={handleLogout}
+            className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
+          >
+            <FaSignOutAlt />
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/loginxyz")}
+            className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-green-400 hover:bg-green-500 hover:text-white transition-all"
+          >
+            <FaSignOutAlt />
+            Login
+          </button>
+        )}
       </div>
     </>
   );
