@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const { data } = await axios.post(
         // "http://localhost:5000/api/auth/login",
-        `${API_URL}/api/auth/login`,
+        `${API_URL}/api/auth/loginxyz`,
 
         formData,
       );
