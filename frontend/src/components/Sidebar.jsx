@@ -29,7 +29,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
     localStorage.removeItem("crmUser");
 
-    navigate("/login");
+    navigate("/loginxyz");
   };
 
   return (
