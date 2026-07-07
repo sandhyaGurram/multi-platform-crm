@@ -10,9 +10,9 @@ export const importOrders = async (
 
     try {
 
-        const workbook = xlsx.readFile(
-            req.file.path
-        );
+        const workbook = xlsx.readFile(req.file.path, {
+            cellDates: true,
+        });
 
         const sheetName =
             workbook.SheetNames[0];
@@ -20,8 +20,9 @@ export const importOrders = async (
         const sheet =
             workbook.Sheets[sheetName];
 
-        const data =
-            xlsx.utils.sheet_to_json(sheet);
+        const data = xlsx.utils.sheet_to_json(sheet, {
+            raw: false,
+        });
 
         for (const row of data) {
 
@@ -29,26 +30,30 @@ export const importOrders = async (
 
             // DATE FORMAT FIX
 
-            let formattedDate = new Date();
+            let formattedDate = row["Order Date"]
+                ? new Date(row["Order Date"])
+                : null;
 
-            if (row["Order Date"]) {
+            // let formattedDate = new Date();
 
-                const parts =
-                    row["Order Date"]
-                        .toString()
-                        .split("-");
+            // if (row["Order Date"]) {
 
-                if (parts.length === 3) {
+            //     const parts =
+            //         row["Order Date"]
+            //             .toString()
+            //             .split("-");
 
-                    formattedDate = new Date(
+            //     if (parts.length === 3) {
 
-                        `${parts[2]}-${parts[1]}-${parts[0]}`
+            //         formattedDate = new Date(
 
-                    );
+            //             `${parts[2]}-${parts[1]}-${parts[0]}`
 
-                }
+            //         );
 
-            }
+            //     }
+
+            // }
 
             // PLATFORM FORMAT FIX
 
@@ -82,6 +87,17 @@ export const importOrders = async (
 
                 customerAddress:
                     row["Address"] || "",
+
+                productName:
+                    row["Product Name"] || "",
+
+                quantity:
+                    row["Quantity"] || "",
+
+
+
+                pincode:
+                    row["Pincode"] || "",
 
                 amount:
                     Number(row["Amount"]) || 0,

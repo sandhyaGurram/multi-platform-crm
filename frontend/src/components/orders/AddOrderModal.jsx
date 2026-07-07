@@ -5,7 +5,13 @@ import { useState } from "react";
 import { API_URL } from "../../config/api";
 
 const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleAddOrder = async (formData) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     try {
       const user = JSON.parse(localStorage.getItem("crmUser"));
 
@@ -20,8 +26,8 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
       onClose();
     } catch (error) {
       console.error(error);
-
-      alert(error.response?.data?.message || "Failed to add order");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -31,6 +37,7 @@ const AddOrderModal = ({ isOpen, onClose, refreshOrders }) => {
       onClose={onClose}
       mode="add"
       onSubmit={handleAddOrder}
+      isSubmitting={isSubmitting}
     />
   );
 };

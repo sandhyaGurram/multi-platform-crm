@@ -20,6 +20,7 @@ const emptyForm = {
 
   customerPhone: "",
   customerEmail: "",
+  orderDate: new Date().toISOString().split("T")[0], // Today's date
   customerAddress: "",
 
   paymentMethod: "",
@@ -189,20 +190,6 @@ const OrderFormModal = ({
               />
 
               <FloatingInput
-                label="SKU"
-                name="sku"
-                value={formData.sku}
-                onChange={handleChange}
-              />
-
-              <FloatingInput
-                label="Category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-              />
-
-              <FloatingInput
                 label="Quantity"
                 name="quantity"
                 type="number"
@@ -215,6 +202,14 @@ const OrderFormModal = ({
                 name="unitPrice"
                 type="number"
                 value={formData.unitPrice}
+                onChange={handleChange}
+              />
+
+              <FloatingInput
+                label="Order Date"
+                name="orderDate"
+                type="date"
+                value={formData.orderDate}
                 onChange={handleChange}
               />
             </FormSection>
@@ -247,11 +242,25 @@ const OrderFormModal = ({
               Cancel
             </button>
 
-            <button
+            {/* <button
               type="submit"
               className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white"
             >
               {mode === "add" ? "Save Order" : "Update Order"}
+            </button> */}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isSubmitting
+                ? mode === "add"
+                  ? "Saving..."
+                  : "Updating..."
+                : mode === "add"
+                  ? "Save Order"
+                  : "Update Order"}
             </button>
           </div>
         </form>

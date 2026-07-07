@@ -86,7 +86,8 @@ export const createOrder = async (req, res) => {
             trackingId,
             customerAddress,
             paymentMethod,
-            brand,
+            pincode,
+
         } = req.body;
 
         const order = await Order.create({
@@ -103,6 +104,7 @@ export const createOrder = async (req, res) => {
             trackingId,
             customerAddress,
             paymentMethod,
+            pincode,
         });
 
         res.status(201).json(order);
