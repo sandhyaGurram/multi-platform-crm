@@ -15,7 +15,7 @@ const Dashboard = () => {
     amazonOrders: 0,
     flipkartOrders: 0,
     meeshoOrders: 0,
-    dipositeOrders: 0,
+    depositeOrders: 0,
   });
 
   const user = JSON.parse(localStorage.getItem("crmUser"));
