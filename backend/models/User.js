@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
 
+    status: {
+        type: String,
+        enum: ["Pending", "Active"],
+        default: "Pending",
+    },
+
     lastLogin: {
         type: Date,
     },

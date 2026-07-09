@@ -73,6 +73,31 @@ const Users = () => {
     document.title = "ARM - Users";
   }, []);
 
+  const approveUser = async (id) => {
+    const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
+    if (!currentUser) {
+      alert("Please login again.");
+      return;
+    }
+
+    try {
+      await axios.put(
+        `${API_URL}/api/users/approve/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        },
+      );
+
+      fetchUsers();
+    } catch (error) {
+      console.log(error.response?.data || error.message);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Users Management</h1>
@@ -90,6 +115,8 @@ const Users = () => {
               <th className="text-left p-4">Last Login</th>
 
               <th className="text-left p-4">Last Logout</th>
+
+              <th className="text-left p-4">Status</th>
 
               <th className="text-left p-4">Actions</th>
             </tr>
@@ -116,6 +143,27 @@ const Users = () => {
                   {user.lastLogout
                     ? new Date(user.lastLogout).toLocaleString()
                     : "Never Logged Out"}
+                </td>
+
+                <td className="p-4">
+                  <span
+                    className={`font-semibold ${
+                      user.status === "Pending"
+                        ? "text-yellow-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {user.status}
+                  </span>
+
+                  {user.status === "Pending" && (
+                    <button
+                      onClick={() => approveUser(user._id)}
+                      className="ml-3 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                    >
+                      Approve
+                    </button>
+                  )}
                 </td>
 
                 <td className="p-4">

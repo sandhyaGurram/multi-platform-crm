@@ -53,6 +53,8 @@ export const registerUser = async (req, res) => {
 
             password: hashedPassword,
 
+            status: "Pending",
+
         });
 
         res.status(201).json({
@@ -92,6 +94,12 @@ export const loginUser = async (req, res) => {
             user &&
             (await bcrypt.compare(password, user.password))
         ) {
+
+
+            if (user.status === "Pending") { return res.status(403).json({ message: "Your account is waiting for admin approval.", }); }
+
+
+
             user.lastLogin = new Date();
 
             await user.save();
