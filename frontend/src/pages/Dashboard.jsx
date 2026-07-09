@@ -155,7 +155,7 @@ const Dashboard = () => {
         {/* Amazon */}
 
         <div className="bg-yellow-100 p-6 rounded shadow">
-          <h4 className="text-yellow font-semibold">Amazon Orders</h4>
+          <h4 className="text-yellow-700 font-semibold">Amazon Orders</h4>
 
           <p className=" font-bold mt-3">{stats.amazonOrders}</p>
         </div>
