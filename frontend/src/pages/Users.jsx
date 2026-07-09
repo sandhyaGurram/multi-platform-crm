@@ -13,9 +13,14 @@ const Users = () => {
 
     if (!confirmDelete) return;
 
-    try {
-      const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+    const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
+    if (!currentUser) {
+      alert("Please login again.");
+      return;
+    }
+
+    try {
       await axios.delete(`${API_URL}/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${currentUser.token}`,
@@ -24,9 +29,31 @@ const Users = () => {
 
       fetchUsers();
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data || error.message);
     }
   };
+
+  // const handleDelete = async (id) => {
+  //   const confirmDelete = window.confirm(
+  //     "Are you sure you want to delete this user?",
+  //   );
+
+  //   if (!confirmDelete) return;
+
+  //   try {
+  //     const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
+  //     await axios.delete(`${API_URL}/api/users/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${currentUser.token}`,
+  //       },
+  //     });
+
+  //     fetchUsers();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const fetchUsers = async () => {
     try {

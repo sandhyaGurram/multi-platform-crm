@@ -11,16 +11,25 @@ import Settings from "../pages/Settings";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Users from "../pages/Users";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/loginxyz" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
-        <Route path="/registerxyxy" element={<Register />} />
+        <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={<MainLayout />}>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <MainLayout />{" "}
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Dashboard />} />
 
           <Route path="orders" element={<Orders />} />

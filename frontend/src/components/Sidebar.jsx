@@ -31,7 +31,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
     localStorage.removeItem("crmUser");
 
-    navigate("/loginxyz");
+    navigate("/login");
   };
 
   return (
@@ -285,7 +285,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </button>
         ) : (
           <button
-            onClick={() => navigate("/loginxyz")}
+            onClick={() => navigate("/login")}
             className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-green-400 hover:bg-green-500 hover:text-white transition-all"
           >
             <FaSignOutAlt />
