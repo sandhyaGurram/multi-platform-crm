@@ -21,18 +21,33 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const handleLogout = async () => {
     const user = JSON.parse(localStorage.getItem("crmUser"));
 
+    // Logout immediately
+    localStorage.removeItem("crmUser");
+    navigate("/login");
+
+    // Update logout time in background
     try {
-      await axios.post(
-        `https://multi-platform-crm.onrender.com/api/auth/logout/${user._id}`,
-      );
+      await axios.post(`${API_URL}/api/auth/logout/${user._id}`);
     } catch (error) {
       console.log(error);
     }
-
-    localStorage.removeItem("crmUser");
-
-    navigate("/login");
   };
+
+  // const handleLogout = async () => {
+  //   const user = JSON.parse(localStorage.getItem("crmUser"));
+
+  //   try {
+  //     await axios.post(
+  //       `https://multi-platform-crm.onrender.com/api/auth/logout/${user._id}`,
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  //   localStorage.removeItem("crmUser");
+
+  //   navigate("/login");
+  // };
 
   return (
     <>

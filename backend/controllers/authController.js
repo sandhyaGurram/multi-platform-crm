@@ -52,11 +52,15 @@ export const registerUser = async (req, res) => {
         const isApproved =
             email === "gurramsandhya2013@gmail.com";
 
+        const status = isApproved ? "Active" : "Pending";
+
 
         const salt = await bcrypt.genSalt(10);
 
         const hashedPassword =
             await bcrypt.hash(password, salt);
+
+
 
         const user = await User.create({
 
@@ -66,25 +70,17 @@ export const registerUser = async (req, res) => {
 
             password: hashedPassword,
 
-            status: "Pending",
-
             role,
 
             isApproved,
+
+            status,
 
         });
 
         res.status(201).json({
 
-            _id: user._id,
-
-            name: user.name,
-
-            email: user.email,
-
-            role: user.role,
-
-            token: generateToken(user._id, user.role),
+            message: "Registration successful. Please wait for admin approval."
 
         });
 

@@ -57,8 +57,13 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get(`${API_URL}/api/users`);
+      const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
+      const { data } = await axios.get(`${API_URL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      });
       setUsers(data);
     } catch (error) {
       console.log(error);
@@ -146,6 +151,25 @@ const Users = () => {
                 </td>
 
                 <td className="p-4">
+                  {user.isApproved ? (
+                    <span className="text-green-600 font-semibold">Active</span>
+                  ) : (
+                    <>
+                      <span className="text-orange-500 font-semibold">
+                        Pending
+                      </span>
+
+                      <button
+                        onClick={() => approveUser(user._id)}
+                        className="ml-3 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                      >
+                        Approve
+                      </button>
+                    </>
+                  )}
+                </td>
+
+                {/* <td className="p-4">
                   <span
                     className={`font-semibold ${
                       user.status === "Pending"
@@ -164,7 +188,7 @@ const Users = () => {
                       Approve
                     </button>
                   )}
-                </td>
+                </td> */}
 
                 <td className="p-4">
                   <button

@@ -32,9 +32,9 @@ const Register = () => {
         formData,
       );
 
-      localStorage.setItem("crmUser", JSON.stringify(data));
+      alert(data.message);
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.log(error);
 

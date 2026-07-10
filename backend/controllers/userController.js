@@ -52,6 +52,7 @@ export const approveUser = async (req, res) => {
             });
         }
 
+        user.isApproved = true;
         user.status = "Active";
 
         await user.save();
