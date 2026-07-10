@@ -37,7 +37,7 @@ const Login = () => {
     } catch (error) {
       console.log(error);
 
-      alert("Invalid Login");
+      alert(error.response?.data?.message || "Something went wrong");
     }
   };
 
