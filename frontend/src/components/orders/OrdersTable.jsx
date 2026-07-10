@@ -66,7 +66,7 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
     },
     {
       name: "Amount",
-      selector: (row) => row.amount || "-",
+      selector: (row) => <>₹ {row.amount || "-"}</>,
       right: true,
       width: "80px",
     },
