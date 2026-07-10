@@ -38,7 +38,7 @@ const Register = () => {
     } catch (error) {
       console.log(error);
 
-      alert("Registration Failed");
+      alert(error.response?.data?.message || error.message);
     }
   };
 
