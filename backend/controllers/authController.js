@@ -5,11 +5,14 @@ import jwt from "jsonwebtoken";
 
 // GENERATE TOKEN
 
-const generateToken = (id) => {
+const generateToken = (id, role) => {
 
     return jwt.sign(
 
-        { id },
+        {
+            id,
+            role,
+        },
 
         process.env.JWT_SECRET,
 
@@ -40,6 +43,16 @@ export const registerUser = async (req, res) => {
 
         }
 
+
+        const role =
+            email === "gurramsandhya2013@gmail.com"
+                ? "admin"
+                : "user";
+
+        const isApproved =
+            email === "gurramsandhya2013@gmail.com";
+
+
         const salt = await bcrypt.genSalt(10);
 
         const hashedPassword =
@@ -55,6 +68,10 @@ export const registerUser = async (req, res) => {
 
             status: "Pending",
 
+            role,
+
+            isApproved,
+
         });
 
         res.status(201).json({
@@ -65,7 +82,9 @@ export const registerUser = async (req, res) => {
 
             email: user.email,
 
-            token: generateToken(user._id),
+            role: user.role,
+
+            token: generateToken(user._id, user.role),
 
         });
 
@@ -90,39 +109,43 @@ export const loginUser = async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        if (
-            user &&
-            (await bcrypt.compare(password, user.password))
-        ) {
-
-
-            if (user.status === "Pending") { return res.status(403).json({ message: "Your account is waiting for admin approval.", }); }
-
-
-
-            user.lastLogin = new Date();
-
-            await user.save();
-
-            res.json({
-
-                _id: user._id,
-
-                name: user.name,
-
-                email: user.email,
-
-                token: generateToken(user._id),
-
+        if (!user) {
+            return res.status(401).json({
+                message: "Please register first.",
             });
+        }
 
-        } else {
+        const isMatch = await bcrypt.compare(password, user.password);
 
-            res.status(401).json({
+        if (!isMatch) {
+            return res.status(401).json({
                 message: "Invalid email or password",
+            });
+        }
+
+        if (!user.isApproved) {
+
+            return res.status(403).json({
+
+                message:
+                    "Your account is waiting for admin approval."
+
             });
 
         }
+
+
+        // Update last login
+        user.lastLogin = new Date();
+        await user.save();
+
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            token: generateToken(user._id, user.role),
+        });
 
     } catch (error) {
 
