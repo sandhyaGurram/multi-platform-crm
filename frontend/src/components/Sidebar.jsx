@@ -33,6 +33,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     }
   };
 
+  // const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
   // const handleLogout = async () => {
   //   const user = JSON.parse(localStorage.getItem("crmUser"));
 
@@ -84,7 +86,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
         <div className="flex flex-col gap-2">
           {/* Dashboard */}
-
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -99,9 +100,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaTachometerAlt />
             Dashboard
           </NavLink>
-
           {/* Orders Section */}
-
           <div className="mt-2">
             <div className="flex items-center gap-3 px-4 py-3 text-white font-semibold">
               <FaShoppingCart />
@@ -195,9 +194,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </NavLink>
             </div>
           </div>
-
           {/* Products */}
-
           <NavLink
             to="/products"
             className={({ isActive }) =>
@@ -212,9 +209,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaBoxOpen />
             Products
           </NavLink>
-
           {/* Customers */}
-
           <NavLink
             to="/customers"
             className={({ isActive }) =>
@@ -229,9 +224,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaUsers />
             Customers
           </NavLink>
-
           {/* Analytics */}
-
           <NavLink
             to="/analytics"
             className={({ isActive }) =>
@@ -246,9 +239,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaChartBar />
             Analytics
           </NavLink>
-
           {/* Settings */}
-
           <NavLink
             to="/settings"
             className={({ isActive }) =>
@@ -263,23 +254,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaCog />
             Settings
           </NavLink>
-
           {/* Users */}
-
-          <NavLink
-            to="/users"
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          {currentUser?.role === "admin" && (
+            <NavLink
+              to="/users"
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
       ${
         isActive
           ? "bg-white text-black font-bold"
           : "hover:bg-gray-800 text-gray-300"
       }`
-            }
-          >
-            <FaUsers />
-            Users
-          </NavLink>
+              }
+            >
+              <FaUsers />
+              Users
+            </NavLink>
+          )}
+          const currentUser = JSON.parse( localStorage.getItem("crmUser") );
         </div>
 
         {/* <button

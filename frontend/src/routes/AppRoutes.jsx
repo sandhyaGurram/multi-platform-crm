@@ -12,6 +12,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Users from "../pages/Users";
 import ProtectedRoute from "../components/ProtectedRoute";
+import AdminRoute from "../components/AdminRoute";
 
 const AppRoutes = () => {
   return (
@@ -42,7 +43,15 @@ const AppRoutes = () => {
 
           <Route path="settings" element={<Settings />} />
 
-          <Route path="users" element={<Users />} />
+          <Route
+            path="users"
+            element={
+              <AdminRoute>
+                {" "}
+                <Users />{" "}
+              </AdminRoute>
+            }
+          />
 
           <Route
             path="orders/shopify"
