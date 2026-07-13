@@ -165,9 +165,9 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
               </button>
             </>
           ) : (
-            <Button onClick={() => onView(row)} variant="secondary">
+            <button onClick={() => onView(row)} variant="secondary">
               View Details
-            </Button>
+            </button>
           )}
         </div>
       ),
