@@ -128,7 +128,7 @@ export const getOrders = async (req, res) => {
 
     try {
 
-        const orders = await Order.find();
+        const orders = await Order.find().sort({ orderDate: -1 });
 
         res.json(orders);
 
