@@ -16,10 +16,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("crmUser"));
+  const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
   const handleLogout = async () => {
-    const user = JSON.parse(localStorage.getItem("crmUser"));
+    const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
     // Logout immediately
     localStorage.removeItem("crmUser");
@@ -27,7 +27,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
     // Update logout time in background
     try {
-      await axios.post(`${API_URL}/api/auth/logout/${user._id}`);
+      await axios.post(`${API_URL}/api/auth/logout/${currentUser._id}`);
     } catch (error) {
       console.log(error);
     }
@@ -271,7 +271,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               Users
             </NavLink>
           )}
-          const currentUser = JSON.parse( localStorage.getItem("crmUser") );
         </div>
 
         {/* <button
@@ -282,7 +281,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           Logout
         </button> */}
 
-        {user ? (
+        {currentUser ? (
           <button
             onClick={handleLogout}
             className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
