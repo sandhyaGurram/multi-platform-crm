@@ -103,6 +103,26 @@ const Users = () => {
     }
   };
 
+  const updateRole = async (id, role) => {
+    const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
+    try {
+      await axios.put(
+        `${API_URL}/api/users/role/${id}`,
+        { role },
+        {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        },
+      );
+
+      fetchUsers();
+    } catch (error) {
+      console.log(error.response?.data || error.message);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Users Management</h1>
@@ -122,6 +142,8 @@ const Users = () => {
               <th className="text-left p-4">Last Logout</th>
 
               <th className="text-left p-4">Status</th>
+
+              <th className="text-left p-4">Role</th>
 
               <th className="text-left p-4">Actions</th>
             </tr>
@@ -189,6 +211,17 @@ const Users = () => {
                     </button>
                   )}
                 </td> */}
+
+                <td className="p-4">
+                  <select
+                    value={user.role}
+                    onChange={(e) => updateRole(user._id, e.target.value)}
+                    className="border rounded px-2 py-1"
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
 
                 <td className="p-4">
                   <button

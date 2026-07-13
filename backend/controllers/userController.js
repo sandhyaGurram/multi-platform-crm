@@ -80,6 +80,14 @@ export const changeRole = async (req, res) => {
             });
         }
 
+
+        if (user.email === "gurramsandhya2013@gmail.com") {
+            return res.status(400).json({
+                message: "Default admin role cannot be changed."
+            });
+        }
+
+
         user.role = role;
 
         await user.save();

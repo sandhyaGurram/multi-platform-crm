@@ -24,6 +24,8 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
   //   return searchableText.includes(searchValue);
   // });
 
+  const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
   const columns = [
     {
       name: "Order ID",
@@ -113,27 +115,60 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
         );
       },
     },
+    // {
+    //   name: "Action",
+    //   center: true,
+    //   width: "160px",
+    //   cell: (row) => (
+    //     <div className=" gap-2 items-center">
+    //       <button
+    //         onClick={() => onView(row)}
+    //         className="bg-black text-white p-2 rounded-lg hover:bg-gray-800"
+    //         title="View"
+    //       >
+    //         <FaEdit size={18} />
+    //       </button>
+
+    //       <button
+    //         onClick={() => onDelete(row._id)}
+    //         className="bg-red-500 text-white p-2 ms-2 rounded-lg hover:bg-red-600"
+    //         title="Delete"
+    //       >
+    //         <FaTrash size={18} />
+    //       </button>
+    //     </div>
+    //   ),
+    // },
+
     {
       name: "Action",
       center: true,
-      width: "160px",
+      width: "200px",
       cell: (row) => (
-        <div className=" gap-2 items-center">
-          <button
-            onClick={() => onView(row)}
-            className="bg-black text-white p-2 rounded-lg hover:bg-gray-800"
-            title="View"
-          >
-            <FaEdit size={18} />
-          </button>
+        <div className="flex gap-2 items-center">
+          {currentUser?.role === "admin" ? (
+            <>
+              <button
+                onClick={() => onView(row)}
+                className="bg-black text-white p-2 rounded-lg hover:bg-gray-800"
+                title="Edit"
+              >
+                <FaEdit size={18} />
+              </button>
 
-          <button
-            onClick={() => onDelete(row._id)}
-            className="bg-red-500 text-white p-2 ms-2 rounded-lg hover:bg-red-600"
-            title="Delete"
-          >
-            <FaTrash size={18} />
-          </button>
+              <button
+                onClick={() => onDelete(row._id)}
+                className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                title="Delete"
+              >
+                <FaTrash size={18} />
+              </button>
+            </>
+          ) : (
+            <Button onClick={() => onView(row)} variant="secondary">
+              View Details
+            </Button>
+          )}
         </div>
       ),
     },

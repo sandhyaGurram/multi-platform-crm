@@ -101,7 +101,7 @@ const Orders = ({ platform }) => {
 
   console.log("Search Results:", searchFilteredOrders);
 
-  const user = JSON.parse(localStorage.getItem("crmUser"));
+  const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
   const fetchOrders = async () => {
     try {
@@ -111,7 +111,7 @@ const Orders = ({ platform }) => {
 
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${currentUser.token}`,
           },
         },
       );
@@ -144,7 +144,7 @@ const Orders = ({ platform }) => {
 
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${currentUser.token}`,
           },
         },
       );
@@ -222,12 +222,14 @@ const Orders = ({ platform }) => {
         </select>
         {/* date selection code end */}
 
-        <button
-          onClick={() => setModalOpen(true)}
-          className="bg-black text-white px-5 py-3 rounded-lg"
-        >
-          Add Order
-        </button>
+        {currentUser?.role === "admin" && (
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-black text-white px-5 py-3 rounded-lg"
+          >
+            Add Order
+          </button>
+        )}
       </div>
 
       {/* upload excell file */}
@@ -239,13 +241,14 @@ const Orders = ({ platform }) => {
 
       {/* FILE IMPORT */}
 
-      <div className="mb-6 flex w-full max-w-2xl">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".xlsx,.xls,.csv"
-          onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
-          className="
+      {currentUser?.role === "admin" && (
+        <div className="mb-6 flex w-full max-w-2xl">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".xlsx,.xls,.csv"
+            onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
+            className="
       block min-w-0 flex-1
       rounded-l-lg
       border border-r-0 border-gray-300
@@ -264,13 +267,13 @@ const Orders = ({ platform }) => {
       hover:file:bg-gray-200
       focus:outline-none
     "
-        />
+          />
 
-        <button
-          type="button"
-          onClick={handleImport}
-          disabled={!excelFile || isImporting}
-          className="
+          <button
+            type="button"
+            onClick={handleImport}
+            disabled={!excelFile || isImporting}
+            className="
       whitespace-nowrap
       rounded-r-lg
       border border-gray-300
@@ -283,11 +286,11 @@ const Orders = ({ platform }) => {
       disabled:cursor-not-allowed
       disabled:opacity-50
     "
-        >
-          {isImporting ? "Importing..." : "Import Excel"}
-        </button>
-      </div>
-
+          >
+            {isImporting ? "Importing..." : "Import Excel"}
+          </button>
+        </div>
+      )}
       {/* <button
         onClick={handleImport}
         className="bg-green-600 text-white px-5 py-3 rounded-lg"

@@ -1,4 +1,6 @@
 const OrderDrawer = ({ isOpen, onClose, order, setEditOpen }) => {
+  const currentUser = JSON.parse(localStorage.getItem("crmUser"));
+
   if (!isOpen || !order) return null;
 
   return (
@@ -93,16 +95,18 @@ const OrderDrawer = ({ isOpen, onClose, order, setEditOpen }) => {
         </div>
       </div>
 
-      <button
-        onClick={() => {
-          onClose();
+      {currentUser?.role === "admin" && (
+        <button
+          onClick={() => {
+            onClose();
 
-          setEditOpen(true);
-        }}
-        className="bg-blue-500 text-white px-5 py-3 rounded-lg mt-6"
-      >
-        Edit Order
-      </button>
+            setEditOpen(true);
+          }}
+          className="bg-blue-500 text-white px-5 py-3 rounded-lg mt-6"
+        >
+          Edit Order
+        </button>
+      )}
     </div>
   );
 };
