@@ -63,7 +63,9 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
     {
       name: "Order Date",
       selector: (row) =>
-        row.orderDate ? new Date(row.orderDate).toLocaleDateString() : "-",
+        row.orderDate
+          ? new Date(row.orderDate).toLocaleDateString("en-GB")
+          : "-",
       width: "100px",
     },
     {

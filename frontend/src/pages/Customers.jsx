@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../config/api";
 
 import CustomersTable from "../components/customers/CustomersTable";
 
 import CustomerDrawer from "../components/customers/CustomerDrawer";
 
-import customers from "../data/customers";
-
 const Customers = () => {
+  const [customers, setCustomers] = useState([]);
+
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -21,7 +23,25 @@ const Customers = () => {
 
   useEffect(() => {
     document.title = "ARM - Customers";
+
+    fetchCustomers();
   }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("crmUser"));
+
+      const res = await axios.get(`${API_URL}/api/customers`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      setCustomers(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>

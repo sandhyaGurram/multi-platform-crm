@@ -28,6 +28,8 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import importRoutes from "./routes/importRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
+
 
 
 dotenv.config();
@@ -49,6 +51,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/import", importRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/customers", customerRoutes);
 
 app.get("/", (req, res) => {
 
