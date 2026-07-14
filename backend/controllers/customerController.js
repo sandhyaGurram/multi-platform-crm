@@ -12,13 +12,17 @@ export const getCustomers = async (req, res) => {
                             {
                                 $ifNull: [
                                     "$customerPhone",
-                                    "$customerName"
+                                    ["$customerName", "$customer"]
                                 ]
                             }
                         ]
                     },
 
-                    customerName: { $first: "$customerName" },
+                    customerName: {
+                        $first: {
+                            $ifNull: ["$customerName", "$customer"]
+                        }
+                    },
 
                     customerPhone: { $first: "$customerPhone" },
 
