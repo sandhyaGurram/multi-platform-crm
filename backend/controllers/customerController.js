@@ -6,16 +6,23 @@ export const getCustomers = async (req, res) => {
         const customers = await Order.aggregate([
             {
                 $group: {
-                    _id: "$customerEmail",
+                    _id: {
+                        $ifNull: [
+                            "$customerEmail",
+                            {
+                                $ifNull: [
+                                    "$customerPhone",
+                                    "$customerName"
+                                ]
+                            }
+                        ]
+                    },
 
                     customerName: { $first: "$customerName" },
-                    customerEmail: { $first: "$customerEmail" },
+
                     customerPhone: { $first: "$customerPhone" },
 
-                    city: { $first: "$city" },
-                    state: { $first: "$state" },
-                    country: { $first: "$country" },
-                    pincode: { $first: "$pincode" },
+                    customerEmail: { $first: "$customerEmail" },
 
                     customerAddress: { $first: "$customerAddress" },
 
@@ -23,13 +30,7 @@ export const getCustomers = async (req, res) => {
 
                     totalSpent: { $sum: "$amount" },
 
-                    totalQuantity: { $sum: "$quantity" },
-
-                    lastOrderDate: { $max: "$orderDate" },
-
-                    firstOrderDate: { $min: "$orderDate" },
-
-                    platforms: { $addToSet: "$platform" }
+                    platforms: { $addToSet: "$platform" },
                 }
             },
 
