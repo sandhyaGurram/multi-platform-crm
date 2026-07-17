@@ -65,14 +65,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       {/* Sidebar */}
 
       <div
-        className={`
-          fixed md:static top-0 left-0 z-50
-          w-64 h-full bg-black text-white p-4
-          transform transition-transform duration-300
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0
-        `}
-      >
+  className={`
+    fixed md:static top-0 left-0 z-50
+    w-64 h-screen bg-black text-white p-4
+    flex flex-col
+    transform transition-transform duration-300
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0
+  `}
+>
         {/* Close Button Mobile */}
 
         <button
