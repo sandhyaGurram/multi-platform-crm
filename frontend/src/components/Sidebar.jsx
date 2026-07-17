@@ -85,7 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
         {/* <h1 className="text-3xl font-bold mb-10">CRM PANEL</h1> */}
 
-        <div className="flex flex-col gap-2">
+        <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
           {/* Dashboard */}
           <NavLink
             to="/"
@@ -285,7 +285,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {currentUser ? (
           <button
             onClick={handleLogout}
-            className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
+            className="mt-auto flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all"
           >
             <FaSignOutAlt />
             Logout
@@ -293,7 +293,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="mt-10 flex items-center gap-3 px-4 py-3 rounded-xl text-green-400 hover:bg-green-500 hover:text-white transition-all"
+            className="mt-auto flex items-center gap-3 px-4 py-3 rounded-xl text-green-400 hover:bg-green-500 hover:text-white transition-all"
           >
             <FaSignOutAlt />
             Login

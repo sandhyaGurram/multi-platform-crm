@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import Notification from "../models/Notification.js";
 
 
 // CREATE ORDER
@@ -109,6 +110,12 @@ export const createOrder = async (req, res) => {
             pincode,
         });
 
+        await Notification.create({
+    title: "New Order",
+    message: `Order ${order.orderId} has been added.`,
+    type: "order",
+});
+
         res.status(201).json(order);
 
     } catch (error) {
@@ -157,6 +164,12 @@ export const updateOrder = async (req, res) => {
             }
 
         );
+
+        await Notification.create({
+    title: "Order Updated",
+    message: `Order ${updatedOrder.orderId} has been updated.`,
+    type: "order",
+});
 
         res.json(updatedOrder);
 
