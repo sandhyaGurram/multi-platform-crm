@@ -74,15 +74,8 @@ const orderSchema = new mongoose.Schema(
             required: true,
         },
 
-        status: {
-            type: String,
-            required: true,
-        },
+       
 
-        date: {
-            type: Date,
-            default: Date.now,
-        },
 
         // CUSTOMER DETAILS
 
@@ -143,6 +136,16 @@ const orderSchema = new mongoose.Schema(
         // DATES
 
         orderDate: Date,
+
+    items: [
+    {
+        productName: String,
+        sku: String,
+        variant: String,
+        quantity: Number,
+        unitPrice: Number,
+    }
+],
 
         deliveryDate: Date,
         category: String,

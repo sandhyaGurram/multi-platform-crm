@@ -46,125 +46,221 @@ const CustomerDrawer = ({ isOpen, onClose, customer }) => {
 
           {customer ? (
 
-            <>
+<>
+    {/* Customer Profile */}
 
-              <div>
+    <div className="border rounded-xl p-5 bg-white shadow-sm">
 
-                <p className="text-gray-500">
-                  Name
+        <h2 className="text-2xl font-bold text-[#a51e27]">
+            {customer.customerName}
+        </h2>
+
+        <span className="inline-block mt-2 px-3 py-1 text-xs rounded-full bg-[#a51e27]/10 text-[#a51e27] font-semibold">
+            {customer.platforms?.join(", ")}
+        </span>
+
+        <div className="mt-5 space-y-3 text-sm">
+
+            <div>
+                <p className="text-gray-500">📧 Email</p>
+                <p className="font-medium">
+                    {customer.customerEmail || "-"}
+                </p>
+            </div>
+
+            <div>
+                <p className="text-gray-500">📞 Phone</p>
+                <p className="font-medium">
+                    {customer.customerPhone || "-"}
+                </p>
+            </div>
+
+            <div>
+                <p className="text-gray-500">📍 Address</p>
+                <p className="font-medium">
+                    {customer.customerAddress || "-"}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    {/* Summary */}
+
+    <div>
+
+        <h3 className="font-semibold text-lg mb-3">
+            Customer Summary
+        </h3>
+
+        <div className="grid grid-cols-3 gap-3">
+
+            <div className="rounded-xl bg-gray-50 border p-4 text-center">
+
+                <p className="text-xs text-gray-500">
+                    Orders
                 </p>
 
-                <h3 className="font-bold text-xl">
-                  {customer.name}
+                <h3 className="text-xl font-bold text-[#a51e27]">
+                    {customer.totalOrders}
                 </h3>
 
-              </div>
+            </div>
 
-              <div>
+            <div className="rounded-xl bg-gray-50 border p-4 text-center">
 
-                <p className="text-gray-500">
-                  Email
+                <p className="text-xs text-gray-500">
+                    Lifetime
                 </p>
 
-                <h3 className="font-semibold">
-                  {customer.email}
+                <h3 className="text-lg font-bold text-[#a51e27]">
+                    ₹{customer.totalSpent?.toLocaleString()}
                 </h3>
 
-              </div>
+            </div>
 
-              <div>
+            <div className="rounded-xl bg-gray-50 border p-4 text-center">
 
-                <p className="text-gray-500">
-                  Phone
+                <p className="text-xs text-gray-500">
+                    Qty
                 </p>
 
-                <h3 className="font-semibold">
-                  {customer.phone}
+                <h3 className="text-xl font-bold text-[#a51e27]">
+                    {customer.totalQuantity || 0}
                 </h3>
 
-              </div>
+            </div>
 
-              <div>
+        </div>
 
-                <p className="text-gray-500">
-                  Address
+    </div>
+
+
+
+    {/* Latest Order */}
+
+    <div>
+
+        <h3 className="font-semibold text-lg mb-3">
+            Latest Order
+        </h3>
+
+        <div className="border rounded-xl p-4 bg-white shadow-sm">
+
+            <div className="flex justify-between">
+
+                <h4 className="font-bold">
+                    {customer.latestOrder?.orderId || "-"}
+                </h4>
+
+                <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+                    {customer.latestOrder?.orderStatus || "-"}
+                </span>
+
+            </div>
+
+            <p className="mt-2 text-lg font-semibold">
+                ₹{customer.latestOrder?.amount || 0}
+            </p>
+
+            <p className="text-sm text-gray-500 mt-2">
+                {customer.latestOrder?.orderDate}
+            </p>
+
+            <hr className="my-4" />
+
+            <h4 className="font-semibold mb-2">
+                Items Purchased
+            </h4>
+
+            {customer.latestOrder?.items?.length ? (
+
+                customer.latestOrder.items.map((item, index) => (
+
+                    <div
+                        key={index}
+                        className="flex justify-between py-1"
+                    >
+
+                        <span>
+                            {item.productName}
+                        </span>
+
+                        <span>
+                            ×{item.quantity}
+                        </span>
+
+                    </div>
+
+                ))
+
+            ) : (
+
+                <p className="text-gray-500 text-sm">
+                    No Items
                 </p>
 
-                <div className="bg-gray-100 p-4 rounded-lg">
+            )}
 
-                  <p>
-                    {customer.city}
-                  </p>
+        </div>
 
+    </div>
+
+
+
+    {/* Top Products */}
+
+    <div>
+
+        <h3 className="font-semibold text-lg mb-3">
+            Top Purchased Products
+        </h3>
+
+        <div className="border rounded-xl divide-y">
+
+            {customer.topProducts?.length ? (
+
+                customer.topProducts.map((product, index) => (
+
+                    <div
+                        key={index}
+                        className="flex justify-between px-4 py-3"
+                    >
+
+                        <span>
+                            {product.name}
+                        </span>
+
+                        <span className="font-semibold">
+                            {product.qty} pcs
+                        </span>
+
+                    </div>
+
+                ))
+
+            ) : (
+
+                <div className="p-4 text-gray-500">
+                    No Products
                 </div>
 
-              </div>
+            )}
 
-              <div>
+        </div>
 
-                <p className="text-gray-500">
-                  Total Orders
-                </p>
+    </div>
 
-                <h3 className="font-semibold">
-                  {customer.orders}
-                </h3>
+</>
 
-              </div>
+) : (
 
-              <div>
+<p>No Customer Selected</p>
 
-                <p className="text-gray-500">
-                  Lifetime Value
-                </p>
-
-                <h3 className="font-semibold">
-                  {customer.spent}
-                </h3>
-
-              </div>
-
-              <div>
-
-                <p className="text-gray-500">
-                  Platform
-                </p>
-
-                <h3 className="font-semibold">
-                  {customer.platform}
-                </h3>
-
-              </div>
-
-              {/* Recent Orders */}
-
-              <div>
-
-                <p className="text-gray-500 mb-2">
-                  Recent Orders
-                </p>
-
-                <div className="space-y-3">
-
-                  <div className="bg-gray-100 p-4 rounded-lg">
-                    #1001 - ₹3200
-                  </div>
-
-                  <div className="bg-gray-100 p-4 rounded-lg">
-                    #1002 - ₹2100
-                  </div>
-
-                </div>
-
-              </div>
-
-            </>
-
-          ) : (
-
-            <p>No Customer Selected</p>
-
-          )}
+)}
 
         </div>
 
