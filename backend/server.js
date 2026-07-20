@@ -29,6 +29,7 @@ import userRoutes from "./routes/userRoutes.js";
 import importRoutes from "./routes/importRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 
 
 
@@ -53,6 +54,8 @@ app.use("/api/import", importRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 app.use("/api/customers", customerRoutes);
+
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
 
