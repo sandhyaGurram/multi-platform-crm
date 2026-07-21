@@ -1,5 +1,9 @@
 import { getTotalStock, getProductStatus, } from "../../utils/productUtils";
 
+const user = JSON.parse(localStorage.getItem("crmUser"));
+const isAdmin = user?.role === "admin";
+
+
 const ProductsTable = ({
   products,
   onView,
@@ -214,12 +218,14 @@ const ProductsTable = ({
           View
         </button>
 
+{isAdmin && (
         <button
           onClick={() => onEdit(product)}
           className="bg-blue-500 text-white p-1 rounded-lg"
         >
           Edit
         </button>
+        )}
       </>
     )}
 

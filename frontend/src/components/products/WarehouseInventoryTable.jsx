@@ -3,29 +3,32 @@ import {
   getProductStatus,
 } from "../../utils/productUtils";
 
+const user = JSON.parse(localStorage.getItem("crmUser"));
+const isAdmin = user?.role === "admin";
+
 const WarehouseInventoryTable = ({ products,
     setProducts, }) => {
   
 
  const handleChange = (id, field, value) => {
 
-    setProducts(prev =>
-        prev.map(product =>
+  if (!isAdmin) {
+    return;
+  }
 
-            product.id === id
-                ? {
-                      ...product,
-
-                      warehouseStock: {
-                          ...product.warehouseStock,
-                          [field]: Number(value),
-                      },
-                  }
-
-                : product
-        )
-    );
-
+  setProducts((prev) =>
+    prev.map((product) =>
+      product.id === id
+        ? {
+            ...product,
+            warehouseStock: {
+              ...product.warehouseStock,
+              [field]: Number(value),
+            },
+          }
+        : product
+    )
+  );
 };
 
   return (
@@ -116,35 +119,37 @@ const WarehouseInventoryTable = ({ products,
 
                   <td className="border p-3">
 
-                    <input
-                      type="number"
-                      value={item.warehouseStock.hyderabad}
-                      onChange={(e) =>
-                        handleChange(
-                          item.id,
-    "hyderabad",
-                          e.target.value
-                        )
-                      }
-                      className="w-20 border rounded px-2 py-1"
-                    />
+                   <input
+  type="number"
+  value={item.warehouseStock.hyderabad}
+  disabled={!isAdmin}
+  onChange={(e) =>
+    handleChange(item.id, "hyderabad", e.target.value)
+  }
+  className={`w-20 border rounded px-2 py-1 ${
+    !isAdmin
+      ? "bg-gray-100 cursor-not-allowed text-gray-500"
+      : ""
+  }`}
+/>
 
                   </td>
 
                   <td className="border p-3">
 
                     <input
-                      type="number"
-                      value={item.warehouseStock.nalgonda}
-                      onChange={(e) =>
-                        handleChange(
-                          item.id,
-    "nalgonda",
-                          e.target.value
-                        )
-                      }
-                      className="w-20 border rounded px-2 py-1"
-                    />
+  type="number"
+  value={item.warehouseStock.nalgonda}
+  disabled={!isAdmin}
+  onChange={(e) =>
+    handleChange(item.id, "nalgonda", e.target.value)
+  }
+  className={`w-20 border rounded px-2 py-1 ${
+    !isAdmin
+      ? "bg-gray-100 cursor-not-allowed text-gray-500"
+      : ""
+  }`}
+/>
 
                   </td>
 

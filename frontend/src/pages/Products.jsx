@@ -92,7 +92,13 @@ const handleView = (product) => {
     setDrawerOpen(true);
 };
 
+const user = JSON.parse(localStorage.getItem("crmUser"));
+
 const handleEdit = (product) => {
+   if (user?.role !== "admin") {
+    return;
+  }
+
     setEditingId(product.id);
     setEditedProduct({...product,});
 };
@@ -280,12 +286,14 @@ const stats = {
       />
 
  <div className="flex flex-wrap gap-3">
+  {JSON.parse(localStorage.getItem("crmUser"))?.role === "admin" && (
    <button
   onClick={() => setIsAdding(true)}
   className="bg-[#a51e27] text-white px-5 rounded-lg"
 >
   + Add Product
 </button>
+)}
  </div>
 
  <WarehouseInventoryTable
