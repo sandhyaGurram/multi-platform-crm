@@ -31,11 +31,15 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
+import startShopifySync from "./cron/shopifySync.js";
+
 
 
 dotenv.config();
 
 connectDB();
+
+startShopifySync();
 
 const app = express();
 

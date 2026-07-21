@@ -1,3 +1,5 @@
+import { getTotalStock } from "../../utils/productUtils";
+
 const ProductsTable = ({
   products,
   onView,
@@ -53,7 +55,7 @@ const ProductsTable = ({
 
                       <input
                         className="border rounded px-1  w-full"
-                        value={editedProduct.name || ""}
+                        value={editedProduct.productName  || ""}
                         onChange={(e) =>
                           setEditedProduct({
                             ...editedProduct,
@@ -65,7 +67,7 @@ const ProductsTable = ({
                     ) : (
 
                       <p className="font-semibold text-gray-800">
-                        {product.name}
+                        {product.productName}
                       </p>
 
                     )}
@@ -158,7 +160,7 @@ const ProductsTable = ({
   />
 ) : (
   <div className="font-semibold">
-    {product.stock}
+    {getTotalStock(product)}
   </div>
 )}
 
@@ -255,9 +257,9 @@ const ProductsTable = ({
       <input
         className="w-full border rounded px-2 py-2"
         placeholder="Product Name"
-        value={newProduct.name}
+        value={newProduct.productName}
         onChange={(e) =>
-          setNewProduct({ ...newProduct, name: e.target.value })
+          setNewProduct({ ...newProduct, productName: e.target.value })
         }
       />
     </td>

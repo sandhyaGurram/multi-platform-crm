@@ -3,6 +3,12 @@ import ProductsTable from "../components/products/ProductsTable";
 import initialProducts from "../data/products";
 import { useState, useEffect } from "react";
 import ProductDrawer from "../components/products/ProductDrawer";
+
+import WarehouseInventoryTable from "../components/products/WarehouseInventoryTable";
+
+import { getTotalStock } from "../utils/productUtils";
+
+
 import {
   FaBoxOpen,
   FaCheckCircle,
@@ -30,7 +36,7 @@ const [selectedStatus, setSelectedStatus] = useState("All Status");
 const [isAdding, setIsAdding] = useState(false);
 
 const [newProduct, setNewProduct] = useState({
-  name: "",
+  productName: "",
   category: "",
   sku: "",
   vendor: "",
@@ -60,7 +66,7 @@ const handleAddProduct = () => {
   setProducts([...products, product]);
 
   setNewProduct({
-    name: "",
+    productName: "",
     category: "",
     sku: "",
     vendor: "",
@@ -96,6 +102,14 @@ const handleSave = () => {
 };
 
 
+const getTotalStock = (product) => {
+  return (
+    product.warehouseStock.shopify +
+    product.warehouseStock.hyderabad +
+    product.warehouseStock.nalgonda
+  );
+};
+
 
   useEffect(() => {
     document.title = "ARM - Products";
@@ -107,7 +121,7 @@ const handleSave = () => {
 
   const filteredProducts = products.filter((product) => {
   const matchesSearch =
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.sku.toLowerCase().includes(searchTerm.toLowerCase());
 
   const matchesCategory =
@@ -122,14 +136,21 @@ const handleSave = () => {
 });
 
 
-  const stats = {
+const stats = {
   total: filteredProducts.length,
 
-  inStock: filteredProducts.filter((p) => p.stock > 10).length,
+  inStock: filteredProducts.filter(
+    (p) => getTotalStock(p) > 10
+  ).length,
 
-  lowStock: filteredProducts.filter((p) => p.stock > 0 && p.stock <= 10).length,
+  lowStock: filteredProducts.filter((p) => {
+    const total = getTotalStock(p);
+    return total > 0 && total <= 10;
+  }).length,
 
-  outStock: filteredProducts.filter((p) => p.stock === 0).length,
+  outStock: filteredProducts.filter(
+    (p) => getTotalStock(p) === 0
+  ).length,
 };
 
   return (
@@ -266,6 +287,11 @@ const handleSave = () => {
   + Add Product
 </button>
  </div>
+
+ <WarehouseInventoryTable
+    products={products}
+    setProducts={setProducts}
+/>
      
     </div>
   );

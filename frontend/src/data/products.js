@@ -1,41 +1,26 @@
 const products = [
 
     {
-        id: "P1001",
+    id: "P1001",
+    productName: "Vitamin C Serum",
+    category: "Skincare",
+    sku: "SKU-VC-001",
+    vendor: "ARM",
 
-        name: "Vitamin C Serum",
-
-        category: "Skincare",
-
-        sku: "SKU-VC-001",
-        vendor: "ARM",
-
-        price: 899,
-
-        stock: 45,
-
-        status: "In Stock",
-        description: "Brightening serum with Vitamin C for glowing skin.",
-
-        platform: "Shopify",
-
-        variants: [
-            {
-                name: "30ml",
-                price: 899,
-            },
-
-            {
-                name: "50ml",
-                price: 1299,
-            },
-        ],
+    warehouseStock: {
+        shopify: 45,
+        hyderabad: 20,
+        nalgonda: 15
     },
+
+    price: 899,
+    status: "In Stock"
+},
 
     {
         id: "P1002",
 
-        name: "Face Wash",
+        productName: "Face Wash",
 
         category: "Skincare",
 
@@ -44,7 +29,11 @@ const products = [
 
         price: 499,
 
-        stock: 3,
+        warehouseStock: {
+    shopify: 0,
+    hyderabad: 0,
+    nalgonda: 0,
+},
 
         status: "Low Stock",
         description: "Brightening serum with Vitamin C for glowing skin.",
@@ -67,7 +56,7 @@ const products = [
     {
         id: "P1003",
 
-        name: "Night Cream",
+        productName: "Night Cream",
 
         category: "Beauty",
 
@@ -76,7 +65,11 @@ const products = [
 
         price: 1299,
 
-        stock: 0,
+        warehouseStock: {
+    shopify: 45,
+    hyderabad: 0,
+    nalgonda: 0,
+},
 
         status: "Out of Stock",
         description: "Brightening serum with Vitamin C for glowing skin.",
@@ -98,7 +91,7 @@ const products = [
     {
         id: "P1004",
 
-        name: "Vitamin C Serum",
+        productName: "Vitamin C Serum",
 
         category: "Skincare",
 
@@ -107,7 +100,11 @@ const products = [
 
         price: 899,
 
-        stock: 45,
+          warehouseStock: {
+    shopify: 55,
+    hyderabad: 0,
+    nalgonda: 0,
+},
 
         status: "In Stock",
 

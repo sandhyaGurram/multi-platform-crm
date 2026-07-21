@@ -1,14 +1,34 @@
 import { FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { getTotalStock } from "../../utils/productUtils";
+
+const Row = ({ label, value }) => {
+  return (
+    <div className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
+      <span className="text-gray-500 font-medium">
+        {label}
+      </span>
+
+      <span className="font-semibold text-gray-800">
+        {value}
+      </span>
+    </div>
+  );
+};
+
 
 const ProductDrawer = ({ isOpen, onClose, product,mode }) => {
 
   const [formData, setFormData] = useState({
-    name: "",
+    productName: "",
     category: "",
     sku: "",
     price: "",
-    stock: "",
+    warehouseStock: {
+    shopify: 0,
+    hyderabad: 0,
+    nalgonda: 0,
+  },
     status: ""
 });
 
@@ -24,7 +44,7 @@ const ProductDrawer = ({ isOpen, onClose, product,mode }) => {
 
       <div
         className={`
-          fixed top-0 right-0 h-full w-full md:w-[450px]
+          fixed top-0 right-0 h-full w-full md:w-[620px]
           bg-white shadow-2xl z-50
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "translate-x-full"}
@@ -54,18 +74,18 @@ const ProductDrawer = ({ isOpen, onClose, product,mode }) => {
 mode === "view" ? (
 
 <h3 className="font-bold text-xl">
-    {product.name}
+    {product.productName}
 </h3>
 
 ) : (
 
 <input
     className="w-full border rounded-lg p-2"
-    value={formData.name}
+    value={formData.productName}
     onChange={(e)=>
         setFormData({
             ...formData,
-            name:e.target.value
+            productName:e.target.value
         })
     }
 />
@@ -103,7 +123,9 @@ mode === "view" ? (
               <div>
                 <p className="text-gray-500">Stock</p>
 
-                <h3 className="font-semibold">{product.stock}</h3>
+               <h3 className="font-semibold">
+  {getTotalStock(product)}
+</h3>
               </div>
 
               {/* Status */}
@@ -126,21 +148,9 @@ mode === "view" ? (
                 </span>
               </div>
 
-              {/* Description */}
+             
 
-              <div>
-                <p className="text-gray-500">Description</p>
-
-                <p className="mt-2 text-gray-700">{product.description}</p>
-              </div>
-
-              {/* Platform */}
-
-              <div>
-                <p className="text-gray-500">Platform</p>
-
-                <h3 className="font-semibold">{product.platform}</h3>
-              </div>
+              
 
               {/* Inventory */}
 
@@ -148,11 +158,15 @@ mode === "view" ? (
                 <p className="text-gray-500 mb-2">Inventory</p>
 
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p>Warehouse Stock: {product.stock}</p>
+                  <p>Shopify: {product.warehouseStock.shopify}</p>
 
-                  <p>Reserved: 2</p>
+<p>Hyderabad: {product.warehouseStock.hyderabad}</p>
 
-                  <p>Available: {product.stock - 2}</p>
+<p>Nalgonda: {product.warehouseStock.nalgonda}</p>
+
+<p className="font-semibold mt-2">
+  Total: {getTotalStock(product)}
+</p>
                 </div>
               </div>
 
@@ -162,13 +176,12 @@ mode === "view" ? (
                 <p className="text-gray-500 mb-2">Variants</p>
 
                 <div className="space-y-3">
-                  {product.variants.map((variant, index) => (
-                    <div key={index} className="bg-gray-100 p-4 rounded-lg">
-                      <h3 className="font-semibold">{variant.name}</h3>
-
-                      <p>Price: {variant.price}</p>
-                    </div>
-                  ))}
+                  {product.variants?.map((variant, index) => (
+  <div key={index} className="bg-gray-100 p-4 rounded-lg">
+    <h3 className="font-semibold">{variant.name}</h3>
+    <p>Price: ₹{variant.price}</p>
+  </div>
+))}
                 </div>
               </div>
             </>
