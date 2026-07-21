@@ -6,7 +6,7 @@ import ProductDrawer from "../components/products/ProductDrawer";
 
 import WarehouseInventoryTable from "../components/products/WarehouseInventoryTable";
 
-import { getTotalStock } from "../utils/productUtils";
+import { getTotalStock, getProductStatus, } from "../utils/productUtils";
 
 
 import {
@@ -41,15 +41,20 @@ const [newProduct, setNewProduct] = useState({
   sku: "",
   vendor: "",
   price: "",
-  stock: "",
+   warehouseStock: {
+    shopify: 0,
+    hyderabad: 0,
+    nalgonda: 0,
+  },
   status: "In Stock",
 });
 
 const handleAddProduct = () => {
   if (
-    !newProduct.name ||
-    !newProduct.category ||
-    !newProduct.sku ||
+    !newProduct.productName.trim() ||
+    !newProduct.category.trim() ||
+    !newProduct.sku.trim() ||
+    !newProduct.vendor.trim() ||
     !newProduct.price
   ) {
     alert("Please fill all required fields.");
@@ -60,7 +65,6 @@ const handleAddProduct = () => {
     ...newProduct,
     id: `P${1000 + products.length + 1}`,
     price: Number(newProduct.price),
-    stock: Number(newProduct.stock),
   };
 
   setProducts([...products, product]);
@@ -71,7 +75,11 @@ const handleAddProduct = () => {
     sku: "",
     vendor: "",
     price: "",
-    stock: "",
+    warehouseStock: {
+      shopify: 0,
+      hyderabad: 0,
+      nalgonda: 0,
+    },
     status: "In Stock",
   });
 
@@ -102,13 +110,6 @@ const handleSave = () => {
 };
 
 
-const getTotalStock = (product) => {
-  return (
-    product.warehouseStock.shopify +
-    product.warehouseStock.hyderabad +
-    product.warehouseStock.nalgonda
-  );
-};
 
 
   useEffect(() => {
@@ -140,16 +141,15 @@ const stats = {
   total: filteredProducts.length,
 
   inStock: filteredProducts.filter(
-    (p) => getTotalStock(p) > 10
+    (p) => getProductStatus(p) === "In Stock"
   ).length,
 
-  lowStock: filteredProducts.filter((p) => {
-    const total = getTotalStock(p);
-    return total > 0 && total <= 10;
-  }).length,
+  lowStock: filteredProducts.filter(
+    (p) => getProductStatus(p) === "Low Stock"
+  ).length,
 
   outStock: filteredProducts.filter(
-    (p) => getTotalStock(p) === 0
+    (p) => getProductStatus(p) === "Out of Stock"
   ).length,
 };
 

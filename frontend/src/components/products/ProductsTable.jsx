@@ -1,4 +1,4 @@
-import { getTotalStock } from "../../utils/productUtils";
+import { getTotalStock, getProductStatus, } from "../../utils/productUtils";
 
 const ProductsTable = ({
   products,
@@ -59,7 +59,7 @@ const ProductsTable = ({
                         onChange={(e) =>
                           setEditedProduct({
                             ...editedProduct,
-                            name: e.target.value
+                            productName: e.target.value
                           })
                         }
                       />
@@ -146,64 +146,42 @@ const ProductsTable = ({
 
               <td className="p-1">
 
-                {editingId === product.id ? (
-  <input
-    type="number"
-    className="border rounded px-1 py-1 w-20"
-    value={editedProduct.stock || ""}
-    onChange={(e) =>
-      setEditedProduct({
-        ...editedProduct,
-        stock: e.target.value,
-      })
-    }
-  />
-) : (
   <div className="font-semibold">
-    {getTotalStock(product)}
+    {editingId === product.id
+      ? getTotalStock(editedProduct)
+      : getTotalStock(product)}
   </div>
-)}
 
-                <div className="text-xs text-gray-500">
+  <div className="text-xs text-gray-500">
+    Available
+  </div>
 
-                  Available
-
-                </div>
-
-              </td>
+</td>
 
               {/* Status */}
 
-              <td className="p-1">
-  {editingId === product.id ? (
-    <select
-      className="border rounded px-1 py-1"
-      value={editedProduct.status || ""}
-      onChange={(e) =>
-        setEditedProduct({
-          ...editedProduct,
-          status: e.target.value,
-        })
-      }
-    >
-      <option>In Stock</option>
-      <option>Low Stock</option>
-      <option>Out of Stock</option>
-    </select>
-  ) : (
-    <span
-      className={`px-1 py-1 rounded-full text-xs font-semibold
-        ${
-          product.status === "In Stock"
-            ? "bg-green-100 text-green-700"
-            : product.status === "Low Stock"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-red-100 text-red-700"
-        }`}
-    >
-      {product.status}
-    </span>
-  )}
+  <td className="p-1">
+  {(() => {
+    const currentProduct =
+      editingId === product.id ? editedProduct : product;
+
+    const status = getProductStatus(currentProduct);
+
+    return (
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-semibold
+          ${
+            status === "In Stock"
+              ? "bg-green-100 text-green-700"
+              : status === "Low Stock"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-red-100 text-red-700"
+          }`}
+      >
+        {status}
+      </span>
+    );
+  })()}
 </td>
 
               {/* Button */}
@@ -309,31 +287,26 @@ const ProductsTable = ({
       />
     </td>
 
-    <td className="p-2">
-      <input
-        type="number"
-        className="w-full border rounded px-2 py-2"
-        placeholder="Stock"
-        value={newProduct.stock}
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, stock: e.target.value })
-        }
-      />
-    </td>
+  <td className="p-2">
+  <div className="px-2 py-2 text-center font-medium">
+    {getTotalStock(newProduct)}
+  </div>
+</td>
 
-    <td className="p-2">
-      <select
-        className="w-full border rounded px-2 py-2"
-        value={newProduct.status}
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, status: e.target.value })
-        }
-      >
-        <option>In Stock</option>
-        <option>Low Stock</option>
-        <option>Out of Stock</option>
-      </select>
-    </td>
+   <td className="p-2">
+  <span
+    className={`px-2 py-1 rounded-full text-xs font-semibold
+      ${
+        getProductStatus(newProduct) === "In Stock"
+          ? "bg-green-100 text-green-700"
+          : getProductStatus(newProduct) === "Low Stock"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-red-100 text-red-700"
+      }`}
+  >
+    {getProductStatus(newProduct)}
+  </span>
+</td>
 
     <td className="p-2">
       <div className="flex gap-2 justify-center">

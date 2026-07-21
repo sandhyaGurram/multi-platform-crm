@@ -1,4 +1,7 @@
-
+import {
+  getTotalStock,
+  getProductStatus,
+} from "../../utils/productUtils";
 
 const WarehouseInventoryTable = ({ products,
     setProducts, }) => {

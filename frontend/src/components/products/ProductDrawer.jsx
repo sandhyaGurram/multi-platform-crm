@@ -1,6 +1,6 @@
 import { FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { getTotalStock } from "../../utils/productUtils";
+import { getTotalStock, getProductStatus, } from "../../utils/productUtils";
 
 const Row = ({ label, value }) => {
   return (
@@ -137,14 +137,14 @@ mode === "view" ? (
                   className={`
                     px-3 py-1 rounded-full text-sm font-bold
 
-                    ${product.status === "In Stock" && "bg-green-100 text-green-600"}
+                    ${getProductStatus(product) === "In Stock" && "bg-green-100 text-green-600"}
 
-                    ${product.status === "Low Stock" && "bg-yellow-100 text-yellow-600"}
+                    ${getProductStatus(product) === "Low Stock" && "bg-yellow-100 text-yellow-600"}
 
-                    ${product.status === "Out of Stock" && "bg-red-100 text-red-600"}
+                    ${getProductStatus(product) === "Out of Stock" && "bg-red-100 text-red-600"}
                   `}
                 >
-                  {product.status}
+                  {getProductStatus(product)}
                 </span>
               </div>
 

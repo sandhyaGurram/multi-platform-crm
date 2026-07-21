@@ -9,3 +9,17 @@ export const getTotalStock = (product) => {
     product.warehouseStock.nalgonda
   );
 };
+
+export const getProductStatus = (product) => {
+  const totalStock = getTotalStock(product);
+
+  if (totalStock === 0) {
+    return "Out of Stock";
+  }
+
+  if (totalStock <= 10) {
+    return "Low Stock";
+  }
+
+  return "In Stock";
+};
