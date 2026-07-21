@@ -30,6 +30,7 @@ const Login = () => {
 
         formData,
       );
+      console.log("Login Response:", data);
 
       localStorage.setItem("crmUser", JSON.stringify(data));
 

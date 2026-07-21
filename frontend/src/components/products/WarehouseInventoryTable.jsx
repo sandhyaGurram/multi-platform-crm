@@ -3,11 +3,13 @@ import {
   getProductStatus,
 } from "../../utils/productUtils";
 
-const user = JSON.parse(localStorage.getItem("crmUser"));
-const isAdmin = user?.role === "admin";
+
 
 const WarehouseInventoryTable = ({ products,
     setProducts, }) => {
+
+      const user = JSON.parse(localStorage.getItem("crmUser"));
+  const isAdmin = user?.role === "admin";
   
 
  const handleChange = (id, field, value) => {

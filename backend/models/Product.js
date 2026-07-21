@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema(
     productName: {
       type: String,
       required: true,
+      trim: true,
     },
 
     sku: {
@@ -18,20 +19,34 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
 
+    vendor: {
+      type: String,
+      required: true,
+    },
+
     price: {
       type: Number,
       required: true,
     },
 
-    stock: {
+    comparePrice: {
       type: Number,
-      required: true,
+      default: 0,
     },
 
-    status: {
-      type: String,
-      enum: ["In Stock", "Low Stock", "Out of Stock"],
-      default: "In Stock",
+    warehouseStock: {
+      shopify: {
+        type: Number,
+        default: 0,
+      },
+      hyderabad: {
+        type: Number,
+        default: 0,
+      },
+      nalgonda: {
+        type: Number,
+        default: 0,
+      },
     },
   },
   {

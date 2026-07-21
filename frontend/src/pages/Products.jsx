@@ -93,6 +93,7 @@ const handleView = (product) => {
 };
 
 const user = JSON.parse(localStorage.getItem("crmUser"));
+const isAdmin = user?.role === "admin";
 
 const handleEdit = (product) => {
    if (user?.role !== "admin") {

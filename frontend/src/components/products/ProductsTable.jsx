@@ -1,7 +1,6 @@
 import { getTotalStock, getProductStatus, } from "../../utils/productUtils";
 
-const user = JSON.parse(localStorage.getItem("crmUser"));
-const isAdmin = user?.role === "admin";
+
 
 
 const ProductsTable = ({
@@ -20,6 +19,12 @@ const ProductsTable = ({
   handleAddProduct,
   setIsAdding,
 }) => {
+
+
+  const user = JSON.parse(localStorage.getItem("crmUser"));
+const isAdmin = user?.role === "admin";
+
+
   return (
     <div className="bg-white rounded-xl shadow p-6 overflow-x-auto">
       <table className="w-full min-w-[900px] table-fixed">
