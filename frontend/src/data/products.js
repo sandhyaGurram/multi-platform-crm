@@ -8,8 +8,9 @@ const products = [
         category: "Skincare",
 
         sku: "SKU-VC-001",
+        vendor: "ARM",
 
-        price: "₹899",
+        price: 899,
 
         stock: 45,
 
@@ -21,12 +22,12 @@ const products = [
         variants: [
             {
                 name: "30ml",
-                price: "₹899",
+                price: 899,
             },
 
             {
                 name: "50ml",
-                price: "₹1299",
+                price: 1299,
             },
         ],
     },
@@ -39,8 +40,9 @@ const products = [
         category: "Skincare",
 
         sku: "SKU-FW-002",
+        vendor: "ARM",
 
-        price: "₹499",
+        price: 499,
 
         stock: 3,
 
@@ -52,12 +54,12 @@ const products = [
         variants: [
             {
                 name: "30ml",
-                price: "₹899",
+                price: 899,
             },
 
             {
                 name: "50ml",
-                price: "₹1299",
+                price: 1299,
             },
         ],
     },
@@ -70,8 +72,9 @@ const products = [
         category: "Beauty",
 
         sku: "SKU-NC-003",
+        vendor: "ARM",
 
-        price: "₹1299",
+        price: 1299,
 
         stock: 0,
 
@@ -83,25 +86,26 @@ const products = [
         variants: [
             {
                 name: "30ml",
-                price: "₹899",
+                price: 899,
             },
 
             {
                 name: "50ml",
-                price: "₹1299",
+                price: 1299,
             },
         ],
     },
     {
-        id: "P1001",
+        id: "P1004",
 
         name: "Vitamin C Serum",
 
         category: "Skincare",
 
         sku: "SKU-VC-001",
+        vendor: "ARM",
 
-        price: "₹899",
+        price: 899,
 
         stock: 45,
 
@@ -114,12 +118,12 @@ const products = [
         variants: [
             {
                 name: "30ml",
-                price: "₹899",
+                price: 899,
             },
 
             {
                 name: "50ml",
-                price: "₹1299",
+                price: 1299,
             },
         ],
     }

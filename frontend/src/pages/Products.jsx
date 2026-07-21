@@ -1,6 +1,6 @@
 import ProductsTable from "../components/products/ProductsTable";
 
-import products from "../data/products";
+import initialProducts from "../data/products";
 import { useState, useEffect } from "react";
 import ProductDrawer from "../components/products/ProductDrawer";
 import {
@@ -15,23 +15,121 @@ const Products = () => {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleView = (product) => {
-    setSelectedProduct(product);
-    setDrawerOpen(true);
+  const [drawerMode, setDrawerMode] = useState("view");
+
+  const [editingId, setEditingId] = useState(null);
+  
+  const [editedProduct, setEditedProduct] = useState({});
+
+  const [products, setProducts] = useState(initialProducts);
+
+  const [searchTerm, setSearchTerm] = useState("");
+const [selectedCategory, setSelectedCategory] = useState("All Categories");
+const [selectedStatus, setSelectedStatus] = useState("All Status");
+
+const [isAdding, setIsAdding] = useState(false);
+
+const [newProduct, setNewProduct] = useState({
+  name: "",
+  category: "",
+  sku: "",
+  vendor: "",
+  price: "",
+  stock: "",
+  status: "In Stock",
+});
+
+const handleAddProduct = () => {
+  if (
+    !newProduct.name ||
+    !newProduct.category ||
+    !newProduct.sku ||
+    !newProduct.price
+  ) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  const product = {
+    ...newProduct,
+    id: `P${1000 + products.length + 1}`,
+    price: Number(newProduct.price),
+    stock: Number(newProduct.stock),
   };
+
+  setProducts([...products, product]);
+
+  setNewProduct({
+    name: "",
+    category: "",
+    sku: "",
+    vendor: "",
+    price: "",
+    stock: "",
+    status: "In Stock",
+  });
+
+  setIsAdding(false);
+};
+
+const handleView = (product) => {
+    setSelectedProduct(product);
+    setDrawerMode("view");
+    setDrawerOpen(true);
+};
+
+const handleEdit = (product) => {
+    setEditingId(product.id);
+    setEditedProduct({...product,});
+};
+
+const handleSave = () => {
+    setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+            product.id === editedProduct.id
+                ? editedProduct
+                : product
+        )
+    );
+
+    setEditingId(null);
+};
+
+
 
   useEffect(() => {
     document.title = "ARM - Products";
   }, []);
 
+
+  
+
+
+  const filteredProducts = products.filter((product) => {
+  const matchesSearch =
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.sku.toLowerCase().includes(searchTerm.toLowerCase());
+
+  const matchesCategory =
+    selectedCategory === "All Categories" ||
+    product.category === selectedCategory;
+
+  const matchesStatus =
+    selectedStatus === "All Status" ||
+    product.status === selectedStatus;
+
+  return matchesSearch && matchesCategory && matchesStatus;
+});
+
+
   const stats = {
-  total: products.length,
+  total: filteredProducts.length,
 
-  inStock: products.filter((p) => p.stock > 10).length,
+  inStock: filteredProducts.filter((p) => p.stock > 10).length,
 
-  lowStock: products.filter((p) => p.stock > 0 && p.stock <= 10).length,
+  lowStock: filteredProducts.filter((p) => p.stock > 0 && p.stock <= 10).length,
 
-  outStock: products.filter((p) => p.stock === 0).length,
+  outStock: filteredProducts.filter((p) => p.stock === 0).length,
 };
 
   return (
@@ -53,38 +151,35 @@ const Products = () => {
   <div className="flex flex-wrap gap-3">
 
     <input
-      type="text"
-      placeholder="Search Products..."
-      className="bg-white px-4 py-3 rounded-lg border outline-none w-64"
-    />
+  type="text"
+  placeholder="Search Products..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="bg-white px-4 py-3 rounded-lg border outline-none w-64"
+/>
 
-    <select className="bg-white px-4 py-3 rounded-lg border outline-none">
+    <select
+  value={selectedCategory}
+  onChange={(e) => setSelectedCategory(e.target.value)}
+  className="bg-white px-4 py-3 rounded-lg border outline-none"
+>
+  <option>All Categories</option>
+  <option>Skincare</option>
+  <option>Beauty</option>
+</select>
 
-      <option>All Categories</option>
+    <select
+  value={selectedStatus}
+  onChange={(e) => setSelectedStatus(e.target.value)}
+  className="bg-white px-4 py-3 rounded-lg border outline-none"
+>
+  <option>All Status</option>
+  <option>In Stock</option>
+  <option>Low Stock</option>
+  <option>Out of Stock</option>
+</select>
 
-      <option>Skin Care</option>
 
-      <option>Hair Care</option>
-
-      <option>Beauty</option>
-
-    </select>
-
-    <select className="bg-white px-4 py-3 rounded-lg border outline-none">
-
-      <option>All Status</option>
-
-      <option>In Stock</option>
-
-      <option>Low Stock</option>
-
-      <option>Out Of Stock</option>
-
-    </select>
-
-    <button className="bg-[#a51e27] text-white px-5 rounded-lg">
-      + Add Product
-    </button>
 
   </div>
 
@@ -93,74 +188,85 @@ const Products = () => {
 
       {/* Dashboard Cards */}
 
-<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
 
-  <div className="bg-white rounded-xl shadow p-5">
-
-    <FaBoxOpen className="text-3xl text-[#a51e27]" />
-
-    <p className="text-gray-500 mt-2">
+  <div className="bg-white rounded-lg shadow-sm border p-4 flex items-center justify-between">
+  <div>
+    <p className="text-xs text-gray-500 uppercase tracking-wide">
       Total Products
     </p>
 
-    <h2 className="text-3xl font-bold">
+    <h2 className="text-2xl font-bold text-gray-800">
       {stats.total}
     </h2>
-
   </div>
 
-  <div className="bg-white rounded-xl shadow p-5">
+  <FaBoxOpen className="text-2xl text-[#a51e27]" />
+</div>
 
-    <FaCheckCircle className="text-3xl text-green-600" />
-
-    <p className="text-gray-500 mt-2">
-      In Stock
-    </p>
-
-    <h2 className="text-3xl font-bold">
-      {stats.inStock}
-    </h2>
-
+  <div className="bg-white rounded-lg shadow-sm border p-4 flex items-center justify-between">
+  <div>
+    <p className="text-xs text-gray-500 uppercase">In Stock</p>
+    <h2 className="text-2xl font-bold">{stats.inStock}</h2>
   </div>
 
-  <div className="bg-white rounded-xl shadow p-5">
+  <FaCheckCircle className="text-2xl text-green-600" />
+</div>
 
-    <FaExclamationTriangle className="text-3xl text-yellow-500" />
-
-    <p className="text-gray-500 mt-2">
-      Low Stock
-    </p>
-
-    <h2 className="text-3xl font-bold">
-      {stats.lowStock}
-    </h2>
-
+<div className="bg-white rounded-lg shadow-sm border p-4 flex items-center justify-between">
+  <div>
+    <p className="text-xs text-gray-500 uppercase">Low Stock</p>
+    <h2 className="text-2xl font-bold">{stats.lowStock}</h2>
   </div>
 
-  <div className="bg-white rounded-xl shadow p-5">
+  <FaExclamationTriangle className="text-2xl text-yellow-500" />
+</div>
 
-    <FaTimesCircle className="text-3xl text-red-500" />
-
-    <p className="text-gray-500 mt-2">
-      Out Of Stock
-    </p>
-
-    <h2 className="text-3xl font-bold">
-      {stats.outStock}
-    </h2>
-
+ <div className="bg-white rounded-lg shadow-sm border p-4 flex items-center justify-between">
+  <div>
+    <p className="text-xs text-gray-500 uppercase">Out of Stock</p>
+    <h2 className="text-2xl font-bold">{stats.outStock}</h2>
   </div>
+
+  <FaTimesCircle className="text-2xl text-red-500" />
+</div>
 
 </div>
 
       {/* Table */}
 
-      <ProductsTable products={products} onView={handleView} />
+     <ProductsTable
+  products={filteredProducts}
+  onView={handleView}
+  onEdit={handleEdit}
+  editingId={editingId}
+  editedProduct={editedProduct}
+  setEditedProduct={setEditedProduct}
+  handleSave={handleSave}
+  setEditingId={setEditingId}
+
+  isAdding={isAdding}
+  newProduct={newProduct}
+  setNewProduct={setNewProduct}
+  handleAddProduct={handleAddProduct}
+  setIsAdding={setIsAdding}
+/>
       <ProductDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         product={selectedProduct}
+        mode={drawerMode}
       />
+
+ <div className="flex flex-wrap gap-3">
+   <button
+  onClick={() => setIsAdding(true)}
+  className="bg-[#a51e27] text-white px-5 rounded-lg"
+>
+  + Add Product
+</button>
+ </div>
+     
     </div>
   );
 };

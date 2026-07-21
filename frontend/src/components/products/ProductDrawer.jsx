@@ -1,6 +1,17 @@
 import { FaTimes } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
-const ProductDrawer = ({ isOpen, onClose, product }) => {
+const ProductDrawer = ({ isOpen, onClose, product,mode }) => {
+
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    sku: "",
+    price: "",
+    stock: "",
+    status: ""
+});
+
   return (
     <>
       {/* Overlay */}
@@ -39,7 +50,28 @@ const ProductDrawer = ({ isOpen, onClose, product }) => {
               <div>
                 <p className="text-gray-500">Product Name</p>
 
-                <h3 className="font-bold text-xl">{product.name}</h3>
+                {
+mode === "view" ? (
+
+<h3 className="font-bold text-xl">
+    {product.name}
+</h3>
+
+) : (
+
+<input
+    className="w-full border rounded-lg p-2"
+    value={formData.name}
+    onChange={(e)=>
+        setFormData({
+            ...formData,
+            name:e.target.value
+        })
+    }
+/>
+
+)
+}
               </div>
 
               {/* SKU */}
