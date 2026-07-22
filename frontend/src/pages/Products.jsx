@@ -116,7 +116,7 @@ const handleEdit = (product) => {
 const handleSave = () => {
     setProducts((prevProducts) =>
         prevProducts.map((product) =>
-            product.id === editedProduct.id
+            product._id === editedProduct._id
                 ? editedProduct
                 : product
         )
@@ -137,6 +137,9 @@ useEffect(() => {
 const fetchProducts = async () => {
   try {
     const res = await getProducts();
+
+    console.log(res.data);
+    
     setProducts(res.data);
   } catch (err) {
     console.error(err);

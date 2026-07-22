@@ -3,7 +3,7 @@ import {
   getProductStatus,
 } from "../../utils/productUtils";
 
-
+import { updateProduct } from "../../services/productService";
 
 const WarehouseInventoryTable = ({ products,
     setProducts, }) => {
@@ -12,25 +12,35 @@ const WarehouseInventoryTable = ({ products,
   const isAdmin = user?.role === "admin";
   
 
- const handleChange = (id, field, value) => {
+const handleChange = async (id, field, value) => {
+  if (!isAdmin) return;
 
-  if (!isAdmin) {
-    return;
-  }
+  const stock = Number(value);
 
+  // Find current product
+  const product = products.find((p) => p._id === id);
+
+  if (!product) return;
+
+  const updatedProduct = {
+    ...product,
+    warehouseStock: {
+      ...product.warehouseStock,
+      [field]: stock,
+    },
+  };
+
+  // Update UI immediately
   setProducts((prev) =>
-    prev.map((product) =>
-      product.id === id
-        ? {
-            ...product,
-            warehouseStock: {
-              ...product.warehouseStock,
-              [field]: Number(value),
-            },
-          }
-        : product
-    )
+    prev.map((p) => (p._id === id ? updatedProduct : p))
   );
+
+  try {
+    // Save to MongoDB
+    await updateProduct(id, updatedProduct);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
   return (
@@ -95,7 +105,7 @@ const WarehouseInventoryTable = ({ products,
 
               return (
 
-                <tr key={item.id}>
+                <tr key={item._id}>
 
                   <td className="border p-3">
 
@@ -103,9 +113,7 @@ const WarehouseInventoryTable = ({ products,
                       {item.productName}
                     </div>
 
-                    <div className="text-xs text-gray-500">
-                      #{item.id}
-                    </div>
+                    
 
                   </td>
 
@@ -126,7 +134,7 @@ const WarehouseInventoryTable = ({ products,
   value={item.warehouseStock.hyderabad}
   disabled={!isAdmin}
   onChange={(e) =>
-    handleChange(item.id, "hyderabad", e.target.value)
+    handleChange(item._id, "hyderabad", e.target.value)
   }
   className={`w-20 border rounded px-2 py-1 ${
     !isAdmin
@@ -144,7 +152,7 @@ const WarehouseInventoryTable = ({ products,
   value={item.warehouseStock.nalgonda}
   disabled={!isAdmin}
   onChange={(e) =>
-    handleChange(item.id, "nalgonda", e.target.value)
+    handleChange(item._id, "nalgonda", e.target.value)
   }
   className={`w-20 border rounded px-2 py-1 ${
     !isAdmin

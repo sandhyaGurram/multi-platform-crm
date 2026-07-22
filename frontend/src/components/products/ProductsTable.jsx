@@ -56,7 +56,7 @@ const isAdmin = user?.role === "admin";
 
         <tbody>
           {products.map((product, index) => (
-            <tr key={index} className="border-b hover:bg-gray-50 transition">
+            <tr key={product._id || product.id} className="border-b hover:bg-gray-50 transition">
               <td className="p-1">
                 <div>
                   {
