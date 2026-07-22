@@ -1,6 +1,6 @@
 import ProductsTable from "../components/products/ProductsTable";
 
-import initialProducts from "../data/products";
+
 import { useState, useEffect } from "react";
 import ProductDrawer from "../components/products/ProductDrawer";
 
@@ -16,6 +16,14 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+} from "../services/productService";
+
+
+
 const Products = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -27,7 +35,7 @@ const Products = () => {
   
   const [editedProduct, setEditedProduct] = useState({});
 
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
 const [selectedCategory, setSelectedCategory] = useState("All Categories");
@@ -49,7 +57,7 @@ const [newProduct, setNewProduct] = useState({
   status: "In Stock",
 });
 
-const handleAddProduct = () => {
+const handleAddProduct = async () => {
   if (
     !newProduct.productName.trim() ||
     !newProduct.category.trim() ||
@@ -61,29 +69,30 @@ const handleAddProduct = () => {
     return;
   }
 
-  const product = {
-    ...newProduct,
-    id: `P${1000 + products.length + 1}`,
-    price: Number(newProduct.price),
-  };
+  try {
+    await createProduct(newProduct);
 
-  setProducts([...products, product]);
+    fetchProducts();
 
-  setNewProduct({
-    productName: "",
-    category: "",
-    sku: "",
-    vendor: "",
-    price: "",
-    warehouseStock: {
-      shopify: 0,
-      hyderabad: 0,
-      nalgonda: 0,
-    },
-    status: "In Stock",
-  });
+    setNewProduct({
+      productName: "",
+      category: "",
+      sku: "",
+      vendor: "",
+      price: "",
+      warehouseStock: {
+        shopify: 0,
+        hyderabad: 0,
+        nalgonda: 0,
+      },
+      status: "In Stock",
+    });
 
-  setIsAdding(false);
+    setIsAdding(false);
+
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const handleView = (product) => {
@@ -119,9 +128,20 @@ const handleSave = () => {
 
 
 
-  useEffect(() => {
-    document.title = "ARM - Products";
-  }, []);
+useEffect(() => {
+  document.title = "ARM - Products";
+
+  fetchProducts();
+}, []);
+
+const fetchProducts = async () => {
+  try {
+    const res = await getProducts();
+    setProducts(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 
   
