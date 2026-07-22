@@ -109,7 +109,7 @@ const handleEdit = (product) => {
     return;
   }
 
-    setEditingId(product.id);
+    setEditingId(product._id);
     setEditedProduct({...product,});
 };
 

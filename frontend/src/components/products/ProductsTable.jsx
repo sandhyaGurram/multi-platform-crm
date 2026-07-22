@@ -60,7 +60,7 @@ const isAdmin = user?.role === "admin";
               <td className="p-1">
                 <div>
                   {
-                    editingId === product.id ? (
+                    editingId === product._id ? (
 
                       <input
                         className="border rounded px-1  w-full"
@@ -82,13 +82,13 @@ const isAdmin = user?.role === "admin";
                     )}
 
                   <p className="text-xs text-gray-500">
-                    #{product.id}
+                    #{product.sku}
                   </p>
                 </div>
               </td>
 
               <td className="p-1">
-  {editingId === product.id ? (
+  {editingId === product._id ? (
     <input
       type="text"
       className="border rounded px-1 py-1 w-full"
@@ -106,7 +106,7 @@ const isAdmin = user?.role === "admin";
 </td>
 
               <td className="p-1">
-  {editingId === product.id ? (
+  {editingId === product._id ? (
     <input
       type="text"
       className="border rounded px-1 py-1 w-full"
@@ -129,7 +129,7 @@ const isAdmin = user?.role === "admin";
 
               <td className="p-1">
 
-                {editingId === product.id ? (
+                {editingId === product._id ? (
   <input
     type="number"
     className="border rounded px-1 py-1 w-24"
@@ -156,7 +156,7 @@ const isAdmin = user?.role === "admin";
               <td className="p-1">
 
   <div className="font-semibold">
-    {editingId === product.id
+    {editingId === product._id
       ? getTotalStock(editedProduct)
       : getTotalStock(product)}
   </div>
@@ -172,7 +172,7 @@ const isAdmin = user?.role === "admin";
   <td className="p-1">
   {(() => {
     const currentProduct =
-      editingId === product.id ? editedProduct : product;
+      editingId === product._id ? editedProduct : product;
 
     const status = getProductStatus(currentProduct);
 
@@ -198,7 +198,7 @@ const isAdmin = user?.role === "admin";
               <td className="p-1">
   <div className="flex justify-center gap-2">
 
-    {editingId === product.id ? (
+    {editingId === product._id ? (
       <>
         <button
           onClick={() => handleSave()}
