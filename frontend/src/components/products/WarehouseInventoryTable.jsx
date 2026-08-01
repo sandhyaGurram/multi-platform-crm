@@ -71,7 +71,7 @@ const handleChange = async (id, field, value) => {
               </th>
 
               <th className="border p-3">
-                Hyderabad
+                WareHouse-1
                 <br />
                 <span className="text-xs text-gray-500">
                   Manual
@@ -79,7 +79,7 @@ const handleChange = async (id, field, value) => {
               </th>
 
               <th className="border p-3">
-                Nalgonda
+                WareHouse-2
                 <br />
                 <span className="text-xs text-gray-500">
                   Manual

@@ -138,8 +138,8 @@ const fetchProducts = async () => {
   try {
     const res = await getProducts();
 
-    console.log(res.data);
-    
+    console.log("Products from MongoDB:", res.data);
+
     setProducts(res.data);
   } catch (err) {
     console.error(err);

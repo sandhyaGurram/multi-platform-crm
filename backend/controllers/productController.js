@@ -2,9 +2,18 @@ import Product from "../models/Product.js";
 
 // GET ALL PRODUCTS
 
+
+
+
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
+
+    console.log("Total products:", products.length);
+
+    products.forEach((p) => {
+      console.log(p.productName);
+    });
 
     res.status(200).json(products);
   } catch (error) {
@@ -145,3 +154,4 @@ export const deleteProduct = async (req, res) => {
     });
   }
 };
+

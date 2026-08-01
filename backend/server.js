@@ -30,6 +30,9 @@ import importRoutes from "./routes/importRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import shopifyRoutes from "./routes/shopifyRoutes.js";
+import { fetchShopifyOrders } from "./services/shopifyService.js";
+import { fetchShopifyProducts } from "./services/shopifyProductService.js";
 
 import startShopifySync from "./cron/shopifySync.js";
 
@@ -37,9 +40,26 @@ import startShopifySync from "./cron/shopifySync.js";
 
 dotenv.config();
 
-connectDB();
+const startServer = async () => {
+  try {
+    await connectDB();
 
-startShopifySync();
+    await fetchShopifyProducts();
+
+    startShopifySync();
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Server startup failed:", error);
+  }
+};
+
+
 
 const app = express();
 
@@ -61,16 +81,12 @@ app.use("/api/customers", customerRoutes);
 
 app.use("/api/products", productRoutes);
 
+app.use("/api/shopify", shopifyRoutes);
+
 app.get("/", (req, res) => {
 
     res.send("CRM Backend Running");
 
 });
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-
-    console.log(`Server running on port ${PORT}`);
-
-});
+startServer();
