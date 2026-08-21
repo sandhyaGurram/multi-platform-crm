@@ -148,9 +148,7 @@ const fetchProducts = async () => {
 
 
   
-
-
-  const filteredProducts = products.filter((product) => {
+const filteredProducts = products.filter((product) => {
   const matchesSearch =
     product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.sku.toLowerCase().includes(searchTerm.toLowerCase());
@@ -161,10 +159,29 @@ const fetchProducts = async () => {
 
   const matchesStatus =
     selectedStatus === "All Status" ||
-    product.status === selectedStatus;
+    getProductStatus(product) === selectedStatus;
 
   return matchesSearch && matchesCategory && matchesStatus;
 });
+
+console.log("TOTAL PRODUCTS:", products.length);
+console.log("FILTERED PRODUCTS:", filteredProducts.length);
+
+//   const filteredProducts = products.filter((product) => {
+//   const matchesSearch =
+//     product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//     product.sku.toLowerCase().includes(searchTerm.toLowerCase());
+
+//   const matchesCategory =
+//     selectedCategory === "All Categories" ||
+//     product.category === selectedCategory;
+
+//   const matchesStatus =
+//     selectedStatus === "All Status" ||
+//     product.status === selectedStatus;
+
+//   return matchesSearch && matchesCategory && matchesStatus;
+// });
 
 
 const stats = {
