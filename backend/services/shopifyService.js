@@ -28,7 +28,20 @@ export const fetchShopifyOrders = async () => {
     for (const order of shopifyOrders) {
 
       const fulfillment = order.fulfillments?.[0];
-      const tracking = fulfillment?.trackingInfo?.[0];
+
+const trackingNumber =
+  fulfillment?.tracking_number ||
+  fulfillment?.tracking_numbers?.[0] ||
+  null;
+
+const trackingUrl =
+  fulfillment?.tracking_url ||
+  fulfillment?.tracking_urls?.[0] ||
+  null;
+
+const courierPartner =
+  fulfillment?.tracking_company ||
+  null;
 
       const customerName = order.customer
         ? `${order.customer.first_name || ""} ${order.customer.last_name || ""}`.trim()
@@ -93,31 +106,57 @@ export const fetchShopifyOrders = async () => {
         paymentStatus:
           order.financial_status || "",
 
-        orderStatus:
-          order.cancelled_at
-            ? "Cancelled"
-            : "Active",
 
-        fulfillmentStatus:
-          order.display_fulfillment_status || null,
+          orderStatus:
+  order.cancelled_at
+    ? "Cancelled"
+    : order.fulfillment_status === "fulfilled"
+      ? "Fulfilled"
+      : order.fulfillment_status === "partial"
+        ? "Partially Fulfilled"
+        : "Unfulfilled",
 
-        deliveryStatus:
-          fulfillment?.displayStatus || null,
+fulfillmentStatus:
+  order.fulfillment_status || null,
 
-        courierPartner:
-          tracking?.company || null,
+deliveryStatus:
+  fulfillment?.shipment_status || null,
 
-        awbNumber:
-          tracking?.number || null,
+courierPartner,
 
-        trackingId:
-          tracking?.number || null,
+awbNumber: trackingNumber,
 
-        trackingUrl:
-          tracking?.url || null,
+trackingId: trackingNumber,
 
-        deliveryDate:
-          fulfillment?.deliveredAt || null,
+trackingUrl,
+
+deliveryDate: null,
+
+        // orderStatus:
+        //   order.cancelled_at
+        //     ? "Cancelled"
+        //     : "Active",
+
+        // fulfillmentStatus:
+        //   order.display_fulfillment_status || null,
+
+        // deliveryStatus:
+        //   fulfillment?.displayStatus || null,
+
+        // courierPartner:
+        //   tracking?.company || null,
+
+        // awbNumber:
+        //   tracking?.number || null,
+
+        // trackingId:
+        //   tracking?.number || null,
+
+        // trackingUrl:
+        //   tracking?.url || null,
+
+        // deliveryDate:
+        //   fulfillment?.deliveredAt || null,
 
         productName:
           firstItem?.productName || "",

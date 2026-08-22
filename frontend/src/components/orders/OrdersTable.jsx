@@ -84,12 +84,12 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
       selector: (row) => row.trackingId || "-",
       width: "130px",
     },
-    {
-      name: "Status",
-      cell: (row) => <Badge status={row.status} />,
-      center: true,
-      width: "140px",
-    },
+   {
+  name: "Status",
+  cell: (row) => <Badge status={row.orderStatus || "-"} />,
+  center: true,
+  width: "140px",
+},
     {
       name: "Platform",
       center: true,
