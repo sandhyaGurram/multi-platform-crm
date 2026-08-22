@@ -107,14 +107,20 @@ const courierPartner =
           order.financial_status || "",
 
 
-          orderStatus:
+         orderStatus:
   order.cancelled_at
     ? "Cancelled"
-    : order.fulfillment_status === "fulfilled"
-      ? "Fulfilled"
-      : order.fulfillment_status === "partial"
-        ? "Partially Fulfilled"
-        : "Unfulfilled",
+    : fulfillment?.shipment_status === "delivered"
+      ? "Delivered"
+      : fulfillment?.shipment_status === "in_transit"
+        ? "In Transit"
+        : fulfillment?.shipment_status === "out_for_delivery"
+          ? "Out for Delivery"
+          : order.fulfillment_status === "fulfilled"
+            ? "Fulfilled"
+            : order.fulfillment_status === "partial"
+              ? "Partially Fulfilled"
+              : "Unfulfilled",
 
 fulfillmentStatus:
   order.fulfillment_status || null,
