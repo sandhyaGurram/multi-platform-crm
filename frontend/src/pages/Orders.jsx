@@ -124,24 +124,36 @@ const Orders = ({ platform }) => {
   //   }
   // };
 
-  const fetchOrders = async () => {
+const fetchOrders = async () => {
+  console.log("FETCH ORDERS STARTED");
+
   try {
-    const { data } = await axios.get(
+    const currentUser = JSON.parse(
+      localStorage.getItem("crmUser")
+    );
+
+    console.log("CURRENT USER:", currentUser);
+    console.log("API URL:", API_URL);
+    console.log("TOKEN:", currentUser?.token);
+
+    const response = await axios.get(
       `${API_URL}/api/orders`,
       {
         headers: {
-          Authorization: `Bearer ${currentUser.token}`,
+          Authorization: `Bearer ${currentUser?.token}`,
         },
       }
     );
 
-    console.log("ORDERS FROM API:", data);
-    console.log("TOTAL ORDERS FROM API:", data.length);
+    console.log("API RESPONSE:", response);
+    console.log("ORDERS FROM API:", response.data);
+    console.log("TOTAL ORDERS FROM API:", response.data.length);
 
-    setOrders(data);
+    setOrders(response.data);
 
   } catch (error) {
-    console.log("FETCH ORDERS ERROR:", error);
+    console.error("FETCH ORDERS ERROR:", error);
+    console.error("ERROR RESPONSE:", error.response);
   }
 };
 

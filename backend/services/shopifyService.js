@@ -16,7 +16,7 @@ export const fetchShopifyOrders = async () => {
       },
       params: {
         status: "any",
-        limit: 5,
+        limit: 250,
       },
     });
 
