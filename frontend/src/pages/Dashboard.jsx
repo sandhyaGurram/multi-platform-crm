@@ -127,7 +127,7 @@ const Dashboard = () => {
         <div className="bg-white p-6 rounded-xl shadow">
           <h4 className="text-gray-500">Revenue</h4>
 
-          <p className=" font-bold mt-3">₹{stats.revenue}</p>
+          <p className="font-bold mt-3">₹{Number(stats.revenue || 0).toFixed(2)}</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
