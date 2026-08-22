@@ -42,7 +42,9 @@ const Orders = ({ platform }) => {
   const filteredOrders = orders.filter((order) => {
     // DATE FILTER
 
-    const orderDate = new Date(order.date);
+    // const orderDate = new Date(order.date);
+
+    const orderDate = new Date(order.orderDate);
 
     const diffTime = today - orderDate;
 
@@ -103,24 +105,48 @@ const Orders = ({ platform }) => {
 
   const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
+  // const fetchOrders = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       // "http://localhost:5000/api/orders",
+  //       `${API_URL}/api/orders`,
+
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${currentUser.token}`,
+  //         },
+  //       },
+  //     );
+
+  //     setOrders(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const fetchOrders = async () => {
-    try {
-      const { data } = await axios.get(
-        // "http://localhost:5000/api/orders",
-        `${API_URL}/api/orders`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-          },
+  try {
+    const { data } = await axios.get(
+      `${API_URL}/api/orders`,
+      {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
         },
-      );
+      }
+    );
 
-      setOrders(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    console.log("ORDERS FROM API:", data);
+    console.log("TOTAL ORDERS FROM API:", data.length);
+
+    setOrders(data);
+
+  } catch (error) {
+    console.log("FETCH ORDERS ERROR:", error);
+  }
+};
+
+
+
 
   useEffect(() => {
     fetchOrders();

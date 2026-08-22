@@ -32,7 +32,7 @@ import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import shopifyRoutes from "./routes/shopifyRoutes.js";
 import { fetchShopifyOrders } from "./services/shopifyService.js";
-import { fetchShopifyProducts } from "./services/shopifyProductService.js";
+
 
 import startShopifySync from "./cron/shopifySync.js";
 
@@ -44,7 +44,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    await fetchShopifyProducts();
+  
 
     startShopifySync();
 
