@@ -31,7 +31,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import shopifyRoutes from "./routes/shopifyRoutes.js";
-import { fetchShopifyOrders } from "./services/shopifyService.js";
+// import { fetchShopifyOrders } from "./services/shopifyService.js";
 
 
 import startShopifySync from "./cron/shopifySync.js";
@@ -44,7 +44,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-  
+
 
     startShopifySync();
 
@@ -85,7 +85,7 @@ app.use("/api/shopify", shopifyRoutes);
 
 app.get("/", (req, res) => {
 
-    res.send("CRM Backend Running");
+  res.send("CRM Backend Running");
 
 });
 

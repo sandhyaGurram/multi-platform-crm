@@ -124,41 +124,32 @@ const Orders = ({ platform }) => {
   //   }
   // };
 
-const fetchOrders = async () => {
-  console.log("FETCH ORDERS STARTED");
+  const fetchOrders = async () => {
+    console.log("FETCH ORDERS STARTED");
 
-  try {
-    const currentUser = JSON.parse(
-      localStorage.getItem("crmUser")
-    );
+    try {
+      const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
-    console.log("CURRENT USER:", currentUser);
-    console.log("API URL:", API_URL);
-    console.log("TOKEN:", currentUser?.token);
+      console.log("CURRENT USER:", currentUser);
+      console.log("API URL:", API_URL);
+      console.log("TOKEN:", currentUser?.token);
 
-    const response = await axios.get(
-      `${API_URL}/api/orders`,
-      {
+      const response = await axios.get(`${API_URL}/api/orders`, {
         headers: {
           Authorization: `Bearer ${currentUser?.token}`,
         },
-      }
-    );
+      });
 
-    console.log("API RESPONSE:", response);
-    console.log("ORDERS FROM API:", response.data);
-    console.log("TOTAL ORDERS FROM API:", response.data.length);
+      console.log("API RESPONSE:", response);
+      console.log("ORDERS FROM API:", response.data);
+      console.log("TOTAL ORDERS FROM API:", response.data.length);
 
-    setOrders(response.data);
-
-  } catch (error) {
-    console.error("FETCH ORDERS ERROR:", error);
-    console.error("ERROR RESPONSE:", error.response);
-  }
-};
-
-
-
+      setOrders(response.data);
+    } catch (error) {
+      console.error("FETCH ORDERS ERROR:", error);
+      console.error("ERROR RESPONSE:", error.response);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -226,109 +217,97 @@ const fetchOrders = async () => {
     <div>
       {/* Header */}
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1 mb-4">
-        <h1 className="font-bold">
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        {/* Heading */}
+        <h1 className="text-3xl font-bold whitespace-nowrap">
           {platform ? `${platform} Orders` : "Orders Management"}
         </h1>
 
-        <SearchBar
-          value={searchTerm}
-          onChange={setSearchTerm}
-          placeholder="Search Orders..."
-        />
-      </div>
-
-      {/* date selection code */}
-
-      <div className="flex flex-wrap gap-4 mb-6">
+        {/* Date Filter */}
         <select
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
           className="bg-white px-4 py-3 rounded-lg shadow outline-none"
         >
           <option>Today</option>
-
           <option>Yesterday</option>
-
           <option>Last 7 Days</option>
-
           <option>Last 30 Days</option>
-
           <option>Last Year</option>
-
           <option>All Orders</option>
         </select>
-        {/* date selection code end */}
 
+        {/* Add Order */}
         {currentUser?.role === "admin" && (
           <button
             onClick={() => setModalOpen(true)}
-            className="bg-black text-white px-5 py-3 rounded-lg"
+            className="bg-black text-white px-5 py-3 rounded-lg whitespace-nowrap"
           >
             Add Order
           </button>
         )}
-      </div>
 
-      {/* upload excell file */}
-      {/* <input
-        type="file"
-        accept=".xlsx,.xls,.csv"
-        onChange={(e) => setExcelFile(e.target.files[0])}
-      /> */}
+        {/* Excel Upload */}
+        {currentUser?.role === "admin" && (
+          <div className="flex min-w-0">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
+              className="
+          block min-w-0
+          rounded-l-lg
+          border border-r-0 border-gray-300
+          bg-white text-sm text-gray-600
 
-      {/* FILE IMPORT */}
+          file:mr-3
+          file:border-0
+          file:border-r
+          file:border-gray-300
+          file:bg-gray-100
+          file:px-4
+          file:py-3
+          file:text-sm
+          file:text-gray-700
 
-      {currentUser?.role === "admin" && (
-        <div className="mb-6 flex w-full max-w-2xl">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".xlsx,.xls,.csv"
-            onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
-            className="
-      block min-w-0 flex-1
-      rounded-l-lg
-      border border-r-0 border-gray-300
-      bg-white text-sm text-gray-600
+          hover:file:bg-gray-200
+          focus:outline-none
+        "
+            />
 
-      file:mr-4
-      file:border-0
-      file:border-r
-      file:border-gray-300
-      file:bg-gray-100
-      file:px-4
-      file:py-3
-      file:text-sm
-      file:text-gray-700
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={!excelFile || isImporting}
+              className="
+          whitespace-nowrap
+          rounded-r-lg
+          border border-gray-300
+          bg-white
+          px-5
+          text-sm font-medium text-gray-700
 
-      hover:file:bg-gray-200
-      focus:outline-none
-    "
+          hover:bg-gray-100
+
+          disabled:cursor-not-allowed
+          disabled:opacity-50
+        "
+            >
+              {isImporting ? "Importing..." : "Import Excel"}
+            </button>
+          </div>
+        )}
+
+        {/* Search */}
+        <div className="ml-auto">
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search Orders..."
           />
-
-          <button
-            type="button"
-            onClick={handleImport}
-            disabled={!excelFile || isImporting}
-            className="
-      whitespace-nowrap
-      rounded-r-lg
-      border border-gray-300
-      bg-white
-      px-5
-      text-sm font-medium text-gray-700
-
-      hover:bg-gray-100
-
-      disabled:cursor-not-allowed
-      disabled:opacity-50
-    "
-          >
-            {isImporting ? "Importing..." : "Import Excel"}
-          </button>
         </div>
-      )}
+      </div>
       {/* <button
         onClick={handleImport}
         className="bg-green-600 text-white px-5 py-3 rounded-lg"
