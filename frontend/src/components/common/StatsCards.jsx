@@ -6,8 +6,8 @@ const StatCard = ({ title, value }) => {
         rounded-xl
         border border-gray-100
         shadow-sm
-        px-4 sm:px-5
-        py-5
+        px-3 sm:px-3
+        py-2
         min-h-[105px]
         flex flex-col
         justify-center
@@ -32,9 +32,9 @@ const StatsCards = ({ stats }) => {
     <div
       className="
         grid
-        grid-cols-1
-        sm:grid-cols-2
-        lg:grid-cols-5
+        grid-cols-3
+        sm:grid-cols-3
+        lg:grid-cols-6
         gap-4
         mb-6
       "

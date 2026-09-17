@@ -219,7 +219,12 @@ const Orders = ({ platform }) => {
   // ===============================
 
   const getOrderStatus = (order) => {
-    return String(order.status || "")
+    return String(
+      order.deliveryStatus ||
+        order.fulfillmentStatus ||
+        order.orderStatus ||
+        "",
+    )
       .trim()
       .toLowerCase()
       .replace(/[-_]+/g, " ")
@@ -235,19 +240,19 @@ const Orders = ({ platform }) => {
   const orderStats = [
     {
       title: "Total Orders",
-      value: searchFilteredOrders.length,
+      value: platformFilteredOrders.length,
     },
 
     {
       title: "Delivered",
-      value: searchFilteredOrders.filter(
+      value: platformFilteredOrders.filter(
         (order) => getOrderStatus(order) === "delivered",
       ).length,
     },
 
     {
       title: "Cancelled",
-      value: searchFilteredOrders.filter((order) => {
+      value: platformFilteredOrders.filter((order) => {
         const status = getOrderStatus(order);
 
         return status === "cancelled" || status === "canceled";
@@ -256,7 +261,7 @@ const Orders = ({ platform }) => {
 
     {
       title: "In Transit + Out for Delivery",
-      value: searchFilteredOrders.filter((order) => {
+      value: platformFilteredOrders.filter((order) => {
         const status = getOrderStatus(order);
 
         return status === "in transit" || status === "out for delivery";
@@ -265,7 +270,7 @@ const Orders = ({ platform }) => {
 
     {
       title: "Unfulfilled",
-      value: searchFilteredOrders.filter(
+      value: platformFilteredOrders.filter(
         (order) => getOrderStatus(order) === "unfulfilled",
       ).length,
     },
