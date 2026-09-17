@@ -10,6 +10,7 @@ import EditOrderModal from "../components/orders/EditOrderModal";
 import SearchBar from "../components/common/SearchBar";
 import { API_URL } from "../config/api";
 import { searchFilter } from "../utils/searchFilter";
+import StatsCards from "../components/common/StatsCards";
 
 const Orders = ({ platform }) => {
   const [orders, setOrders] = useState([]);
@@ -213,6 +214,63 @@ const Orders = ({ platform }) => {
     }
   };
 
+  // ===============================
+  // ORDER STATUS NORMALIZER
+  // ===============================
+
+  const getOrderStatus = (order) => {
+    return String(order.status || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ");
+  };
+
+  // ===============================
+  // ORDER STATISTICS
+  // Uses the same filtered orders
+  // that are displayed in the table
+  // ===============================
+
+  const orderStats = [
+    {
+      title: "Total Orders",
+      value: searchFilteredOrders.length,
+    },
+
+    {
+      title: "Delivered",
+      value: searchFilteredOrders.filter(
+        (order) => getOrderStatus(order) === "delivered",
+      ).length,
+    },
+
+    {
+      title: "Cancelled",
+      value: searchFilteredOrders.filter((order) => {
+        const status = getOrderStatus(order);
+
+        return status === "cancelled" || status === "canceled";
+      }).length,
+    },
+
+    {
+      title: "In Transit + Out for Delivery",
+      value: searchFilteredOrders.filter((order) => {
+        const status = getOrderStatus(order);
+
+        return status === "in transit" || status === "out for delivery";
+      }).length,
+    },
+
+    {
+      title: "Unfulfilled",
+      value: searchFilteredOrders.filter(
+        (order) => getOrderStatus(order) === "unfulfilled",
+      ).length,
+    },
+  ];
+
   return (
     <div>
       {/* Header */}
@@ -314,6 +372,8 @@ const Orders = ({ platform }) => {
       >
         Import Excel
       </button> */}
+
+      <StatsCards stats={orderStats} />
 
       {/* Table */}
 
