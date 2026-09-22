@@ -31,6 +31,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import shopifyRoutes from "./routes/shopifyRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 // import { fetchShopifyOrders } from "./services/shopifyService.js";
 
 
@@ -80,6 +81,8 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/customers", customerRoutes);
 
 app.use("/api/products", productRoutes);
+
+app.use("/api/notifications", notificationRoutes);
 
 app.use("/api/shopify", shopifyRoutes);
 

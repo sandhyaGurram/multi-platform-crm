@@ -44,7 +44,7 @@ const syncOrders = async () => {
 
   try {
 
-    await fetchShopifyOrders();
+    // await fetchShopifyOrders();
 
     console.log("Shopify Order Sync Completed");
 

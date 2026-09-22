@@ -13,6 +13,7 @@ import Register from "../pages/Register";
 import Users from "../pages/Users";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
+import Notifications from "../pages/Notifications";
 
 const AppRoutes = () => {
   return (
@@ -36,6 +37,8 @@ const AppRoutes = () => {
           <Route path="orders" element={<Orders />} />
 
           <Route path="products" element={<Products />} />
+
+          <Route path="notifications" element={<Notifications />} />
 
           <Route path="customers" element={<Customers />} />
 

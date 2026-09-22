@@ -124,12 +124,12 @@ const ProductDrawer = ({ isOpen, onClose, product, mode }) => {
               />
 
               <DetailRow
-                label="Hyderabad"
+                label="Warehouse-1"
                 value={product.warehouseStock?.hyderabad ?? 0}
               />
 
               <DetailRow
-                label="Nalgonda"
+                label="Warehouse-2"
                 value={product.warehouseStock?.nalgonda ?? 0}
               />
 

@@ -1,5 +1,7 @@
 import express from "express";
 
+import protect from "../middleware/authMiddleware.js";
+
 import {
   getProducts,
   getProductById,
@@ -20,7 +22,7 @@ router.get("/:id", getProductById);
 router.post("/", createProduct);
 
 // UPDATE product
-router.put("/:id", updateProduct);
+router.put("/:id", protect, updateProduct);
 
 // DELETE product
 router.delete("/:id", deleteProduct);

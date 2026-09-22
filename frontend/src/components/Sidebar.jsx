@@ -7,6 +7,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaTimes,
+  FaBell,
 } from "react-icons/fa";
 
 import axios from "axios";
@@ -65,15 +66,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       {/* Sidebar */}
 
       <div
-  className={`
+        className={`
     fixed md:static top-0 left-0 z-50
-    w-64 h-screen bg-black text-white p-4
+    w-64 h-[100dvh] bg-black text-white p-4
     flex flex-col
     transform transition-transform duration-300
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
     md:translate-x-0
   `}
->
+      >
         {/* Close Button Mobile */}
 
         <button
@@ -85,7 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
         {/* <h1 className="text-3xl font-bold mb-10">CRM PANEL</h1> */}
 
-        <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
+        <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto">
           {/* Dashboard */}
           <NavLink
             to="/"
@@ -210,6 +211,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <FaBoxOpen />
             Products
           </NavLink>
+
+          {/* Notifications */}
+          <NavLink
+            to="/notifications"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+    ${
+      isActive
+        ? "bg-white text-black font-bold"
+        : "hover:bg-gray-800 text-gray-300"
+    }`
+            }
+          >
+            <FaBell />
+            Notifications
+          </NavLink>
+
           {/* Customers */}
           <NavLink
             to="/customers"

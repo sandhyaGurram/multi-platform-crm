@@ -1,21 +1,21 @@
 const products = [
 
     {
-    id: "P1001",
-    productName: "Vitamin C Serum",
-    category: "Skincare",
-    sku: "SKU-VC-001",
-    vendor: "ARM",
+        id: "P1001",
+        productName: "Vitamin C Serum",
+        category: "Skincare",
+        sku: "SKU-VC-001",
+        vendor: "ARM",
 
-    warehouseStock: {
-        shopify: 45,
-        hyderabad: 20,
-        nalgonda: 15
+        warehouseStock: {
+            shopify: 45,
+            hyderabad: 20,
+            nalgonda: 15
+        },
+
+        price: 899,
+        status: "In Stock"
     },
-
-    price: 899,
-    status: "In Stock"
-},
 
     {
         id: "P1002",
@@ -30,10 +30,10 @@ const products = [
         price: 499,
 
         warehouseStock: {
-    shopify: 0,
-    hyderabad: 0,
-    nalgonda: 0,
-},
+            shopify: 0,
+            hyderabad: 0,
+            nalgonda: 0,
+        },
 
         status: "Low Stock",
         description: "Brightening serum with Vitamin C for glowing skin.",
@@ -66,10 +66,10 @@ const products = [
         price: 1299,
 
         warehouseStock: {
-    shopify: 45,
-    hyderabad: 0,
-    nalgonda: 0,
-},
+            shopify: 45,
+            hyderabad: 0,
+            nalgonda: 0,
+        },
 
         status: "Out of Stock",
         description: "Brightening serum with Vitamin C for glowing skin.",
@@ -100,11 +100,11 @@ const products = [
 
         price: 899,
 
-          warehouseStock: {
-    shopify: 55,
-    hyderabad: 0,
-    nalgonda: 0,
-},
+        warehouseStock: {
+            shopify: 55,
+            hyderabad: 0,
+            nalgonda: 0,
+        },
 
         status: "In Stock",
 
