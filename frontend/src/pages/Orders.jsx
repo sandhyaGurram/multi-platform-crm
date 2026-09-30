@@ -4,6 +4,7 @@ import OrderDrawer from "../components/orders/OrderDrawer";
 // import orders from "../data/orders";
 import { useEffect, useRef, useState } from "react";
 import { FileSpreadsheet, Upload, X } from "lucide-react";
+import * as XLSX from "xlsx";
 import axios from "axios";
 import AddOrderModal from "../components/orders/AddOrderModal";
 import EditOrderModal from "../components/orders/EditOrderModal";
@@ -22,6 +23,12 @@ const Orders = ({ platform }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
+
+  const [selectedOrderIds, setSelectedOrderIds] = useState([]);
+
+  const [paymentFilter, setPaymentFilter] = useState("All");
 
   const [dateFilter, setDateFilter] = useState("All Orders");
 
@@ -214,6 +221,211 @@ const Orders = ({ platform }) => {
     }
   };
 
+  const handleSelectOrder = (orderId) => {
+    setSelectedOrderIds((prev) => {
+      if (prev.includes(orderId)) {
+        return prev.filter((id) => id !== orderId);
+      }
+
+      return [...prev, orderId];
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedOrderIds.length === searchFilteredOrders.length) {
+      setSelectedOrderIds([]);
+    } else {
+      setSelectedOrderIds(searchFilteredOrders.map((order) => order._id));
+    }
+  };
+
+  const handleSelectedRowsChange = ({ selectedRows }) => {
+    setSelectedOrderIds(selectedRows.map((order) => order._id));
+  };
+
+  const handleExportSelected = () => {
+    if (selectedOrderIds.length === 0) {
+      alert("Please select at least one order.");
+      return;
+    }
+
+    const selectedOrders = searchFilteredOrders.filter((order) =>
+      selectedOrderIds.includes(order._id),
+    );
+
+    const exportData = selectedOrders.map((order) => ({
+      "Order ID": order.orderId || "",
+      Platform: order.platform || "",
+
+      "Order Date": order.orderDate
+        ? new Date(order.orderDate).toLocaleString("en-IN")
+        : "",
+
+      "Customer Name": order.customerName || "",
+      "Customer Phone": order.customerPhone || "",
+      "Customer Email": order.customerEmail || "",
+
+      Address: order.customerAddress || "",
+      City: order.city || "",
+      State: order.state || "",
+      Pincode: order.pincode || "",
+
+      Product: order.productName || "",
+      SKU: order.sku || "",
+      Variant: order.variant || "",
+
+      Quantity: order.quantity || 0,
+      "Unit Price": order.unitPrice || 0,
+      Amount: order.amount || 0,
+
+      "Payment Method": order.paymentMethod || "",
+      "Payment Status": order.paymentStatus || "",
+
+      "Order Status": order.orderStatus || "",
+      "Fulfillment Status": order.fulfillmentStatus || "",
+      "Delivery Status": order.deliveryStatus || "",
+
+      Courier: order.courierPartner || "",
+      "AWB Number": order.awbNumber || "",
+      "Tracking ID": order.trackingId || "",
+      "Tracking URL": order.trackingUrl || "",
+
+      Tax: order.taxAmount || 0,
+      "Shipping Charge": order.shippingCharge || 0,
+      Discount: order.discountAmount || 0,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+    XLSX.writeFile(
+      workbook,
+      `selected-orders-${new Date().toISOString().split("T")[0]}.xlsx`,
+    );
+
+    // Clear selection after export
+    setSelectedOrderIds([]);
+  };
+
+  const handleExport = () => {
+    if (!searchFilteredOrders.length) {
+      alert("No orders available to export.");
+      return;
+    }
+
+    const exportData = searchFilteredOrders.map((order) => ({
+      "Order ID": order.orderId || "",
+      Platform: order.platform || "",
+
+      "Order Date": order.orderDate
+        ? new Date(order.orderDate).toLocaleString("en-IN")
+        : "",
+
+      "Customer Name": order.customerName || "",
+      "Customer Phone": order.customerPhone || "",
+      "Customer Email": order.customerEmail || "",
+
+      Address: order.customerAddress || "",
+      City: order.city || "",
+      State: order.state || "",
+      Pincode: order.pincode || "",
+      Country: order.country || "",
+
+      Product: order.productName || "",
+      SKU: order.sku || "",
+      Variant: order.variant || "",
+
+      Quantity: order.quantity || 0,
+      "Unit Price": order.unitPrice || 0,
+      Amount: order.amount || 0,
+
+      "Payment Method": order.paymentMethod || "",
+      "Payment Status": order.paymentStatus || "",
+
+      "Order Status": order.orderStatus || "",
+      "Fulfillment Status": order.fulfillmentStatus || "",
+      "Delivery Status": order.deliveryStatus || "",
+
+      Courier: order.courierPartner || "",
+      "AWB Number": order.awbNumber || "",
+      "Tracking ID": order.trackingId || "",
+      "Tracking URL": order.trackingUrl || "",
+
+      Tax: order.taxAmount || 0,
+      "Shipping Charge": order.shippingCharge || 0,
+      Discount: order.discountAmount || 0,
+
+      "Delivery Date": order.deliveryDate
+        ? new Date(order.deliveryDate).toLocaleString("en-IN")
+        : "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+    const today = new Date().toISOString().split("T")[0];
+
+    XLSX.writeFile(workbook, `orders-${today}.xlsx`);
+  };
+
+  const handleExportAll = () => {
+    if (!searchFilteredOrders.length) {
+      alert("No orders available to export.");
+      return;
+    }
+
+    const exportData = searchFilteredOrders.map((order) => ({
+      "Order ID": order.orderId || "",
+      Platform: order.platform || "",
+      "Order Date": order.orderDate
+        ? new Date(order.orderDate).toLocaleString("en-IN")
+        : "",
+      "Customer Name": order.customerName || "",
+      "Customer Phone": order.customerPhone || "",
+      "Customer Email": order.customerEmail || "",
+      Address: order.customerAddress || "",
+      City: order.city || "",
+      State: order.state || "",
+      Pincode: order.pincode || "",
+      Product: order.productName || "",
+      SKU: order.sku || "",
+      Variant: order.variant || "",
+      Quantity: order.quantity || 0,
+      "Unit Price": order.unitPrice || 0,
+      Amount: order.amount || 0,
+      "Payment Method": order.paymentMethod || "",
+      "Payment Status": order.paymentStatus || "",
+      "Order Status": order.orderStatus || "",
+      "Fulfillment Status": order.fulfillmentStatus || "",
+      "Delivery Status": order.deliveryStatus || "",
+      Courier: order.courierPartner || "",
+      "AWB Number": order.awbNumber || "",
+      "Tracking ID": order.trackingId || "",
+      "Tracking URL": order.trackingUrl || "",
+      Tax: order.taxAmount || 0,
+      "Shipping Charge": order.shippingCharge || 0,
+      Discount: order.discountAmount || 0,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+    XLSX.writeFile(
+      workbook,
+      `all-orders-${new Date().toISOString().split("T")[0]}.xlsx`,
+    );
+
+    setExportMenuOpen(false);
+  };
+
   // ===============================
   // ORDER STATUS NORMALIZER
   // ===============================
@@ -274,6 +486,34 @@ const Orders = ({ platform }) => {
         (order) => getOrderStatus(order) === "unfulfilled",
       ).length,
     },
+
+    {
+      title: "COD Orders",
+      value: platformFilteredOrders.filter((order) => {
+        const paymentMethod = (order.paymentMethod || "").toLowerCase();
+
+        return (
+          paymentMethod.includes("cod") ||
+          paymentMethod.includes("cash on delivery") ||
+          paymentMethod.includes("cash_on_delivery")
+        );
+      }).length,
+
+      onClick: () => {
+        setPaymentFilter(paymentFilter === "COD" ? "All" : "COD");
+      },
+    },
+
+    {
+      title: "Paid Orders",
+      value: platformFilteredOrders.filter((order) => {
+        return (order.paymentStatus || "").toLowerCase() === "paid";
+      }).length,
+
+      onClick: () => {
+        setPaymentFilter(paymentFilter === "Paid" ? "All" : "Paid");
+      },
+    },
   ];
 
   return (
@@ -304,11 +544,45 @@ const Orders = ({ platform }) => {
         {currentUser?.role === "admin" && (
           <button
             onClick={() => setModalOpen(true)}
-            className="bg-black text-white px-5 py-3 rounded-lg whitespace-nowrap"
+            className="bg-black text-white px-2 py-3 rounded-lg whitespace-nowrap"
           >
             Add Order
           </button>
         )}
+
+        {/* Export Orders */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setExportMenuOpen((prev) => !prev)}
+            className="flex items-center gap-2 bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700"
+          >
+            <FileSpreadsheet size={18} />
+            Export
+          </button>
+
+          {exportMenuOpen && (
+            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <button
+                type="button"
+                onClick={handleExportSelected}
+                disabled={selectedOrderIds.length === 0}
+                className="w-full text-left px-4 py-3 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Export Selected
+                {selectedOrderIds.length > 0 && ` (${selectedOrderIds.length})`}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleExportAll}
+                className="w-full text-left px-4 py-3 hover:bg-gray-100"
+              >
+                Export All Orders
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Excel Upload */}
         {currentUser?.role === "admin" && (
@@ -386,6 +660,7 @@ const Orders = ({ platform }) => {
         orders={searchFilteredOrders}
         onView={handleView}
         onDelete={handleDelete}
+        onSelectedRowsChange={handleSelectedRowsChange}
       />
 
       {/* pagination */}

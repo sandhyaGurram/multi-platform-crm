@@ -4,7 +4,7 @@ import Badge from "../ui/Badge";
 import Button from "../ui/Button";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const OrdersTable = ({ orders, onView, onDelete }) => {
+const OrdersTable = ({ orders, onView, onDelete, onSelectedRowsChange }) => {
   // const filteredOrders = orders.filter((order) => {
   //   const searchValue = search.toLowerCase();
 
@@ -84,21 +84,21 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
       selector: (row) => row.trackingId || "-",
       width: "130px",
     },
-  {
-  name: "Status",
-  cell: (row) => (
-    <Badge
-      status={
-        row.deliveryStatus ||
-        row.fulfillmentStatus ||
-        row.orderStatus ||
-        "-"
-      }
-    />
-  ),
-  center: true,
-  width: "160px",
-},
+    {
+      name: "Status",
+      cell: (row) => (
+        <Badge
+          status={
+            row.deliveryStatus ||
+            row.fulfillmentStatus ||
+            row.orderStatus ||
+            "-"
+          }
+        />
+      ),
+      center: true,
+      width: "160px",
+    },
     {
       name: "Platform",
       center: true,
@@ -187,44 +187,55 @@ const OrdersTable = ({ orders, onView, onDelete }) => {
 
   return (
     <div className="bg-white rounded-xl shadow p-6 overflow-hidden">
-     <DataTable
-  columns={columns}
-  data={orders}
-  pagination
-  highlightOnHover
-  striped
-  fixedHeader
-  fixedHeaderScrollHeight="500px"
-  paginationPerPage={10}
-  paginationRowsPerPageOptions={[10, 25, 50, 100]}
-  persistTableHead
-  customStyles={{
-    headRow: {
-      style: {
-        backgroundColor: "#ffffff",
-        minHeight: "50px",
-      },
-    },
+      <DataTable
+        columns={columns}
+        data={orders}
+        /* =========================
+     ROW SELECTION
+  ========================= */
 
-    headCells: {
-      style: {
-        backgroundColor: "#ffffff",
-        fontSize: "14px",
-        fontWeight: "600",
-        whiteSpace: "nowrap",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
+        selectableRows
+        selectableRowsHighlight
+        onSelectedRowsChange={onSelectedRowsChange}
+        /* =========================
+     TABLE
+  ========================= */
 
-    cells: {
-      style: {
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      },
-    },
-  }}
-/>
+        pagination
+        highlightOnHover
+        striped
+        fixedHeader
+        fixedHeaderScrollHeight="500px"
+        paginationPerPage={10}
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        persistTableHead
+        customStyles={{
+          headRow: {
+            style: {
+              backgroundColor: "#ffffff",
+              minHeight: "50px",
+            },
+          },
+
+          headCells: {
+            style: {
+              backgroundColor: "#ffffff",
+              fontSize: "14px",
+              fontWeight: "600",
+              whiteSpace: "nowrap",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            },
+          },
+
+          cells: {
+            style: {
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            },
+          },
+        }}
+      />
     </div>
   );
 };
