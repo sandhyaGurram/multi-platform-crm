@@ -518,9 +518,234 @@ const Orders = ({ platform }) => {
 
   return (
     <div>
-      {/* Header */}
+      {/* =========================
+    MOBILE HEADER
+========================= */}
+      <div className="sm:hidden mb-5 space-y-3">
+        {/* ROW 1 — TITLE + SEARCH */}
+        <div className="flex items-center gap-3">
+          <h1
+            className="
+      text-[25px]
+      font-semibold
+      tracking-tight
+      text-[#172033]
+      whitespace-nowrap
+    "
+          >
+            {platform ? `${platform} Orders` : "Orders"}
+          </h1>
 
-      <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="flex-1 min-w-0">
+            <SearchBar
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Search Orders..."
+            />
+          </div>
+        </div>
+
+        {/* ROW 2 — FILTER + ADD + EXPORT */}
+        <div className="flex items-center gap-2">
+          {/* DATE FILTER */}
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="
+        h-10
+        flex-1
+        min-w-0
+        px-3
+        rounded-xl
+        border border-[#E2E8F0]
+        bg-white
+        text-sm
+        font-medium
+        text-[#64748B]
+        outline-none
+        shadow-[0_2px_8px_rgba(15,23,42,0.04)]
+      "
+          >
+            <option value="Today">Today</option>
+            <option value="Yesterday">Yesterday</option>
+            <option value="Last 7 Days">Last 7 Days</option>
+            <option value="Last 30 Days">Last 30 Days</option>
+            <option value="Last Year">Last Year</option>
+            <option value="All Orders">All Orders</option>
+          </select>
+
+          {/* ADD ORDER */}
+          {currentUser?.role === "admin" && (
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="
+          h-10
+          px-3.5
+          rounded-xl
+          bg-[#111827]
+          text-white
+          text-sm
+          font-medium
+          whitespace-nowrap
+          transition
+          active:scale-95
+        "
+            >
+              Add Order
+            </button>
+          )}
+
+          {/* EXPORT */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setExportMenuOpen((prev) => !prev)}
+              className="
+          h-10
+          px-4
+          rounded-xl
+          bg-[#0F9D58]
+          text-white
+          text-sm
+          font-medium
+          flex
+          items-center
+          gap-1.5
+          whitespace-nowrap
+          transition
+          active:scale-95
+        "
+            >
+              <FileSpreadsheet size={16} />
+              Export
+            </button>
+
+            {exportMenuOpen && (
+              <div
+                className="
+          absolute
+          right-0
+          top-full
+          mt-2
+          w-52
+          bg-white
+          rounded-xl
+          border border-[#E5E7EB]
+          shadow-[0_12px_30px_rgba(15,23,42,0.12)]
+          overflow-hidden
+          z-50
+        "
+              >
+                <button
+                  type="button"
+                  onClick={handleExportSelected}
+                  disabled={selectedOrderIds.length === 0}
+                  className="
+              w-full
+              px-4
+              py-3
+              text-left
+              text-sm
+              text-[#334155]
+              hover:bg-[#F8FAFC]
+              disabled:opacity-40
+            "
+                >
+                  Export Selected
+                  {selectedOrderIds.length > 0 &&
+                    ` (${selectedOrderIds.length})`}
+                </button>
+
+                <div className="h-px bg-[#F1F5F9]" />
+
+                <button
+                  type="button"
+                  onClick={handleExportAll}
+                  className="
+              w-full
+              px-4
+              py-3
+              text-left
+              text-sm
+              text-[#334155]
+              hover:bg-[#F8FAFC]
+            "
+                >
+                  Export All Orders
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ROW 3 — EXCEL IMPORT */}
+        {currentUser?.role === "admin" && (
+          <div
+            className="
+      flex
+      items-center
+      h-10
+      w-full
+      rounded-xl
+      border border-[#E2E8F0]
+      bg-white
+      overflow-hidden
+    "
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
+              className="
+          min-w-0
+          flex-1
+          w-full
+          text-xs
+          text-[#64748B]
+
+          file:mr-2
+          file:border-0
+          file:border-r
+          file:border-[#E2E8F0]
+          file:bg-[#F8FAFC]
+          file:px-3
+          file:py-2.5
+          file:text-xs
+          file:text-[#475569]
+
+          hover:file:bg-[#F1F5F9]
+        "
+            />
+
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={!excelFile || isImporting}
+              className="
+          h-full
+          px-4
+          whitespace-nowrap
+          border-l
+          border-[#E2E8F0]
+          text-sm
+          font-medium
+          text-[#64748B]
+          hover:bg-[#F8FAFC]
+          disabled:opacity-40
+          disabled:cursor-not-allowed
+        "
+            >
+              {isImporting ? "Importing..." : "Import"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* desktop Header */}
+
+      <div className="hidden sm:flex flex-wrap items-center gap-3 mb-6">
         {/* Heading */}
         <h1 className="text-3xl font-bold whitespace-nowrap">
           {platform ? `${platform} Orders` : "Orders Management"}

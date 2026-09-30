@@ -1,102 +1,128 @@
-const StatCard = ({ title, value, index }) => {
-  const isTotal = title === "Total Orders";
-
+const StatCard = ({ title, value, active, onClick }) => {
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
       className={`
-        relative group
-        flex flex-col justify-between
-        min-h-[100px] sm:min-h-[115px] lg:min-h-[125px]
-        rounded-2xl
+        group
+        relative
+        w-full
+        h-[72px]
+        sm:h-[78px]
+
+        flex
+        items-center
+        justify-between
+
+        px-4
+        sm:px-5
+
+        rounded-[14px]
+
         border
-        px-4 py-4 sm:px-5 sm:py-5
-        transition-all duration-300
-        hover:-translate-y-0.5 hover:shadow-lg
+
+        transition-all
+        duration-300
+        ease-out
+
+        cursor-pointer
+        overflow-hidden
 
         ${
-          isTotal
+          active
             ? `
-              col-span-2 sm:col-span-1
-              bg-[#172B4D]
-              border-[#172B4D]
-              shadow-md
+              bg-[#8F1528]
+              border-[#8F1528]
+              
             `
             : `
-              bg-white
-              border-[#E8ECF2]
-              shadow-[0_2px_8px_rgba(15,23,42,0.04)]
-              hover:border-[#CBD5E1]
+              bg-[#FFFFFF]
+              border-[#E7E5E1]
+          
+              hover:border-[#C9A86A]
+              hover:shadow-[0_8px_22px_rgba(15,23,42,0.08)]
+              hover:-translate-y-[1px]
             `
         }
       `}
     >
-      {/* Decorative top accent */}
-      <div
+      {/* Champagne accent */}
+      <span
         className={`
-          absolute top-0 left-5 right-5
-          h-[2px] rounded-full
-          ${isTotal ? "bg-[#C9A86A]" : "bg-transparent"}
+          absolute
+          top-0
+          left-5
+          right-5
+          h-[2px]
+          rounded-full
+
+          ${active ? "bg-[#D6B56D]" : "bg-transparent group-hover:bg-[#D6B56D]"}
         `}
       />
 
       {/* Title */}
-      <p
+      <span
         className={`
-          text-[12px] sm:text-[13px]
-          font-medium tracking-wide
-          leading-relaxed
-          ${isTotal ? "text-[#CBD5E1]" : "text-[#64748B]"}
+          text-[11px]
+          sm:text-[13px]
+
+          font-medium
+          tracking-[0.02em]
+
+          text-left
+          leading-tight
+
+          ${active ? "text-[#F8EBDD]" : "text-[#64748B]"}
         `}
       >
         {title}
-      </p>
+      </span>
 
-      {/* Value */}
-      <div className="flex items-end justify-between mt-3">
-        <p
-          className={`
-            text-[26px] sm:text-[30px]
-            font-bold tracking-tight
-            leading-none tabular-nums
-            ${isTotal ? "text-white" : "text-[#1E293B]"}
-          `}
-        >
-          {Number(value || 0).toLocaleString("en-IN")}
-        </p>
+      {/* Number */}
+      <span
+        className={`
+          ml-3
 
-        <span
-          className={`
-            text-[10px] font-medium
-            ${isTotal ? "text-[#C9A86A]" : "text-[#CBD5E1]"}
-          `}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
-    </div>
+          text-[23px]
+          sm:text-[27px]
+
+          font-semibold
+          tracking-[-0.02em]
+
+          tabular-nums
+
+          ${active ? "text-white" : "text-[#172033]"}
+        `}
+      >
+        {Number(value || 0).toLocaleString("en-IN")}
+      </span>
+    </button>
   );
 };
 
-const StatsCards = ({ stats = [] }) => {
+const StatsCards = ({ stats = [], activeTab, onTabChange }) => {
   return (
     <div
       className="
         grid
-        grid-cols-4
-        sm:grid-cols-4
-        lg:grid-cols-8
+
+        grid-cols-2
+        sm:grid-cols-3
+        lg:grid-cols-5
         xl:grid-cols-8
-        gap-3 sm:gap-4
+
+        gap-3
+
         mb-5
-        w-full
       "
     >
-      {stats.map((stat, index) => (
+      {stats.map((stat) => (
         <StatCard
-          key={stat.title}
+          key={stat.key || stat.title}
           title={stat.title}
           value={stat.value}
-          index={index}
+          active={activeTab === stat.key}
+          onClick={() => onTabChange(stat.key)}
         />
       ))}
     </div>
