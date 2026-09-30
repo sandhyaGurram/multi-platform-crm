@@ -103,23 +103,40 @@ const OrdersTable = ({ orders, onView, onDelete, onSelectedRowsChange }) => {
       name: "Platform",
       center: true,
       width: "130px",
+
       cell: (row) => {
-        const color =
-          row.platform === "Shopify"
-            ? "bg-green-100 text-green-700"
-            : row.platform === "Amazon"
-              ? "bg-yellow-100 text-yellow-700"
-              : row.platform === "Flipkart"
-                ? "bg-blue-100 text-blue-700"
-                : row.platform === "Meesho"
-                  ? "bg-pink-100 text-pink-700"
-                  : row.platform === "Deposite"
-                    ? "bg-red-100 text-red-700"
-                    : "bg-gray-100 text-gray-700";
+        const platformStyles = {
+          Shopify: "bg-[#EEF7F1] text-[#356B4A] border-[#D4E7DA]",
+
+          Amazon: "bg-[#FFF5E6] text-[#9A6416] border-[#F0DFC0]",
+
+          Flipkart: "bg-[#EEF3FA] text-[#315A8A] border-[#D6E1EF]",
+
+          Meesho: "bg-[#F9EEF5] text-[#9A3F70] border-[#EBD6E2]",
+
+          Deposite: "bg-[#F6E8E9] text-[#A51E27] border-[#EACDCF]",
+        };
+
+        const style =
+          platformStyles[row.platform] ||
+          "bg-[#F4F5F7] text-[#64748B] border-[#E2E5E9]";
 
         return (
           <span
-            className={`inline-block whitespace-nowrap px-3 py-1 rounded-full text-sm font-semibold ${color}`}
+            className="
+      inline-flex
+      items-center
+      whitespace-nowrap
+      px-3
+      py-1
+      rounded-full
+      bg-[#F6E8E9]
+      text-[#A51E27]
+      border
+      border-[#EACDCF]
+      text-xs
+      font-medium
+    "
           >
             {row.platform}
           </span>
@@ -186,7 +203,18 @@ const OrdersTable = ({ orders, onView, onDelete, onSelectedRowsChange }) => {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 overflow-hidden">
+    <div
+      className="
+  bg-[#FFFDFC]
+  rounded-[18px]
+  border
+  border-[#E7E1D8]
+  shadow-[0_8px_30px_rgba(20,25,35,0.05)]
+  p-3
+  sm:p-4
+  overflow-hidden
+"
+    >
       <DataTable
         columns={columns}
         data={orders}
@@ -210,21 +238,48 @@ const OrdersTable = ({ orders, onView, onDelete, onSelectedRowsChange }) => {
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
         persistTableHead
         customStyles={{
+          table: {
+            style: {
+              backgroundColor: "#FFFDFC",
+            },
+          },
+
           headRow: {
             style: {
-              backgroundColor: "#ffffff",
-              minHeight: "50px",
+              minHeight: "52px",
+              backgroundColor: "#F8F5EF",
+              borderBottom: "1px solid #E7E1D8",
             },
           },
 
           headCells: {
             style: {
-              backgroundColor: "#ffffff",
-              fontSize: "14px",
+              backgroundColor: "#F8F5EF",
+              color: "#526075",
+              fontSize: "11px",
               fontWeight: "600",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
               whiteSpace: "nowrap",
               paddingLeft: "16px",
               paddingRight: "16px",
+            },
+          },
+
+          rows: {
+            style: {
+              minHeight: "58px",
+              backgroundColor: "#FFFDFC",
+              borderBottom: "1px solid #EEEAE4",
+              color: "#334155",
+              fontSize: "13px",
+              transition: "background-color 0.2s ease",
+            },
+
+            highlightOnHoverStyle: {
+              backgroundColor: "#FBF7F2",
+              borderBottomColor: "#E6DED2",
+              cursor: "default",
             },
           },
 
@@ -232,6 +287,15 @@ const OrdersTable = ({ orders, onView, onDelete, onSelectedRowsChange }) => {
             style: {
               paddingLeft: "16px",
               paddingRight: "16px",
+            },
+          },
+
+          pagination: {
+            style: {
+              backgroundColor: "#FFFDFC",
+              borderTop: "1px solid #EEEAE4",
+              minHeight: "58px",
+              color: "#64748B",
             },
           },
         }}

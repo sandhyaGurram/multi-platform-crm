@@ -517,357 +517,316 @@ const Orders = ({ platform }) => {
   ];
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#172033]">
       {/* =========================
     MOBILE HEADER
 ========================= */}
-      <div className="sm:hidden mb-5 space-y-3">
-        {/* ROW 1 — TITLE + SEARCH */}
-        <div className="flex items-center gap-3">
-          <h1
-            className="
-      text-[25px]
+      {/* =========================
+    PREMIUM ORDERS HEADER
+========================= */}
+
+      <div className="mb-6">
+        <div
+          className="
+  grid
+  grid-cols-[280px_1fr]
+  items-center
+  gap-5
+  px-1
+"
+        >
+          {/* TITLE */}
+          <div className="flex items-center gap-3 w-[280px] shrink-0">
+            <div
+              className="
+    w-[3px]
+    h-10
+    rounded-full
+    bg-[#A51E27]
+    shrink-0
+  "
+            />
+
+            <div>
+              <h1
+                className="
+      text-[28px]
+      sm:text-[32px]
       font-semibold
-      tracking-tight
+      tracking-[-0.035em]
       text-[#172033]
+      leading-none
       whitespace-nowrap
     "
-          >
-            {platform ? `${platform} Orders` : "Orders"}
-          </h1>
-
-          <div className="flex-1 min-w-0">
-            <SearchBar
-              value={searchTerm}
-              onChange={setSearchTerm}
-              placeholder="Search Orders..."
-            />
-          </div>
-        </div>
-
-        {/* ROW 2 — FILTER + ADD + EXPORT */}
-        <div className="flex items-center gap-2">
-          {/* DATE FILTER */}
-          <select
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="
-        h-10
-        flex-1
-        min-w-0
-        px-3
-        rounded-xl
-        border border-[#E2E8F0]
-        bg-white
-        text-sm
-        font-medium
-        text-[#64748B]
-        outline-none
-        shadow-[0_2px_8px_rgba(15,23,42,0.04)]
-      "
-          >
-            <option value="Today">Today</option>
-            <option value="Yesterday">Yesterday</option>
-            <option value="Last 7 Days">Last 7 Days</option>
-            <option value="Last 30 Days">Last 30 Days</option>
-            <option value="Last Year">Last Year</option>
-            <option value="All Orders">All Orders</option>
-          </select>
-
-          {/* ADD ORDER */}
-          {currentUser?.role === "admin" && (
-            <button
-              type="button"
-              onClick={() => setModalOpen(true)}
-              className="
-          h-10
-          px-3.5
-          rounded-xl
-          bg-[#111827]
-          text-white
-          text-sm
-          font-medium
-          whitespace-nowrap
-          transition
-          active:scale-95
-        "
-            >
-              Add Order
-            </button>
-          )}
-
-          {/* EXPORT */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setExportMenuOpen((prev) => !prev)}
-              className="
-          h-10
-          px-4
-          rounded-xl
-          bg-[#0F9D58]
-          text-white
-          text-sm
-          font-medium
-          flex
-          items-center
-          gap-1.5
-          whitespace-nowrap
-          transition
-          active:scale-95
-        "
-            >
-              <FileSpreadsheet size={16} />
-              Export
-            </button>
-
-            {exportMenuOpen && (
-              <div
-                className="
-          absolute
-          right-0
-          top-full
-          mt-2
-          w-52
-          bg-white
-          rounded-xl
-          border border-[#E5E7EB]
-          shadow-[0_12px_30px_rgba(15,23,42,0.12)]
-          overflow-hidden
-          z-50
-        "
               >
-                <button
-                  type="button"
-                  onClick={handleExportSelected}
-                  disabled={selectedOrderIds.length === 0}
-                  className="
-              w-full
-              px-4
-              py-3
-              text-left
-              text-sm
-              text-[#334155]
-              hover:bg-[#F8FAFC]
-              disabled:opacity-40
-            "
-                >
-                  Export Selected
-                  {selectedOrderIds.length > 0 &&
-                    ` (${selectedOrderIds.length})`}
-                </button>
+                {platform ? `${platform} Orders` : "Orders Management"}
+              </h1>
 
-                <div className="h-px bg-[#F1F5F9]" />
-
-                <button
-                  type="button"
-                  onClick={handleExportAll}
-                  className="
-              w-full
-              px-4
-              py-3
-              text-left
-              text-sm
-              text-[#334155]
-              hover:bg-[#F8FAFC]
-            "
-                >
-                  Export All Orders
-                </button>
-              </div>
-            )}
+              <p
+                className="
+      mt-1.5
+      text-[10px]
+      uppercase
+      tracking-[0.18em]
+      text-[#9A948A]
+    "
+              >
+                Order Management
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* ROW 3 — EXCEL IMPORT */}
-        {currentUser?.role === "admin" && (
+          {/* CONTROLS */}
           <div
             className="
       flex
+      flex-wrap
       items-center
-      h-10
-      w-full
-      rounded-xl
-      border border-[#E2E8F0]
-      bg-white
-      overflow-hidden
+      gap-2.5
+      flex-1
     "
           >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".xlsx,.xls,.csv"
-              onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
-              className="
-          min-w-0
-          flex-1
-          w-full
+            {/* DATE FILTER */}
+            <div className="relative">
+              <select
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="
+            h-11
+            min-w-[145px]
+            appearance-none
+            rounded-[11px]
+            border
+            border-[#DED9D0]
+            bg-[#FFFDFC]
+            pl-4
+            pr-10
+            text-[13px]
+            font-medium
+            text-[#475569]
+            outline-none
+            
+            cursor-pointer
+            transition
+            hover:border-[#B8A16B]
+            focus:border-[#A51E27]
+            focus:ring-2
+            focus:ring-[#A51E27]/10
+          "
+              >
+                <option value="Today">Today</option>
+                <option value="Yesterday">Yesterday</option>
+                <option value="Last 7 Days">Last 7 Days</option>
+                <option value="Last 30 Days">Last 30 Days</option>
+                <option value="Last Year">Last Year</option>
+                <option value="All Orders">All Orders</option>
+              </select>
+
+              <span
+                className="
+          pointer-events-none
+          absolute
+          right-3
+          top-1/2
+          -translate-y-1/2
+          text-[#8C867D]
           text-xs
-          text-[#64748B]
-
-          file:mr-2
-          file:border-0
-          file:border-r
-          file:border-[#E2E8F0]
-          file:bg-[#F8FAFC]
-          file:px-3
-          file:py-2.5
-          file:text-xs
-          file:text-[#475569]
-
-          hover:file:bg-[#F1F5F9]
         "
-            />
-
-            <button
-              type="button"
-              onClick={handleImport}
-              disabled={!excelFile || isImporting}
-              className="
-          h-full
-          px-4
-          whitespace-nowrap
-          border-l
-          border-[#E2E8F0]
-          text-sm
-          font-medium
-          text-[#64748B]
-          hover:bg-[#F8FAFC]
-          disabled:opacity-40
-          disabled:cursor-not-allowed
-        "
-            >
-              {isImporting ? "Importing..." : "Import"}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* desktop Header */}
-
-      <div className="hidden sm:flex flex-wrap items-center gap-3 mb-6">
-        {/* Heading */}
-        <h1 className="text-3xl font-bold whitespace-nowrap">
-          {platform ? `${platform} Orders` : "Orders Management"}
-        </h1>
-
-        {/* Date Filter */}
-        <select
-          value={dateFilter}
-          onChange={(e) => setDateFilter(e.target.value)}
-          className="bg-white px-4 py-3 rounded-lg shadow outline-none"
-        >
-          <option>Today</option>
-          <option>Yesterday</option>
-          <option>Last 7 Days</option>
-          <option>Last 30 Days</option>
-          <option>Last Year</option>
-          <option>All Orders</option>
-        </select>
-
-        {/* Add Order */}
-        {currentUser?.role === "admin" && (
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-black text-white px-2 py-3 rounded-lg whitespace-nowrap"
-          >
-            Add Order
-          </button>
-        )}
-
-        {/* Export Orders */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setExportMenuOpen((prev) => !prev)}
-            className="flex items-center gap-2 bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700"
-          >
-            <FileSpreadsheet size={18} />
-            Export
-          </button>
-
-          {exportMenuOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-              <button
-                type="button"
-                onClick={handleExportSelected}
-                disabled={selectedOrderIds.length === 0}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Export Selected
-                {selectedOrderIds.length > 0 && ` (${selectedOrderIds.length})`}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleExportAll}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100"
-              >
-                Export All Orders
-              </button>
+                ▾
+              </span>
             </div>
-          )}
-        </div>
 
-        {/* Excel Upload */}
-        {currentUser?.role === "admin" && (
-          <div className="flex min-w-0">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".xlsx,.xls,.csv"
-              onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
-              className="
-          block min-w-0
-          rounded-l-lg
-          border border-r-0 border-gray-300
-          bg-white text-sm text-gray-600
+            {/* ADD ORDER */}
+            {currentUser?.role === "admin" && (
+              <button
+                type="button"
+                onClick={() => setModalOpen(true)}
+                className="
+            h-11
+            px-5
+            rounded-[11px]
+            bg-[#172033]
+            text-white
+            text-[13px]
+            font-medium
+            tracking-wide
+            transition-all
+            duration-200
+            shadow-[0_4px_12px_rgba(23,32,51,0.14)]
+            hover:bg-[#27344B]
+            hover:-translate-y-[1px]
+            active:translate-y-0
+          "
+              >
+                <span className="text-[#D6B56D] mr-1.5">+</span>
+                Add Order
+              </button>
+            )}
 
-          file:mr-3
-          file:border-0
-          file:border-r
-          file:border-gray-300
-          file:bg-gray-100
-          file:px-4
-          file:py-3
-          file:text-sm
-          file:text-gray-700
+            {/* EXPORT */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setExportMenuOpen((prev) => !prev)}
+                className="
+            h-11
+            px-5
+            rounded-[11px]
+            bg-[#A51E27]
+            text-white
+            text-[13px]
+            font-medium
+            tracking-wide
+            flex
+            items-center
+            gap-2
+            shadow-[0_5px_14px_rgba(165,30,39,0.18)]
+            transition-all
+            hover:bg-[#8F1821]
+            hover:-translate-y-[1px]
+          "
+              >
+                <FileSpreadsheet size={16} strokeWidth={1.8} />
+                Export
+                <span className="text-[#D6B56D] text-xs">▾</span>
+              </button>
 
-          hover:file:bg-gray-200
-          focus:outline-none
+              {exportMenuOpen && (
+                <div
+                  className="
+            absolute
+            left-0
+            top-full
+            mt-2
+            w-56
+            bg-[#FFFDFC]
+            border
+            border-[#E4DED5]
+            rounded-xl
+            shadow-[0_18px_45px_rgba(20,25,35,0.14)]
+            overflow-hidden
+            z-50
+          "
+                >
+                  <button
+                    type="button"
+                    onClick={handleExportSelected}
+                    disabled={selectedOrderIds.length === 0}
+                    className="
+                w-full
+                px-4
+                py-3.5
+                text-left
+                text-[13px]
+                text-[#334155]
+                hover:bg-[#F7F3ED]
+                disabled:opacity-40
+              "
+                  >
+                    Export Selected
+                    {selectedOrderIds.length > 0 &&
+                      ` (${selectedOrderIds.length})`}
+                  </button>
+
+                  <div className="h-px bg-[#ECE7DF]" />
+
+                  <button
+                    type="button"
+                    onClick={handleExportAll}
+                    className="
+                w-full
+                px-4
+                py-3.5
+                text-left
+                text-[13px]
+                text-[#334155]
+                hover:bg-[#F7F3ED]
+              "
+                  >
+                    Export All Orders
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* EXCEL IMPORT */}
+            {currentUser?.role === "admin" && (
+              <div
+                className="
+          flex
+          items-center
+          h-11
+          rounded-[11px]
+          border
+          border-[#DED9D0]
+          bg-[#FFFDFC]
+          overflow-hidden
+          shadow-[0_2px_8px_rgba(30,35,45,0.03)]
         "
-            />
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".xlsx,.xls,.csv"
+                  onChange={(e) => setExcelFile(e.target.files?.[0] || null)}
+                  className="
+              min-w-0
+              w-[200px]
+              text-xs
+              text-[#7A8494]
 
-            <button
-              type="button"
-              onClick={handleImport}
-              disabled={!excelFile || isImporting}
+              file:mr-2
+              file:border-0
+              file:border-r
+              file:border-[#E5DFD6]
+              file:bg-[#F7F3ED]
+              file:px-4
+              file:py-3
+              file:text-xs
+              file:font-medium
+              file:text-[#475569]
+
+              hover:file:bg-[#F0EBE2]
+            "
+                />
+
+                <button
+                  type="button"
+                  onClick={handleImport}
+                  disabled={!excelFile || isImporting}
+                  className="
+              h-full
+              px-4
+              text-[12px]
+              font-semibold
+              text-[#687386]
+              border-l
+              border-[#E5DFD6]
+              hover:bg-[#F7F3ED]
+              disabled:opacity-40
+            "
+                >
+                  {isImporting ? "Importing..." : "Import"}
+                </button>
+              </div>
+            )}
+
+            {/* SEARCH */}
+            <div
               className="
-          whitespace-nowrap
-          rounded-r-lg
-          border border-gray-300
-          bg-white
-          px-5
-          text-sm font-medium text-gray-700
-
-          hover:bg-gray-100
-
-          disabled:cursor-not-allowed
-          disabled:opacity-50
-        "
+        w-full
+        sm:w-[260px]
+        xl:ml-auto
+      "
             >
-              {isImporting ? "Importing..." : "Import Excel"}
-            </button>
+              <SearchBar
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Search Orders..."
+              />
+            </div>
           </div>
-        )}
-
-        {/* Search */}
-        <div className="ml-auto">
-          <SearchBar
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search Orders..."
-          />
         </div>
       </div>
       {/* <button

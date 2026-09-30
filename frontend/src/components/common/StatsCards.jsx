@@ -7,46 +7,44 @@ const StatCard = ({ title, value, active, onClick }) => {
         group
         relative
         w-full
-        h-[72px]
-        sm:h-[78px]
+        h-[76px]
 
         flex
         items-center
         justify-between
 
-        px-4
-        sm:px-5
+        px-5
 
         rounded-[14px]
 
         border
 
+        text-left
+
+        overflow-hidden
+
         transition-all
         duration-300
-        ease-out
-
-        cursor-pointer
-        overflow-hidden
 
         ${
           active
             ? `
-              bg-[#8F1528]
-              border-[#8F1528]
-              
+              bg-[#8F1729]
+              border-[#8F1729]
+              shadow-[0_8px_24px_rgba(143,23,41,0.18)]
             `
             : `
-              bg-[#FFFFFF]
-              border-[#E7E5E1]
-          
-              hover:border-[#C9A86A]
-              hover:shadow-[0_8px_22px_rgba(15,23,42,0.08)]
+              bg-[#FFFDFC]
+              border-[#E6E1D9]
+              shadow-[0_3px_12px_rgba(20,25,35,0.045)]
+              hover:border-[#CDB77E]
+              hover:shadow-[0_8px_22px_rgba(20,25,35,0.08)]
               hover:-translate-y-[1px]
             `
         }
       `}
     >
-      {/* Champagne accent */}
+      {/* Champagne line */}
       <span
         className={`
           absolute
@@ -60,35 +58,26 @@ const StatCard = ({ title, value, active, onClick }) => {
         `}
       />
 
-      {/* Title */}
+      {/* TITLE */}
       <span
         className={`
-          text-[11px]
+          text-[12px]
           sm:text-[13px]
-
           font-medium
-          tracking-[0.02em]
+          tracking-[0.01em]
 
-          text-left
-          leading-tight
-
-          ${active ? "text-[#F8EBDD]" : "text-[#64748B]"}
+          ${active ? "text-[#F7EDE5]" : "text-[#687386]"}
         `}
       >
         {title}
       </span>
 
-      {/* Number */}
+      {/* NUMBER */}
       <span
         className={`
-          ml-3
-
-          text-[23px]
-          sm:text-[27px]
-
+          text-[25px]
           font-semibold
-          tracking-[-0.02em]
-
+          tracking-[-0.03em]
           tabular-nums
 
           ${active ? "text-white" : "text-[#172033]"}
@@ -105,14 +94,11 @@ const StatsCards = ({ stats = [], activeTab, onTabChange }) => {
     <div
       className="
         grid
-
         grid-cols-2
         sm:grid-cols-3
-        lg:grid-cols-5
-        xl:grid-cols-8
-
+        lg:grid-cols-4
+        xl:grid-cols-7
         gap-3
-
         mb-5
       "
     >
