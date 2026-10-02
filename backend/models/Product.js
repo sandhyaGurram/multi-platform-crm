@@ -43,6 +43,14 @@ const productSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+      warehouseOne: {
+        type: Number,
+        default: 0,
+      },
+      warehouseTwo: {
+        type: Number,
+        default: 0,
+      },
       nalgonda: {
         type: Number,
         default: 0,

@@ -105,6 +105,8 @@ export const fetchShopifyProducts = async () => {
           shopify: variant?.inventory_quantity || 0,
           hyderabad: 0,
           nalgonda: 0,
+          warehouseOne: 0,
+          warehouseTwo: 0,
         },
       });
 

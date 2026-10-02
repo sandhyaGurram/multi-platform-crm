@@ -49,6 +49,8 @@ const Products = () => {
       shopify: 0,
       hyderabad: 0,
       nalgonda: 0,
+      warehouseOne: 0,
+      warehouseTwo: 0,
     },
     status: "In Stock",
   });
@@ -80,6 +82,8 @@ const Products = () => {
           shopify: 0,
           hyderabad: 0,
           nalgonda: 0,
+          warehouseOne: 0,
+          warehouseTwo: 0,
         },
         status: "In Stock",
       });

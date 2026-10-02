@@ -132,6 +132,14 @@ const ProductDrawer = ({ isOpen, onClose, product, mode }) => {
                 label="Warehouse-2"
                 value={product.warehouseStock?.nalgonda ?? 0}
               />
+              <DetailRow
+                label="Warehouse-2"
+                value={product.warehouseStock?.warehouseOne ?? 0}
+              />
+              <DetailRow
+                label="Warehouse-2"
+                value={product.warehouseStock?.warehouseTwo ?? 0}
+              />
 
               <DetailRow label="Total Stock" value={totalStock} />
             </SectionCard>

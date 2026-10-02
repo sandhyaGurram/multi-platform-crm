@@ -137,6 +137,8 @@ export const updateProduct = async (req, res) => {
       "shopify",
       "hyderabad",
       "nalgonda",
+      "warehouseOne",
+      "warehouseTwo",
     ];
 
     for (const warehouse of warehouses) {

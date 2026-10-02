@@ -123,6 +123,11 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
                 <br />
                 <span className="text-xs text-gray-500">Manual</span>
               </th>
+              <th className="border p-3">
+                WareHouseOne
+                <br />
+                <span className="text-xs text-gray-500">Manual</span>
+              </th>
 
               <th className="border p-3">
                 WareHouse-2
@@ -142,7 +147,16 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
               const nalgonda = Number(item.warehouseStock?.nalgonda ?? 0);
 
-              const total = shopify + hyderabad + nalgonda;
+              const warehouseOne = Number(
+                item.warehouseStock?.warehouseOne ?? 0,
+              );
+
+              const warehouseTwo = Number(
+                item.warehouseStock?.warehouseTwo ?? 0,
+              );
+
+              const total =
+                shopify + hyderabad + nalgonda + warehouseOne + warehouseTwo;
 
               return (
                 <tr key={item._id}>
@@ -167,6 +181,28 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
                         handleChange(item._id, "hyderabad", e.target.value)
                       }
                       onBlur={() => handleBlur(item._id, "hyderabad")}
+                      className={`w-20 border rounded px-2 py-1 ${
+                        !isAdmin
+                          ? "bg-gray-100 cursor-not-allowed text-gray-500"
+                          : ""
+                      }`}
+                    />
+                  </td>
+
+                  {/* warehouseOne */}
+                  <td className="border p-3">
+                    <input
+                      type="number"
+                      value={getInputValue(
+                        item._id,
+                        "warehouseOne",
+                        warehouseOne,
+                      )}
+                      disabled={!isAdmin}
+                      onChange={(e) =>
+                        handleChange(item._id, "warehouseOne", e.target.value)
+                      }
+                      onBlur={() => handleBlur(item._id, "warehouseOne")}
                       className={`w-20 border rounded px-2 py-1 ${
                         !isAdmin
                           ? "bg-gray-100 cursor-not-allowed text-gray-500"
