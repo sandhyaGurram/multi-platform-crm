@@ -34,17 +34,23 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
     if (!product) return;
 
-    const oldValue = Number(product.warehouseStock?.[field] ?? 0);
-
     const draftValue = draftValues[key];
 
     if (draftValue === undefined) {
       return;
     }
 
+    const oldValue = Number(product.warehouseStock?.[field] ?? 0);
     const newValue = Number(draftValue);
 
-    // Nothing changed
+    console.log("=================================");
+    console.log("WAREHOUSE UPDATE");
+    console.log("Product:", product.productName);
+    console.log("Field:", field);
+    console.log("Old value:", oldValue);
+    console.log("New value:", newValue);
+    console.log("=================================");
+
     if (oldValue === newValue) {
       setDraftValues((prev) => {
         const copy = { ...prev };
@@ -57,7 +63,6 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
     const updatedProduct = {
       ...product,
-
       warehouseStock: {
         ...product.warehouseStock,
         [field]: newValue,
@@ -65,16 +70,32 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
     };
 
     try {
-      console.log("Saving warehouse stock:", field, oldValue, "→", newValue);
+      console.log("Sending product to backend:");
+      console.log(updatedProduct);
 
       const res = await updateProduct(id, updatedProduct);
 
-      console.log("Product update response:", res.data);
+      console.log("Backend response:");
+      console.log(res.data);
 
-      // Update products with database response
-      setProducts((prev) => prev.map((p) => (p._id === id ? res.data : p)));
+      // Keep the local value even if backend response
+      // does not contain the new warehouse field.
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === id
+            ? {
+                ...p,
+                ...res.data,
+                warehouseStock: {
+                  ...p.warehouseStock,
+                  ...(res.data.warehouseStock || {}),
+                  [field]: newValue,
+                },
+              }
+            : p,
+        ),
+      );
 
-      // Remove temporary value
       setDraftValues((prev) => {
         const copy = { ...prev };
         delete copy[key];
@@ -82,20 +103,15 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
       });
     } catch (error) {
       console.error("Warehouse update failed:", error);
-
       console.error("Server response:", error.response?.data);
-
       console.error("Status:", error.response?.status);
 
-      // Remove temporary value
-      setDraftValues((prev) => {
-        const copy = { ...prev };
-        delete copy[key];
-        return copy;
-      });
-
+      // IMPORTANT:
+      // Don't immediately delete the user's typed value.
+      // Keep it visible so we can see that saving failed.
       alert(
-        error.response?.data?.message || "Failed to update warehouse stock.",
+        error.response?.data?.message ||
+          "Failed to save warehouse stock. Please try again.",
       );
     }
   };
