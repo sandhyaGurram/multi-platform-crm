@@ -107,10 +107,10 @@ export const importOrders = async (req, res) => {
 
                     const amount =
                         Number(
-                            row["Supplier Discounted Price"]
+                            row["Supplier Discounted Price (Incl GST and Commission)"]
                         ) ||
                         Number(
-                            row["Supplier Listed Price"]
+                            row["Supplier Listed Price (Incl. GST + Commission)"]
                         ) ||
                         0;
 
