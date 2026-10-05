@@ -163,7 +163,7 @@ export const importOrders = async (req, res) => {
                         customerName: "",
                         customerPhone: "",
                         customerEmail: "",
-                        customerAddress: "",
+                        customerAddress: customerState,
 
                         city: "",
                         state: customerState,
