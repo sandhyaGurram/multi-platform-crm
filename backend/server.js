@@ -32,6 +32,7 @@ import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import shopifyRoutes from "./routes/shopifyRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import meeshoRoutes from "./routes/meeshoRoutes.js";
 // import { fetchShopifyOrders } from "./services/shopifyService.js";
 
 
@@ -85,6 +86,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 app.use("/api/shopify", shopifyRoutes);
+
+app.use("/api/meesho", meeshoRoutes);
 
 app.get("/", (req, res) => {
 

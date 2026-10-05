@@ -200,12 +200,17 @@ const Orders = ({ platform }) => {
     formData.append("file", excelFile);
 
     try {
-      await axios.post(
-        // "http://localhost:5000/api/import/orders",
+      console.log("========== IMPORT START ==========");
+      console.log("API URL:", API_URL);
+      console.log("IMPORT URL:", `${API_URL}/api/import/orders`);
+      console.log("FILE:", excelFile);
+      console.log("FILE NAME:", excelFile.name);
+      console.log("FILE TYPE:", excelFile.type);
+      console.log("=================================");
+
+      const response = await axios.post(
         `${API_URL}/api/import/orders`,
-
         formData,
-
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -213,13 +218,48 @@ const Orders = ({ platform }) => {
         },
       );
 
-      alert("Excel Imported");
+      console.log("========== IMPORT RESPONSE ==========");
+      console.log(response.data);
+      console.log("=====================================");
+
+      alert(
+        `Import completed!\n\n` +
+          `Platform: ${response.data.platform}\n` +
+          `Total: ${response.data.totalRows}\n` +
+          `Created: ${response.data.created}\n` +
+          `Updated: ${response.data.updated}\n` +
+          `Skipped: ${response.data.skipped}\n` +
+          `Errors: ${response.data.errors?.length || 0}`,
+      );
 
       fetchOrders();
     } catch (error) {
-      console.log(error);
+      console.error("========== IMPORT ERROR ==========");
+      console.error(error);
+      console.error(error.response);
+      console.error("=================================");
     }
   };
+  // await axios.post(
+  //   // "http://localhost:5000/api/import/orders",
+  //   `${API_URL}/api/import/orders`,
+
+  //   formData,
+
+  //   {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   },
+  // );
+
+  // alert("Excel Imported");
+
+  // fetchOrders();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSelectOrder = (orderId) => {
     setSelectedOrderIds((prev) => {

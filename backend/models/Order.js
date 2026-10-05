@@ -81,6 +81,13 @@ const orderSchema = new mongoose.Schema(
             default: null,
         },
 
+        
+        marketplaceData: {
+  catalogId: String,
+  packetId: String,
+  subOrderNo: String,
+},
+
 
         // PRODUCT DETAILS
 
