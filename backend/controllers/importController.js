@@ -123,7 +123,7 @@ export const importOrders = async (req, res) => {
                             row["Supplier Listed Price (Incl. GST + Commission)"]
                         ) ||
                         Number(
-                            row["Supplier Discounted Price (Incl GST and Commision)"]
+                            row["Supplier Discounted Price (Incl GST and Commission)"]
                         ) ||
                         0;
 
