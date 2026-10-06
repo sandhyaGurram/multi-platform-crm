@@ -82,10 +82,19 @@ const orderSchema = new mongoose.Schema(
         },
 
         
-        marketplaceData: {
-  catalogId: String,
-  packetId: String,
-  subOrderNo: String,
+       marketplaceData: {
+
+    // Meesho
+    catalogId: String,
+    packetId: String,
+    subOrderNo: String,
+
+    // Flipkart
+    orderItemId: String,
+    flipkartOrderId: String,
+    fsn: String,
+    fulfilmentSource: String,
+    fulfilmentType: String,
 },
 
 

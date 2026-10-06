@@ -138,9 +138,9 @@ const Orders = ({ platform }) => {
     try {
       const currentUser = JSON.parse(localStorage.getItem("crmUser"));
 
-      console.log("CURRENT USER:", currentUser);
+      // console.log("CURRENT USER:", currentUser);
       console.log("API URL:", API_URL);
-      console.log("TOKEN:", currentUser?.token);
+      // console.log("TOKEN:", currentUser?.token);
 
       const response = await axios.get(`${API_URL}/api/orders`, {
         headers: {

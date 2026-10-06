@@ -50,9 +50,20 @@ export const importOrders = async (req, res) => {
                 "Order ID"
             );
 
+        const isFlipkart =
+            Object.prototype.hasOwnProperty.call(
+                firstRow,
+                "order_item_id"
+            ) &&
+            Object.prototype.hasOwnProperty.call(
+                firstRow,
+                "order_id"
+            );
+
         console.log("Detected platform:", {
             isMeesho,
             isShopify,
+            isFlipkart,
         });
 
         let platform = "Unknown";
@@ -61,6 +72,8 @@ export const importOrders = async (req, res) => {
             platform = "Meesho";
         } else if (isShopify) {
             platform = "Shopify";
+        } else if (isFlipkart) {
+            platform = "Flipkart";
         }
 
         console.log("IMPORT PLATFORM:", platform);
@@ -227,6 +240,151 @@ export const importOrders = async (req, res) => {
                 // ======================================
                 // EXISTING / OTHER PLATFORM IMPORT
                 // ======================================
+                else if (platform === "Flipkart") {
+
+                    const orderItemId =
+                        String(row["order_item_id"] || "").trim();
+
+                    const flipkartOrderId =
+                        String(row["order_id"] || "").trim();
+
+                    if (!orderItemId) {
+                        skipped++;
+
+                        errors.push({
+                            reason: "Flipkart order_item_id is missing",
+                            row,
+                        });
+
+                        continue;
+                    }
+
+                    const productName =
+                        String(row["product_title"] || "")
+                            .replace(/^"+|"+$/g, "")
+                            .trim();
+
+                    const sku =
+                        String(row["sku"] || "")
+                            .replace(/^"+|"+$/g, "")
+                            .replace(/^SKU:/i, "")
+                            .trim();
+
+                    const quantity =
+                        Number(row["quantity"]) || 0;
+
+                    const orderStatus =
+                        String(row["order_item_status"] || "")
+                            .trim() || "Pending";
+
+                    const trackingId =
+                        String(row["delivery_tracking_id"] || "")
+                            .replace(/^DTr:/i, "")
+                            .trim();
+
+                    const courierPartner =
+                        String(
+                            row["delivery_logistics_partner"] ||
+                            row["pickup_logistics_partner"] ||
+                            ""
+                        ).trim();
+
+                    const orderDate =
+                        row["order_date"]
+                            ? new Date(row["order_date"])
+                            : null;
+
+                    const deliveryDate =
+                        row["order_delivery_date"]
+                            ? new Date(row["order_delivery_date"])
+                            : null;
+
+                    orderData = {
+
+                        // Use order_item_id because one Flipkart
+                        // order can potentially contain multiple items
+                        orderId: orderItemId,
+
+                        platform: "Flipkart",
+
+                        // This Fulfilment report has no price column
+                        amount: 0,
+
+                        customerName: "",
+                        customerPhone: "",
+                        customerEmail: "",
+                        customerAddress: "",
+
+                        city: "",
+                        state: "",
+                        pincode: "",
+                        country: "India",
+
+                        quantity,
+
+                        paymentMethod: "",
+                        paymentStatus: "",
+
+                        orderStatus,
+
+                        fulfillmentStatus: orderStatus,
+
+                        deliveryStatus:
+                            orderStatus === "DELIVERED"
+                                ? "Delivered"
+                                : null,
+
+                        trackingId,
+                        courierPartner,
+
+                        awbNumber: trackingId,
+
+                        trackingUrl: null,
+
+                        productName,
+
+                        sku,
+
+                        variant: "",
+
+                        unitPrice: 0,
+
+                        taxAmount: 0,
+                        shippingCharge: 0,
+                        discountAmount: 0,
+
+                        profit: 0,
+
+                        orderDate,
+
+                        deliveryDate,
+
+                        items: [
+                            {
+                                productName,
+                                sku,
+                                variant: "",
+                                quantity,
+                                unitPrice: 0,
+                            },
+                        ],
+
+                        category: "",
+                        brand: "Flipkart",
+
+                        marketplaceData: {
+                            orderItemId,
+                            flipkartOrderId,
+                            fsn: String(row["fsn"] || "").trim(),
+                            fulfilmentSource:
+                                String(row["fulfilment_source"] || "").trim(),
+                            fulfilmentType:
+                                String(row["fulfilment_type"] || "").trim(),
+                        },
+                    };
+                }
+
+
 
                 else {
                     let formattedDate = row["Order Date"]
