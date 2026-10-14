@@ -77,12 +77,17 @@ export const fetchShopifyProducts = async () => {
       const sku =
         variant?.sku || `SHOPIFY-${variant?.id || product.id}`;
 
-      const existingProduct = await Product.findOne({
-        sku,
-      });
+      const existingProduct = await Product.findOne({ sku });
 
       if (existingProduct) {
-        console.log(`${product.title} already exists`);
+        await Product.findByIdAndUpdate(existingProduct._id, {
+          status: product.status || "active",
+        });
+
+        console.log(
+          `${product.title} status updated: ${product.status}`
+        );
+
         continue;
       }
 

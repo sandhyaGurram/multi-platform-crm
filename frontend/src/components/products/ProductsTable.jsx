@@ -103,7 +103,7 @@ const ProductsTable = ({
 
               <td className="border p-3">
                 {(() => {
-                  const status = (item.status || "active").toLowerCase();
+                  const status = (product.status || "active").toLowerCase();
 
                   const styles = {
                     active: "bg-green-100 text-green-800",
@@ -114,7 +114,7 @@ const ProductsTable = ({
                   return (
                     <span
                       className={`rounded-full px-3 py-1 text-sm font-medium ${
-                        styles[status] || styles.active
+                        styles[status] || "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {status.charAt(0).toUpperCase() + status.slice(1)}
