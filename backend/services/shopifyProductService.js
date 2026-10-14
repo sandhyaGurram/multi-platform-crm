@@ -97,9 +97,13 @@ export const fetchShopifyProducts = async () => {
 
         price: Number(variant?.price || 0),
 
+
+
         comparePrice: Number(
           variant?.compare_at_price || 0
         ),
+
+        status: product.status || "active",
 
         warehouseStock: {
           shopify: variant?.inventory_quantity || 0,

@@ -32,6 +32,8 @@ const ProductsTable = ({
 
             <th className="text-left p-1">Category</th>
 
+            <th className="border p-3 text-left">Status</th>
+
             <th className="text-left p-1">SKU</th>
 
             <th className="text-left p-1">Brand</th>
@@ -97,6 +99,28 @@ const ProductsTable = ({
                 ) : (
                   product.category
                 )}
+              </td>
+
+              <td className="border p-3">
+                {(() => {
+                  const status = (item.status || "active").toLowerCase();
+
+                  const styles = {
+                    active: "bg-green-100 text-green-800",
+                    draft: "bg-sky-100 text-sky-800",
+                    archived: "bg-gray-200 text-gray-700",
+                  };
+
+                  return (
+                    <span
+                      className={`rounded-full px-3 py-1 text-sm font-medium ${
+                        styles[status] || styles.active
+                      }`}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </span>
+                  );
+                })()}
               </td>
 
               <td className="p-1">
