@@ -20,8 +20,8 @@ const ProductsTable = ({
   const isAdmin = user?.role === "admin";
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 overflow-x-auto">
-      <table className="w-full min-w-[900px] table-fixed">
+    <div className="w-full min-w-0 overflow-x-auto">
+      <table className="w-full min-w-[1100px] table-fixed border-collapse">
         {/* Header */}
 
         <thead>

@@ -307,21 +307,23 @@ const Products = () => {
 
       {/* Table */}
 
-      <ProductsTable
-        products={filteredProducts}
-        onView={handleView}
-        onEdit={handleEdit}
-        editingId={editingId}
-        editedProduct={editedProduct}
-        setEditedProduct={setEditedProduct}
-        handleSave={handleSave}
-        setEditingId={setEditingId}
-        isAdding={isAdding}
-        newProduct={newProduct}
-        setNewProduct={setNewProduct}
-        handleAddProduct={handleAddProduct}
-        setIsAdding={setIsAdding}
-      />
+      <div className="w-full min-w-0 max-w-full overflow-hidden">
+        <ProductsTable
+          products={filteredProducts}
+          onView={handleView}
+          onEdit={handleEdit}
+          editingId={editingId}
+          editedProduct={editedProduct}
+          setEditedProduct={setEditedProduct}
+          handleSave={handleSave}
+          setEditingId={setEditingId}
+          isAdding={isAdding}
+          newProduct={newProduct}
+          setNewProduct={setNewProduct}
+          handleAddProduct={handleAddProduct}
+          setIsAdding={setIsAdding}
+        />
+      </div>
       <ProductDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
