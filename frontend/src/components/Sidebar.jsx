@@ -15,6 +15,7 @@ import {
   FaShoppingBag,
   FaMoneyBillWave,
 } from "react-icons/fa";
+import logo from "../assets/ARM_logo.png";
 
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -181,57 +182,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, collapsed, setCollapsed }) => {
           {/* Brand */}
           <div className="flex items-center gap-3">
             {/* Logo */}
-            <div
-              className="
-                relative
-                w-[40px]
-                h-[40px]
-                shrink-0
-
-                rounded-[12px]
-
-                flex
-                items-center
-                justify-center
-
-                bg-gradient-to-br
-                from-[#A51E27]
-                to-[#741322]
-
-                border
-                border-[#C56C76]
-
-                shadow-[0_6px_18px_rgba(143,23,41,0.28)]
-              "
-            >
-              <span
-                className="
-                  text-[16px]
-                  font-serif
-                  font-bold
-                  tracking-wide
-                  text-[#FFF7EE]
-                "
-              >
-                ARM
-              </span>
-
-              {/* gold shine */}
-              <span
-                className="
-                  absolute
-                  top-[5px]
-                  right-[6px]
-
-                  w-[5px]
-                  h-[5px]
-
-                  rounded-full
-
-                  bg-[#E1C47A]
-
-                  opacity-90
-                "
+            <div className="w-[40px] h-[40px] shrink-0 flex items-center justify-center">
+              <img
+                src={logo}
+                alt="ARM Logo"
+                className="w-full h-full object-contain"
               />
             </div>
 

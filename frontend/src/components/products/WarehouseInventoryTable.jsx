@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { updateProduct } from "../../services/productService";
+import { FaFileExport } from "react-icons/fa";
 
 const WarehouseInventoryTable = ({ products, setProducts }) => {
   const user = JSON.parse(localStorage.getItem("crmUser"));
@@ -7,6 +8,102 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
   // Temporary values while user is typing
   const [draftValues, setDraftValues] = useState({});
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const toggleProduct = (id) => {
+    setSelectedProducts((prev) =>
+      prev.includes(id)
+        ? prev.filter((productId) => productId !== id)
+        : [...prev, id],
+    );
+  };
+
+  const toggleAllProducts = () => {
+    const allSelected =
+      products.length > 0 &&
+      products.every((product) => selectedProducts.includes(product._id));
+
+    setSelectedProducts(
+      allSelected ? [] : products.map((product) => product._id),
+    );
+  };
+
+  const exportInventory = (selectedOnly = true) => {
+    const reportProducts = selectedOnly
+      ? products.filter((product) => selectedProducts.includes(product._id))
+      : products;
+
+    if (reportProducts.length === 0) {
+      alert(
+        selectedOnly
+          ? "Please select at least one product to export."
+          : "No products available to export.",
+      );
+      return;
+    }
+
+    const headers = [
+      "Product Name",
+      "SKU",
+      "Shopify Auto Sync",
+      "WareHouse-1",
+      "WareHouseOne",
+      "WareHouse-2",
+      "Total Stock",
+    ];
+
+    const escapeCsv = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+    const rows = reportProducts.map((product) => {
+      const stock = product.warehouseStock || {};
+
+      const shopify = Number(stock.shopify ?? 0);
+      const warehouse1 = Number(stock.hyderabad ?? 0);
+      const warehouseOne = Number(stock.warehouseOne ?? 0);
+      const warehouse2 = Number(stock.nalgonda ?? 0);
+
+      const total = shopify + warehouse1 + warehouseOne + warehouse2;
+
+      return [
+        product.productName,
+        product.sku,
+        shopify,
+        warehouse1,
+        warehouseOne,
+        warehouse2,
+        total,
+      ];
+    });
+
+    const csvContent = [
+      headers.map(escapeCsv).join(","),
+      ...rows.map((row) => row.map(escapeCsv).join(",")),
+    ].join("\r\n");
+
+    // UTF-8 BOM helps Excel display text correctly.
+    const blob = new Blob(["\uFEFF", csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = selectedOnly
+      ? "selected-warehouse-inventory.csv"
+      : "all-warehouse-inventory.csv";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    if (selectedOnly) {
+      setSelectedProducts([]);
+    }
+  };
 
   const getInputValue = (id, field, originalValue) => {
     const key = `${id}-${field}`;
@@ -118,12 +215,54 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
   return (
     <div className="bg-white rounded-xl shadow border mt-8 p-6">
-      <h2 className="text-2xl font-bold mb-6">Warehouse Inventory</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold">Warehouse Inventory</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {selectedProducts.length} product(s) selected
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => exportInventory(true)}
+            disabled={selectedProducts.length === 0}
+            className="inline-flex items-center gap-2 rounded-lg bg-[#a51e27] px-4 py-2 text-sm font-semibold text-white hover:bg-[#871923] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FaFileExport />
+            Export Selected
+          </button>
+
+          <button
+            type="button"
+            onClick={() => exportInventory(false)}
+            disabled={products.length === 0}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+          >
+            <FaFileExport />
+            Export All
+          </button>
+        </div>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full border">
           <thead className="bg-gray-100">
             <tr>
+              <th className="border p-3 text-center">
+                <input
+                  type="checkbox"
+                  checked={
+                    products.length > 0 &&
+                    products.every((product) =>
+                      selectedProducts.includes(product._id),
+                    )
+                  }
+                  onChange={toggleAllProducts}
+                  aria-label="Select all products"
+                />
+              </th>
               <th className="border p-3 text-left">Product</th>
 
               <th className="border p-3">SKU</th>
@@ -176,6 +315,14 @@ const WarehouseInventoryTable = ({ products, setProducts }) => {
 
               return (
                 <tr key={item._id}>
+                  <td className="border p-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.includes(item._id)}
+                      onChange={() => toggleProduct(item._id)}
+                      aria-label={`Select ${item.productName}`}
+                    />
+                  </td>
                   <td className="border p-3">
                     <div className="font-semibold">{item.productName}</div>
                   </td>
