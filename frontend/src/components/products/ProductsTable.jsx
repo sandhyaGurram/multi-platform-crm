@@ -21,7 +21,7 @@ const ProductsTable = ({
 
   return (
     <div className="w-full min-w-0 overflow-x-auto">
-      <table className="w-full min-w-[1100px] table-fixed border-collapse">
+      <table className="w-full min-w-[1200px] table-auto border-collapse">
         {/* Header */}
 
         <thead>
@@ -42,7 +42,7 @@ const ProductsTable = ({
 
             <th className="text-left p-1">Stock</th>
 
-            <th className="text-left p-1">Status</th>
+            <th className="text-left p-1">Stock Status</th>
 
             <th className="text-center p-1">Actions</th>
           </tr>
