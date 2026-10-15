@@ -14,6 +14,7 @@ import Users from "../pages/Users";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
 import Notifications from "../pages/Notifications";
+import Inventory from "./pages/Inventory";
 
 const AppRoutes = () => {
   return (
@@ -37,6 +38,8 @@ const AppRoutes = () => {
           <Route path="orders" element={<Orders />} />
 
           <Route path="products" element={<Products />} />
+
+          <Route path="inventory" element={<Inventory />} />
 
           <Route path="notifications" element={<Notifications />} />
 
