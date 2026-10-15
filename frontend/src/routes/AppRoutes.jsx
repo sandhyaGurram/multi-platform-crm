@@ -14,7 +14,7 @@ import Users from "../pages/Users";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
 import Notifications from "../pages/Notifications";
-import Inventory from "./pages/Inventory";
+import Inventory from "../pages/Inventory";
 
 const AppRoutes = () => {
   return (

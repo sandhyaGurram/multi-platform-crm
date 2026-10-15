@@ -15,6 +15,8 @@ import {
   FaShoppingBag,
   FaMoneyBillWave,
 } from "react-icons/fa";
+
+import { FaBoxesStacked } from "react-icons/fa6";
 import logo from "../assets/ARM_logo.png";
 
 import axios from "axios";
@@ -690,6 +692,40 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, collapsed, setCollapsed }) => {
               `}
             >
               Products
+            </span>
+          </NavLink>
+
+          {/* Inventory */}
+
+          <NavLink
+            to="/inventory"
+            title={collapsed ? "Inventory" : ""}
+            className={navClass}
+          >
+            <span
+              className={`
+                w-[30px]
+                h-[30px]
+                flex
+                items-center
+                justify-center
+                rounded-[9px]
+                shrink-0
+                ${collapsed ? "" : "bg-[#1B222D]"}
+              `}
+            >
+              <FaBoxesStacked size={14} />
+            </span>
+
+            <span
+              className={`
+                text-[13px]
+                font-medium
+                whitespace-nowrap
+                ${collapsed ? "md:hidden" : ""}
+              `}
+            >
+              Inventory
             </span>
           </NavLink>
 
