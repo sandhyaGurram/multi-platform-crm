@@ -24,27 +24,18 @@ const ProductsTable = ({
       <table className="w-full min-w-[1200px] table-auto border-collapse">
         {/* Header */}
 
-        <thead>
+        <thead className="bg-gray-50">
           <tr className="border-b">
-            <th className="text-center p-1 w-12">S.No</th>
-
-            <th className="text-left p-1">Product ID</th>
-
-            <th className="text-left p-1">Category</th>
-
-            <th className="border p-3 text-left">Status</th>
-
-            <th className="text-left p-1">SKU</th>
-
-            <th className="text-left p-1">Brand</th>
-
-            <th className="text-left p-1">Price</th>
-
-            <th className="text-left p-1">Stock</th>
-
-            <th className="text-left p-1">Stock Status</th>
-
-            <th className="text-center p-1">Actions</th>
+            <th className="w-[60px] p-3 text-center">S.No</th>
+            <th className="w-[240px] p-3 text-left">Product Name</th>
+            <th className="w-[130px] p-3 text-left">Category</th>
+            <th className="w-[130px] p-3 text-left">Shopify Status</th>
+            <th className="w-[180px] p-3 text-left">SKU</th>
+            <th className="w-[140px] p-3 text-left">Brand</th>
+            <th className="w-[150px] p-3 text-left">Price</th>
+            <th className="w-[120px] p-3 text-left">Stock</th>
+            <th className="w-[140px] p-3 text-left">Stock Status</th>
+            <th className="w-[150px] p-3 text-center">Actions</th>
           </tr>
         </thead>
 
@@ -250,6 +241,7 @@ const ProductsTable = ({
 
           {isAdding && (
             <tr className="bg-gray-50 border-t">
+              <td className="p-2 text-center">—</td>
               <td className="p-2">
                 <input
                   className="w-full border rounded px-2 py-2"
@@ -273,6 +265,11 @@ const ProductsTable = ({
                     setNewProduct({ ...newProduct, category: e.target.value })
                   }
                 />
+              </td>
+              <td className="p-2">
+                <span className="rounded-full bg-gray-100 px-2 py-1 text-xs">
+                  Draft
+                </span>
               </td>
 
               <td className="p-2">
