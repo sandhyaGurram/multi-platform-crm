@@ -342,7 +342,7 @@ const Products = () => {
         )}
       </div>
 
-      <WarehouseInventoryTable products={products} setProducts={setProducts} />
+      {/* <WarehouseInventoryTable products={products} setProducts={setProducts} /> */}
     </div>
   );
 };
