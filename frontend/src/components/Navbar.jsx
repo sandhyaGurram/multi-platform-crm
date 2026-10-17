@@ -136,7 +136,7 @@ const Navbar = ({ setSidebarOpen }) => {
                   {/* Email row */}
                   <div className="flex items-start justify-between gap-4 border-b border-[#F1EDE7] py-4">
                     <span className="shrink-0 text-[12px] font-medium text-[#918B83]">
-                      Email address
+                      Email
                     </span>
 
                     <span className="max-w-[195px] break-all text-right text-[12px] font-medium leading-5 text-[#303747]">
@@ -147,7 +147,7 @@ const Navbar = ({ setSidebarOpen }) => {
                   {/* Mobile row */}
                   <div className="flex items-center justify-between gap-4 py-4">
                     <span className="shrink-0 text-[12px] font-medium text-[#918B83]">
-                      Mobile number
+                      Mobile
                     </span>
 
                     <span className="text-right text-[12px] font-medium text-[#303747]">
