@@ -101,6 +101,88 @@ router.get("/callback", async (req, res) => {
     }
 });
 
+
+
+
+// Fetch existing Zoho Sheet records
+router.get("/data", async (req, res) => {
+    try {
+        const {
+            ZOHO_CLIENT_ID,
+            ZOHO_CLIENT_SECRET,
+            ZOHO_REFRESH_TOKEN,
+            ZOHO_SHEET_RESOURCE_ID,
+            ZOHO_SHEET_WORKSHEET_NAME,
+        } = process.env;
+
+        if (
+            !ZOHO_CLIENT_ID ||
+            !ZOHO_CLIENT_SECRET ||
+            !ZOHO_REFRESH_TOKEN ||
+            !ZOHO_SHEET_RESOURCE_ID ||
+            !ZOHO_SHEET_WORKSHEET_NAME
+        ) {
+            return res.status(500).json({
+                message: "Required Zoho environment variables are missing.",
+            });
+        }
+
+        // Generate a fresh access token
+        const tokenResponse = await axios.post(
+            "https://accounts.zoho.in/oauth/v2/token",
+            new URLSearchParams({
+                grant_type: "refresh_token",
+                client_id: ZOHO_CLIENT_ID,
+                client_secret: ZOHO_CLIENT_SECRET,
+                refresh_token: ZOHO_REFRESH_TOKEN,
+            }),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+
+        const accessToken = tokenResponse.data.access_token;
+
+        if (!accessToken) {
+            return res.status(502).json({
+                message: "Zoho did not return an access token.",
+                details: tokenResponse.data.error || "Unknown token error",
+            });
+        }
+
+        // Fetch the existing worksheet records
+        const sheetResponse = await axios.post(
+            `https://sheet.zoho.in/api/v2/${ZOHO_SHEET_RESOURCE_ID}`,
+            new URLSearchParams({
+                method: "worksheet.records.fetch",
+                worksheet_name: ZOHO_SHEET_WORKSHEET_NAME,
+                records_start_index: "1",
+                count: "100",
+            }),
+            {
+                headers: {
+                    Authorization: `Zoho-oauthtoken ${accessToken}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+
+        return res.json(sheetResponse.data);
+    } catch (error) {
+        console.error(
+            "Zoho Sheet fetch failed:",
+            error.response?.data || error.message
+        );
+
+        return res.status(500).json({
+            message: "Failed to fetch Zoho Sheet data.",
+            details: error.response?.data || error.message,
+        });
+    }
+});
+
 export default router;
 
 

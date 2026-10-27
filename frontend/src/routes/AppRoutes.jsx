@@ -15,6 +15,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
 import Notifications from "../pages/Notifications";
 import Inventory from "../pages/Inventory";
+import ZohoSheet from "../pages/ZohoSheet";
 
 const AppRoutes = () => {
   return (
@@ -44,6 +45,7 @@ const AppRoutes = () => {
           <Route path="customers" element={<Customers />} />
 
           <Route path="analytics" element={<Analytics />} />
+          <Route path="zoho-sheet" element={<ZohoSheet />} />
 
           <Route path="settings" element={<Settings />} />
 
