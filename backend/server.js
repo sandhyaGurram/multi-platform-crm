@@ -33,6 +33,7 @@ import productRoutes from "./routes/productRoutes.js";
 import shopifyRoutes from "./routes/shopifyRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import meeshoRoutes from "./routes/meeshoRoutes.js";
+import zohoRoutes from "./routes/zohoRoutes.js";
 // import { fetchShopifyOrders } from "./services/shopifyService.js";
 
 
@@ -88,6 +89,8 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/shopify", shopifyRoutes);
 
 app.use("/api/meesho", meeshoRoutes);
+
+app.use("/api/zoho", zohoRoutes);
 
 app.get("/", (req, res) => {
 
