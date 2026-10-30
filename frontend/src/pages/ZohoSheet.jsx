@@ -36,9 +36,16 @@ export default function ZohoSheet() {
     fetchRecords();
   }, [fetchRecords]);
 
-  const columns = records.length
-    ? Object.keys(records[0]).filter((key) => key !== "row_index")
-    : [];
+  const columns = [
+    "DATE",
+    "ORDER-ID",
+    "CUSTOMER NAME",
+    "PRODUCTS",
+    "PRICE",
+    "PAYMENT",
+    "SERVICE",
+    "Delivery Status",
+  ];
 
   return (
     <div className="p-4 md:p-6">

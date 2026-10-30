@@ -729,6 +729,40 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, collapsed, setCollapsed }) => {
             </span>
           </NavLink>
 
+          {/*zoho sheet data */}
+
+          <NavLink
+            to="/zoho-sheet"
+            title={collapsed ? "Zoho Sheet" : ""}
+            className={navClass}
+          >
+            <span
+              className={`
+                w-[30px]
+                h-[30px]
+                flex
+                items-center
+                justify-center
+                rounded-[9px]
+                shrink-0
+                ${collapsed ? "" : "bg-[#1B222D]"}
+              `}
+            >
+              <FaBell size={14} />
+            </span>
+
+            <span
+              className={`
+                text-[13px]
+                font-medium
+                whitespace-nowrap
+                ${collapsed ? "md:hidden" : ""}
+              `}
+            >
+              Zoho Sheets
+            </span>
+          </NavLink>
+
           {/* Notifications */}
 
           <NavLink
