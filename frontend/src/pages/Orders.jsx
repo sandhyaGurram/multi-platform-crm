@@ -47,32 +47,61 @@ const Orders = ({ platform }) => {
 
   const today = new Date();
 
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  );
+
+  const startOfYesterday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - 1,
+  );
+
   const filteredOrders = orders.filter((order) => {
-    // DATE FILTER
-
-    // const orderDate = new Date(order.date);
-
     const orderDate = new Date(order.orderDate);
-
-    const diffTime = today - orderDate;
-
-    const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
     let matchesDate = true;
 
     if (dateFilter === "Today") {
-      matchesDate = orderDate.toDateString() === today.toDateString();
+      matchesDate =
+        orderDate >= startOfToday &&
+        orderDate <
+          new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     } else if (dateFilter === "Yesterday") {
-      matchesDate = diffDays >= 1 && diffDays < 2;
+      matchesDate = orderDate >= startOfYesterday && orderDate < startOfToday;
     } else if (dateFilter === "Last 7 Days") {
-      matchesDate = diffDays <= 7;
+      matchesDate =
+        orderDate >=
+          new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() - 6,
+          ) &&
+        orderDate <
+          new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     } else if (dateFilter === "Last 30 Days") {
-      matchesDate = diffDays <= 30;
+      matchesDate =
+        orderDate >=
+          new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() - 29,
+          ) &&
+        orderDate <
+          new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     } else if (dateFilter === "Last Year") {
-      matchesDate = diffDays <= 365;
+      matchesDate =
+        orderDate >=
+          new Date(
+            today.getFullYear() - 1,
+            today.getMonth(),
+            today.getDate(),
+          ) &&
+        orderDate <
+          new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     }
-
-    // SEARCH FILTER
 
     return matchesDate;
   });
