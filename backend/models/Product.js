@@ -17,17 +17,22 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
+      default: "Uncategorized",
     },
 
     vendor: {
       type: String,
       required: true,
     },
+
+
+
     status: {
       type: String,
-      enum: ["active", "draft", "archived"],
+      enum: ["active", "draft", "archived", "unlisted"],
       default: "active",
     },
+
 
     price: {
       type: Number,
