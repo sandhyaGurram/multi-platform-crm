@@ -1,9 +1,3 @@
-import axios from "axios";
-import Product from "../models/Product.js";
-
-
-
-
 
 
 import axios from "axios";
