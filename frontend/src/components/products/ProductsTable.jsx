@@ -9,7 +9,6 @@ const ProductsTable = ({
   setEditedProduct,
   handleSave,
   setEditingId,
-
   isAdding,
   newProduct,
   setNewProduct,
@@ -19,41 +18,97 @@ const ProductsTable = ({
   const user = JSON.parse(localStorage.getItem("crmUser"));
   const isAdmin = user?.role === "admin";
 
+  // SHOPIFY STATUS STYLING
+  const getShopifyStatusStyle = (status) => {
+    const normalizedStatus = (status || "unknown").toLowerCase();
+
+    const styles = {
+      active: "bg-green-100 text-green-800",
+      draft: "bg-sky-100 text-sky-800",
+      archived: "bg-gray-200 text-gray-700",
+      unlisted: "bg-purple-100 text-purple-800",
+    };
+
+    return styles[normalizedStatus] || "bg-gray-100 text-gray-700";
+  };
+
+  // SHOPIFY STATUS LABEL
+  const getShopifyStatusLabel = (status) => {
+    if (!status) return "Unknown";
+
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+  };
+
+  // INVENTORY STATUS STYLING
+  const getInventoryStatusStyle = (status) => {
+    if (status === "In Stock") {
+      return "bg-green-100 text-green-700";
+    }
+
+    if (status === "Low Stock") {
+      return "bg-yellow-100 text-yellow-700";
+    }
+
+    return "bg-red-100 text-red-700";
+  };
+
   return (
-    <div className="w-full min-w-0 overflow-x-auto">
+    <div className="w-full min-w-0 overflow-x-auto rounded-xl border border-gray-200">
       <table className="w-full min-w-[1200px] table-auto border-collapse">
-        {/* Header */}
+        {/* TABLE HEADER */}
 
         <thead className="bg-gray-50">
-          <tr className="border-b">
+          <tr className="border-b text-gray-600 text-sm">
             <th className="w-[60px] p-3 text-center">S.No</th>
+
             <th className="w-[240px] p-3 text-left">Product Name</th>
-            <th className="w-[130px] p-3 text-left">Category</th>
+
+            <th className="w-[180px] p-3 text-left">Category</th>
+
             <th className="w-[130px] p-3 text-left">Shopify Status</th>
+
             <th className="w-[180px] p-3 text-left">SKU</th>
+
             <th className="w-[140px] p-3 text-left">Brand</th>
+
             <th className="w-[150px] p-3 text-left">Price</th>
+
             <th className="w-[120px] p-3 text-left">Stock</th>
+
             <th className="w-[140px] p-3 text-left">Stock Status</th>
+
             <th className="w-[150px] p-3 text-center">Actions</th>
           </tr>
         </thead>
 
-        {/* Body */}
+        {/* TABLE BODY */}
 
         <tbody>
-          {products.map((product, index) => (
-            <tr
-              key={product._id || product.id}
-              className="border-b hover:bg-gray-50 transition"
-            >
-              <td className="p-1 text-center font-medium">{index + 1}</td>
+          {products.map((product, index) => {
+            const currentProduct =
+              editingId === product._id ? editedProduct : product;
 
-              <td className="p-1">
-                <div>
+            const shopifyStatus = product.status || "unknown";
+
+            const category = product.category || "Uncategorized";
+
+            const inventoryStatus = getProductStatus(currentProduct);
+
+            return (
+              <tr
+                key={product._id || product.id}
+                className="border-b hover:bg-gray-50 transition-colors"
+              >
+                {/* SERIAL NUMBER */}
+
+                <td className="p-2 text-center text-sm">{index + 1}</td>
+
+                {/* PRODUCT NAME */}
+
+                <td className="p-2">
                   {editingId === product._id ? (
                     <input
-                      className="border rounded px-1  w-full"
+                      className="border rounded px-2 py-2 w-full"
                       value={editedProduct.productName || ""}
                       onChange={(e) =>
                         setEditedProduct({
@@ -63,185 +118,167 @@ const ProductsTable = ({
                       }
                     />
                   ) : (
-                    <p className="font-semibold text-gray-800">
+                    <p className="font-medium text-gray-800">
                       {product.productName}
                     </p>
                   )}
+                </td>
 
-                  {/* <p className="text-xs text-gray-500">
-                    #{product.sku}
-                  </p> */}
-                </div>
-              </td>
+                {/* SHOPIFY CATEGORY */}
 
-              <td className="p-1">
-                {editingId === product._id ? (
-                  <input
-                    type="text"
-                    className="border rounded px-1 py-1 w-full"
-                    value={editedProduct.category || ""}
-                    onChange={(e) =>
-                      setEditedProduct({
-                        ...editedProduct,
-                        category: e.target.value,
-                      })
-                    }
-                  />
-                ) : (
-                  product.category
-                )}
-              </td>
-
-              <td className="border p-3">
-                {(() => {
-                  const status = (product.status || "active").toLowerCase();
-
-                  const styles = {
-                    active: "bg-green-100 text-green-800",
-                    draft: "bg-sky-100 text-sky-800",
-                    archived: "bg-gray-200 text-gray-700",
-                  };
-
-                  return (
-                    <span
-                      className={`rounded-full px-3 py-1 text-sm font-medium ${
-                        styles[status] || "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </span>
-                  );
-                })()}
-              </td>
-
-              <td className="p-1">
-                {editingId === product._id ? (
-                  <input
-                    type="text"
-                    className="border rounded px-1 py-1 w-full"
-                    value={editedProduct.sku || ""}
-                    onChange={(e) =>
-                      setEditedProduct({
-                        ...editedProduct,
-                        sku: e.target.value,
-                      })
-                    }
-                  />
-                ) : (
-                  product.sku
-                )}
-              </td>
-
-              <td className="p-1">{product.vendor}</td>
-
-              <td className="p-1">
-                <div className="flex items-center gap-2 whitespace-nowrap">
-                  <p className="text-sm text-gray-400 line-through">
-                    ₹{product.comparePrice}
-                  </p>
+                <td className="p-2">
                   {editingId === product._id ? (
                     <input
-                      type="number"
-                      className="border rounded px-1 py-1 w-24"
-                      value={editedProduct.price || ""}
+                      type="text"
+                      className="border rounded px-2 py-2 w-full"
+                      value={editedProduct.category || ""}
                       onChange={(e) =>
                         setEditedProduct({
                           ...editedProduct,
-                          price: e.target.value,
+                          category: e.target.value,
                         })
                       }
                     />
                   ) : (
-                    <p className="font-semibold">₹{product.price}</p>
+                    <span className="text-sm text-gray-700">{category}</span>
                   )}
-                </div>
-              </td>
+                </td>
 
-              <td className="p-1">
-                <div className="flex items-center gap-1 whitespace-nowrap">
-                  <div className="font-semibold">
-                    {editingId === product._id
-                      ? getTotalStock(editedProduct)
-                      : getTotalStock(product)}
-                  </div>
+                {/* SHOPIFY STATUS */}
 
-                  <div className="text-xs text-gray-500">Available</div>
-                </div>
-              </td>
+                <td className="p-2">
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${getShopifyStatusStyle(shopifyStatus)}`}
+                  >
+                    {getShopifyStatusLabel(shopifyStatus)}
+                  </span>
+                </td>
 
-              {/* Status */}
+                {/* SKU */}
 
-              <td className="p-1">
-                {(() => {
-                  const currentProduct =
-                    editingId === product._id ? editedProduct : product;
-
-                  const status = getProductStatus(currentProduct);
-
-                  return (
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold
-          ${
-            status === "In Stock"
-              ? "bg-green-100 text-green-700"
-              : status === "Low Stock"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-red-100 text-red-700"
-          }`}
-                    >
-                      {status}
-                    </span>
-                  );
-                })()}
-              </td>
-
-              {/* Button */}
-
-              <td className="p-1">
-                <div className="flex justify-center gap-2">
+                <td className="p-2">
                   {editingId === product._id ? (
-                    <>
-                      <button
-                        onClick={() => handleSave()}
-                        className="bg-green-600 text-white px-3 rounded-lg"
-                      >
-                        Save
-                      </button>
-
-                      <button
-                        onClick={() => setEditingId(null)}
-                        className="bg-gray-500 text-white px-3 rounded-lg"
-                      >
-                        Cancel
-                      </button>
-                    </>
+                    <input
+                      type="text"
+                      className="border rounded px-2 py-2 w-full"
+                      value={editedProduct.sku || ""}
+                      onChange={(e) =>
+                        setEditedProduct({
+                          ...editedProduct,
+                          sku: e.target.value,
+                        })
+                      }
+                    />
                   ) : (
-                    <>
-                      <button
-                        onClick={() => onView(product)}
-                        className="bg-[#a51e27] text-white px-3 rounded-lg"
-                      >
-                        View
-                      </button>
-
-                      {isAdmin && (
-                        <button
-                          onClick={() => onEdit(product)}
-                          className="bg-blue-500 text-white px-3 rounded-lg"
-                        >
-                          Edit
-                        </button>
-                      )}
-                    </>
+                    <span className="text-sm">{product.sku}</span>
                   )}
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+
+                {/* BRAND */}
+
+                <td className="p-2 text-sm">{product.vendor || "-"}</td>
+
+                {/* PRICE */}
+
+                <td className="p-2">
+                  <div className="flex items-center gap-2 whitespace-nowrap">
+                    {Number(product.comparePrice) > 0 && (
+                      <p className="text-sm text-gray-400 line-through">
+                        ₹{product.comparePrice}
+                      </p>
+                    )}
+
+                    {editingId === product._id ? (
+                      <input
+                        type="number"
+                        className="border rounded px-2 py-2 w-24"
+                        value={editedProduct.price || ""}
+                        onChange={(e) =>
+                          setEditedProduct({
+                            ...editedProduct,
+                            price: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      <p className="font-semibold">₹{product.price}</p>
+                    )}
+                  </div>
+                </td>
+
+                {/* STOCK */}
+
+                <td className="p-2">
+                  <div className="flex items-center gap-1 whitespace-nowrap">
+                    <div className="font-semibold">
+                      {getTotalStock(currentProduct)}
+                    </div>
+
+                    <div className="text-xs text-gray-500">Available</div>
+                  </div>
+                </td>
+
+                {/* INVENTORY STOCK STATUS */}
+
+                <td className="p-2">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${getInventoryStatusStyle(inventoryStatus)}`}
+                  >
+                    {inventoryStatus}
+                  </span>
+                </td>
+
+                {/* ACTIONS */}
+
+                <td className="p-2">
+                  <div className="flex justify-center gap-2">
+                    {editingId === product._id ? (
+                      <>
+                        <button
+                          onClick={() => handleSave()}
+                          className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm"
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          onClick={() => setEditingId(null)}
+                          className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => onView(product)}
+                          className="bg-[#a51e27] hover:bg-[#851820] text-white px-3 py-2 rounded-lg text-sm"
+                        >
+                          View
+                        </button>
+
+                        {isAdmin && (
+                          <button
+                            onClick={() => onEdit(product)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm"
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+
+          {/* ADD NEW PRODUCT */}
 
           {isAdding && (
             <tr className="bg-gray-50 border-t">
               <td className="p-2 text-center">—</td>
+
               <td className="p-2">
                 <input
                   className="w-full border rounded px-2 py-2"
@@ -262,12 +299,16 @@ const ProductsTable = ({
                   placeholder="Category"
                   value={newProduct.category}
                   onChange={(e) =>
-                    setNewProduct({ ...newProduct, category: e.target.value })
+                    setNewProduct({
+                      ...newProduct,
+                      category: e.target.value,
+                    })
                   }
                 />
               </td>
+
               <td className="p-2">
-                <span className="rounded-full bg-gray-100 px-2 py-1 text-xs">
+                <span className="rounded-full bg-gray-100 text-gray-700 px-3 py-1 text-xs">
                   Draft
                 </span>
               </td>
@@ -278,7 +319,10 @@ const ProductsTable = ({
                   placeholder="SKU"
                   value={newProduct.sku}
                   onChange={(e) =>
-                    setNewProduct({ ...newProduct, sku: e.target.value })
+                    setNewProduct({
+                      ...newProduct,
+                      sku: e.target.value,
+                    })
                   }
                 />
               </td>
@@ -289,7 +333,10 @@ const ProductsTable = ({
                   placeholder="Brand"
                   value={newProduct.vendor}
                   onChange={(e) =>
-                    setNewProduct({ ...newProduct, vendor: e.target.value })
+                    setNewProduct({
+                      ...newProduct,
+                      vendor: e.target.value,
+                    })
                   }
                 />
               </td>
@@ -301,7 +348,10 @@ const ProductsTable = ({
                   placeholder="Price"
                   value={newProduct.price}
                   onChange={(e) =>
-                    setNewProduct({ ...newProduct, price: e.target.value })
+                    setNewProduct({
+                      ...newProduct,
+                      price: e.target.value,
+                    })
                   }
                 />
               </td>
@@ -314,14 +364,7 @@ const ProductsTable = ({
 
               <td className="p-2">
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold
-      ${
-        getProductStatus(newProduct) === "In Stock"
-          ? "bg-green-100 text-green-700"
-          : getProductStatus(newProduct) === "Low Stock"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-red-100 text-red-700"
-      }`}
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${getInventoryStatusStyle(getProductStatus(newProduct))}`}
                 >
                   {getProductStatus(newProduct)}
                 </span>
@@ -331,14 +374,14 @@ const ProductsTable = ({
                 <div className="flex gap-2 justify-center">
                   <button
                     onClick={handleAddProduct}
-                    className="bg-green-600 text-white px-3 py-2 rounded"
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded"
                   >
                     Save
                   </button>
 
                   <button
                     onClick={() => setIsAdding(false)}
-                    className="bg-gray-500 text-white px-3 py-2 rounded"
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded"
                   >
                     Cancel
                   </button>
@@ -353,3 +396,359 @@ const ProductsTable = ({
 };
 
 export default ProductsTable;
+
+// import { getTotalStock, getProductStatus } from "../../utils/productUtils";
+
+// const ProductsTable = ({
+//   products,
+//   onView,
+//   onEdit,
+//   editingId,
+//   editedProduct,
+//   setEditedProduct,
+//   handleSave,
+//   setEditingId,
+
+//   isAdding,
+//   newProduct,
+//   setNewProduct,
+//   handleAddProduct,
+//   setIsAdding,
+// }) => {
+//   const user = JSON.parse(localStorage.getItem("crmUser"));
+//   const isAdmin = user?.role === "admin";
+
+//   return (
+//     <div className="w-full min-w-0 overflow-x-auto">
+//       <table className="w-full min-w-[1200px] table-auto border-collapse">
+//         {/* Header */}
+
+//         <thead className="bg-gray-50">
+//           <tr className="border-b">
+//             <th className="w-[60px] p-3 text-center">S.No</th>
+//             <th className="w-[240px] p-3 text-left">Product Name</th>
+//             <th className="w-[130px] p-3 text-left">Category</th>
+//             <th className="w-[130px] p-3 text-left">Shopify Status</th>
+//             <th className="w-[180px] p-3 text-left">SKU</th>
+//             <th className="w-[140px] p-3 text-left">Brand</th>
+//             <th className="w-[150px] p-3 text-left">Price</th>
+//             <th className="w-[120px] p-3 text-left">Stock</th>
+//             <th className="w-[140px] p-3 text-left">Stock Status</th>
+//             <th className="w-[150px] p-3 text-center">Actions</th>
+//           </tr>
+//         </thead>
+
+//         {/* Body */}
+
+//         <tbody>
+//           {products.map((product, index) => (
+//             <tr
+//               key={product._id || product.id}
+//               className="border-b hover:bg-gray-50 transition"
+//             >
+//               <td className="p-1 text-center font-medium">{index + 1}</td>
+
+//               <td className="p-1">
+//                 <div>
+//                   {editingId === product._id ? (
+//                     <input
+//                       className="border rounded px-1  w-full"
+//                       value={editedProduct.productName || ""}
+//                       onChange={(e) =>
+//                         setEditedProduct({
+//                           ...editedProduct,
+//                           productName: e.target.value,
+//                         })
+//                       }
+//                     />
+//                   ) : (
+//                     <p className="font-semibold text-gray-800">
+//                       {product.productName}
+//                     </p>
+//                   )}
+
+//                   {/* <p className="text-xs text-gray-500">
+//                     #{product.sku}
+//                   </p> */}
+//                 </div>
+//               </td>
+
+//               <td className="p-1">
+//                 {editingId === product._id ? (
+//                   <input
+//                     type="text"
+//                     className="border rounded px-1 py-1 w-full"
+//                     value={editedProduct.category || ""}
+//                     onChange={(e) =>
+//                       setEditedProduct({
+//                         ...editedProduct,
+//                         category: e.target.value,
+//                       })
+//                     }
+//                   />
+//                 ) : (
+//                   product.category
+//                 )}
+//               </td>
+
+//               <td className="border p-3">
+//                 {(() => {
+//                   const status = (product.status || "active").toLowerCase();
+
+//                   const styles = {
+//                     active: "bg-green-100 text-green-800",
+//                     draft: "bg-sky-100 text-sky-800",
+//                     archived: "bg-gray-200 text-gray-700",
+//                   };
+
+//                   return (
+//                     <span
+//                       className={`rounded-full px-3 py-1 text-sm font-medium ${
+//                         styles[status] || "bg-gray-100 text-gray-700"
+//                       }`}
+//                     >
+//                       {status.charAt(0).toUpperCase() + status.slice(1)}
+//                     </span>
+//                   );
+//                 })()}
+//               </td>
+
+//               <td className="p-1">
+//                 {editingId === product._id ? (
+//                   <input
+//                     type="text"
+//                     className="border rounded px-1 py-1 w-full"
+//                     value={editedProduct.sku || ""}
+//                     onChange={(e) =>
+//                       setEditedProduct({
+//                         ...editedProduct,
+//                         sku: e.target.value,
+//                       })
+//                     }
+//                   />
+//                 ) : (
+//                   product.sku
+//                 )}
+//               </td>
+
+//               <td className="p-1">{product.vendor}</td>
+
+//               <td className="p-1">
+//                 <div className="flex items-center gap-2 whitespace-nowrap">
+//                   <p className="text-sm text-gray-400 line-through">
+//                     ₹{product.comparePrice}
+//                   </p>
+//                   {editingId === product._id ? (
+//                     <input
+//                       type="number"
+//                       className="border rounded px-1 py-1 w-24"
+//                       value={editedProduct.price || ""}
+//                       onChange={(e) =>
+//                         setEditedProduct({
+//                           ...editedProduct,
+//                           price: e.target.value,
+//                         })
+//                       }
+//                     />
+//                   ) : (
+//                     <p className="font-semibold">₹{product.price}</p>
+//                   )}
+//                 </div>
+//               </td>
+
+//               <td className="p-1">
+//                 <div className="flex items-center gap-1 whitespace-nowrap">
+//                   <div className="font-semibold">
+//                     {editingId === product._id
+//                       ? getTotalStock(editedProduct)
+//                       : getTotalStock(product)}
+//                   </div>
+
+//                   <div className="text-xs text-gray-500">Available</div>
+//                 </div>
+//               </td>
+
+//               {/* Status */}
+
+//               <td className="p-1">
+//                 {(() => {
+//                   const currentProduct =
+//                     editingId === product._id ? editedProduct : product;
+
+//                   const status = getProductStatus(currentProduct);
+
+//                   return (
+//                     <span
+//                       className={`px-2 py-1 rounded-full text-xs font-semibold
+//           ${
+//             status === "In Stock"
+//               ? "bg-green-100 text-green-700"
+//               : status === "Low Stock"
+//                 ? "bg-yellow-100 text-yellow-700"
+//                 : "bg-red-100 text-red-700"
+//           }`}
+//                     >
+//                       {status}
+//                     </span>
+//                   );
+//                 })()}
+//               </td>
+
+//               {/* Button */}
+
+//               <td className="p-1">
+//                 <div className="flex justify-center gap-2">
+//                   {editingId === product._id ? (
+//                     <>
+//                       <button
+//                         onClick={() => handleSave()}
+//                         className="bg-green-600 text-white px-3 rounded-lg"
+//                       >
+//                         Save
+//                       </button>
+
+//                       <button
+//                         onClick={() => setEditingId(null)}
+//                         className="bg-gray-500 text-white px-3 rounded-lg"
+//                       >
+//                         Cancel
+//                       </button>
+//                     </>
+//                   ) : (
+//                     <>
+//                       <button
+//                         onClick={() => onView(product)}
+//                         className="bg-[#a51e27] text-white px-3 rounded-lg"
+//                       >
+//                         View
+//                       </button>
+
+//                       {isAdmin && (
+//                         <button
+//                           onClick={() => onEdit(product)}
+//                           className="bg-blue-500 text-white px-3 rounded-lg"
+//                         >
+//                           Edit
+//                         </button>
+//                       )}
+//                     </>
+//                   )}
+//                 </div>
+//               </td>
+//             </tr>
+//           ))}
+
+//           {isAdding && (
+//             <tr className="bg-gray-50 border-t">
+//               <td className="p-2 text-center">—</td>
+//               <td className="p-2">
+//                 <input
+//                   className="w-full border rounded px-2 py-2"
+//                   placeholder="Product Name"
+//                   value={newProduct.productName}
+//                   onChange={(e) =>
+//                     setNewProduct({
+//                       ...newProduct,
+//                       productName: e.target.value,
+//                     })
+//                   }
+//                 />
+//               </td>
+
+//               <td className="p-2">
+//                 <input
+//                   className="w-full border rounded px-2 py-2"
+//                   placeholder="Category"
+//                   value={newProduct.category}
+//                   onChange={(e) =>
+//                     setNewProduct({ ...newProduct, category: e.target.value })
+//                   }
+//                 />
+//               </td>
+//               <td className="p-2">
+//                 <span className="rounded-full bg-gray-100 px-2 py-1 text-xs">
+//                   Draft
+//                 </span>
+//               </td>
+
+//               <td className="p-2">
+//                 <input
+//                   className="w-full border rounded px-2 py-2"
+//                   placeholder="SKU"
+//                   value={newProduct.sku}
+//                   onChange={(e) =>
+//                     setNewProduct({ ...newProduct, sku: e.target.value })
+//                   }
+//                 />
+//               </td>
+
+//               <td className="p-2">
+//                 <input
+//                   className="w-full border rounded px-2 py-2"
+//                   placeholder="Brand"
+//                   value={newProduct.vendor}
+//                   onChange={(e) =>
+//                     setNewProduct({ ...newProduct, vendor: e.target.value })
+//                   }
+//                 />
+//               </td>
+
+//               <td className="p-2">
+//                 <input
+//                   type="number"
+//                   className="w-full border rounded px-2 py-2"
+//                   placeholder="Price"
+//                   value={newProduct.price}
+//                   onChange={(e) =>
+//                     setNewProduct({ ...newProduct, price: e.target.value })
+//                   }
+//                 />
+//               </td>
+
+//               <td className="p-2">
+//                 <div className="px-2 py-2 text-center font-medium">
+//                   {getTotalStock(newProduct)}
+//                 </div>
+//               </td>
+
+//               <td className="p-2">
+//                 <span
+//                   className={`px-2 py-1 rounded-full text-xs font-semibold
+//       ${
+//         getProductStatus(newProduct) === "In Stock"
+//           ? "bg-green-100 text-green-700"
+//           : getProductStatus(newProduct) === "Low Stock"
+//             ? "bg-yellow-100 text-yellow-700"
+//             : "bg-red-100 text-red-700"
+//       }`}
+//                 >
+//                   {getProductStatus(newProduct)}
+//                 </span>
+//               </td>
+
+//               <td className="p-2">
+//                 <div className="flex gap-2 justify-center">
+//                   <button
+//                     onClick={handleAddProduct}
+//                     className="bg-green-600 text-white px-3 py-2 rounded"
+//                   >
+//                     Save
+//                   </button>
+
+//                   <button
+//                     onClick={() => setIsAdding(false)}
+//                     className="bg-gray-500 text-white px-3 py-2 rounded"
+//                   >
+//                     Cancel
+//                   </button>
+//                 </div>
+//               </td>
+//             </tr>
+//           )}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// };
+
+// export default ProductsTable;
