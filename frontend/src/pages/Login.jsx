@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../config/api";
 import logo from "../assets/ARM_logo.png";
 import { Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
@@ -184,6 +184,20 @@ const Login = () => {
             )}
           </button>
         </form>
+
+        {/* REGISTER LINK */}
+
+        <div className="mt-5 text-center">
+          <p className="text-sm text-[#8B8582]">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="font-semibold text-[#781D32] hover:text-[#A78652] transition-colors underline-offset-4 hover:underline"
+            >
+              Create Account
+            </Link>
+          </p>
+        </div>
 
         {/* SECURITY */}
 
