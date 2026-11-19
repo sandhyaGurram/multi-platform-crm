@@ -1,130 +1,249 @@
+
 import Order from "../models/Order.js";
 
 export const getDashboardStats = async (req, res) => {
+    try {
+        const { filter } = req.query;
 
-    const filter = req.query.filter;
+        const now = new Date();
 
-    let query = {};
-
-    const today = new Date();
-
-    if (filter === "Today") {
-
-        const startOfDay = new Date();
-
-        startOfDay.setHours(0, 0, 0, 0);
-
-        query.createdAt = {
-            $gte: startOfDay,
-        };
-
-    }
-
-    else if (filter === "Yesterday") {
-
-        const yesterday = new Date();
-
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        yesterday.setHours(0, 0, 0, 0);
-
-        const endYesterday = new Date(yesterday);
-
-        endYesterday.setHours(23, 59, 59, 999);
-
-        query.createdAt = {
-            $gte: yesterday,
-            $lte: endYesterday,
-        };
-
-    }
-
-    else if (filter === "Last 7 Days") {
-
-        const last7 = new Date();
-
-        last7.setDate(last7.getDate() - 7);
-
-        query.createdAt = {
-            $gte: last7,
-        };
-
-    }
-
-    else if (filter === "Last 30 Days") {
-
-        const last30 = new Date();
-
-        last30.setDate(last30.getDate() - 30);
-
-        query.createdAt = {
-            $gte: last30,
-        };
-
-    }
-
-    else if (filter === "Last Year") {
-
-        const lastYear = new Date();
-
-        lastYear.setFullYear(
-            lastYear.getFullYear() - 1
+        // Start of today (local server time)
+        const startOfToday = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
         );
 
-        query.createdAt = {
-            $gte: lastYear,
-        };
+        const startOfTomorrow = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + 1
+        );
 
+        let startDate = null;
+        let endDate = startOfTomorrow;
+
+        if (filter === "Today") {
+            startDate = startOfToday;
+
+        } else if (filter === "Yesterday") {
+            startDate = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() - 1
+            );
+
+            endDate = startOfToday;
+
+        } else if (filter === "Last 7 Days") {
+            startDate = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() - 6
+            );
+
+        } else if (filter === "Last 30 Days") {
+            startDate = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() - 29
+            );
+
+        } else if (filter === "Last Year") {
+            startDate = new Date(
+                now.getFullYear() - 1,
+                now.getMonth(),
+                now.getDate()
+            );
+        }
+
+        // Filter using actual order date
+        const query = {};
+
+        if (startDate) {
+            query.orderDate = {
+                $gte: startDate,
+                $lt: endDate,
+            };
+        }
+
+        const orders = await Order.find(query);
+
+        const totalOrders = orders.length;
+
+        const revenue = orders.reduce(
+            (sum, order) => sum + (Number(order.amount) || 0),
+            0
+        );
+
+        const countPlatform = (platform) =>
+            orders.filter(
+                (order) =>
+                    order.platform?.toLowerCase() === platform.toLowerCase()
+            ).length;
+
+        res.json({
+            totalOrders,
+            revenue,
+            shopifyOrders: countPlatform("Shopify"),
+            amazonOrders: countPlatform("Amazon"),
+            flipkartOrders: countPlatform("Flipkart"),
+            meeshoOrders: countPlatform("Meesho"),
+            depositeOrders: countPlatform("Deposite"),
+        });
+
+    } catch (error) {
+        console.error("Dashboard Stats Error:", error);
+
+        res.status(500).json({
+            message: "Failed to fetch dashboard statistics",
+        });
     }
-
-    const orders = await Order.find(query);
-
-    const totalOrders = orders.length;
-
-    const revenue = orders.reduce(
-        (sum, order) =>
-            sum + (order.amount || 0),
-        0
-    );
-
-    const shopifyOrders = orders.filter(
-        (order) =>
-            order.platform?.toLowerCase() ===
-            "shopify"
-    ).length;
-
-    const amazonOrders = orders.filter(
-        (order) =>
-            order.platform?.toLowerCase() ===
-            "amazon"
-    ).length;
-
-    const flipkartOrders = orders.filter(
-        (order) =>
-            order.platform?.toLowerCase() ===
-            "flipkart"
-    ).length;
-
-    const meeshoOrders = orders.filter(
-        (order) =>
-            order.platform?.toLowerCase() ===
-            "meesho"
-    ).length;
-
-    const depositeOrders = orders.filter(
-        (order) =>
-            order.platform?.toLowerCase() ===
-            "deposite"
-    ).length;
-
-    res.json({
-        totalOrders,
-        revenue,
-        shopifyOrders,
-        amazonOrders,
-        flipkartOrders,
-        meeshoOrders,
-        depositeOrders,
-    });
-
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import Order from "../models/Order.js";
+
+// export const getDashboardStats = async (req, res) => {
+
+//     const filter = req.query.filter;
+
+//     let query = {};
+
+//     const today = new Date();
+
+//     if (filter === "Today") {
+
+//         const startOfDay = new Date();
+
+//         startOfDay.setHours(0, 0, 0, 0);
+
+//         query.createdAt = {
+//             $gte: startOfDay,
+//         };
+
+//     }
+
+//     else if (filter === "Yesterday") {
+
+//         const yesterday = new Date();
+
+//         yesterday.setDate(yesterday.getDate() - 1);
+
+//         yesterday.setHours(0, 0, 0, 0);
+
+//         const endYesterday = new Date(yesterday);
+
+//         endYesterday.setHours(23, 59, 59, 999);
+
+//         query.createdAt = {
+//             $gte: yesterday,
+//             $lte: endYesterday,
+//         };
+
+//     }
+
+//     else if (filter === "Last 7 Days") {
+
+//         const last7 = new Date();
+
+//         last7.setDate(last7.getDate() - 7);
+
+//         query.createdAt = {
+//             $gte: last7,
+//         };
+
+//     }
+
+//     else if (filter === "Last 30 Days") {
+
+//         const last30 = new Date();
+
+//         last30.setDate(last30.getDate() - 30);
+
+//         query.createdAt = {
+//             $gte: last30,
+//         };
+
+//     }
+
+//     else if (filter === "Last Year") {
+
+//         const lastYear = new Date();
+
+//         lastYear.setFullYear(
+//             lastYear.getFullYear() - 1
+//         );
+
+//         query.createdAt = {
+//             $gte: lastYear,
+//         };
+
+//     }
+
+//     const orders = await Order.find(query);
+
+//     const totalOrders = orders.length;
+
+//     const revenue = orders.reduce(
+//         (sum, order) =>
+//             sum + (order.amount || 0),
+//         0
+//     );
+
+//     const shopifyOrders = orders.filter(
+//         (order) =>
+//             order.platform?.toLowerCase() ===
+//             "shopify"
+//     ).length;
+
+//     const amazonOrders = orders.filter(
+//         (order) =>
+//             order.platform?.toLowerCase() ===
+//             "amazon"
+//     ).length;
+
+//     const flipkartOrders = orders.filter(
+//         (order) =>
+//             order.platform?.toLowerCase() ===
+//             "flipkart"
+//     ).length;
+
+//     const meeshoOrders = orders.filter(
+//         (order) =>
+//             order.platform?.toLowerCase() ===
+//             "meesho"
+//     ).length;
+
+//     const depositeOrders = orders.filter(
+//         (order) =>
+//             order.platform?.toLowerCase() ===
+//             "deposite"
+//     ).length;
+
+//     res.json({
+//         totalOrders,
+//         revenue,
+//         shopifyOrders,
+//         amazonOrders,
+//         flipkartOrders,
+//         meeshoOrders,
+//         depositeOrders,
+//     });
+
+// };
