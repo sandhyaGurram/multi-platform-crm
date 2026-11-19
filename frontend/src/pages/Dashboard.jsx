@@ -41,33 +41,99 @@ const Dashboard = () => {
     document.title = "ARM - Dashboard";
   }, []);
 
+  // const today = new Date();
+
+  // const filteredOrders = orders.filter((order) => {
+  //   const orderDate = new Date(order.date);
+
+  //   const diffTime = today - orderDate;
+
+  //   const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  //   if (dateFilter === "Today") {
+  //     return orderDate.toDateString() === today.toDateString();
+  //   }
+
+  //   if (dateFilter === "Yesterday") {
+  //     return diffDays >= 1 && diffDays < 2;
+  //   }
+
+  //   if (dateFilter === "Last 7 Days") {
+  //     return diffDays <= 7;
+  //   }
+
+  //   if (dateFilter === "Last 30 Days") {
+  //     return diffDays <= 30;
+  //   }
+
+  //   if (dateFilter === "Last Year") {
+  //     return diffDays <= 365;
+  //   }
+
+  //   return true;
+  // });
+
   const today = new Date();
+
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  );
+
+  const startOfYesterday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - 1,
+  );
+
+  const startOfTomorrow = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 1,
+  );
 
   const filteredOrders = orders.filter((order) => {
     const orderDate = new Date(order.date);
 
-    const diffTime = today - orderDate;
-
-    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    if (isNaN(orderDate.getTime())) return false;
 
     if (dateFilter === "Today") {
-      return orderDate.toDateString() === today.toDateString();
+      return orderDate >= startOfToday && orderDate < startOfTomorrow;
     }
 
     if (dateFilter === "Yesterday") {
-      return diffDays >= 1 && diffDays < 2;
+      return orderDate >= startOfYesterday && orderDate < startOfToday;
     }
 
     if (dateFilter === "Last 7 Days") {
-      return diffDays <= 7;
+      const start = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 6,
+      );
+
+      return orderDate >= start && orderDate < startOfTomorrow;
     }
 
     if (dateFilter === "Last 30 Days") {
-      return diffDays <= 30;
+      const start = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 29,
+      );
+
+      return orderDate >= start && orderDate < startOfTomorrow;
     }
 
     if (dateFilter === "Last Year") {
-      return diffDays <= 365;
+      const start = new Date(
+        today.getFullYear() - 1,
+        today.getMonth(),
+        today.getDate(),
+      );
+
+      return orderDate >= start && orderDate < startOfTomorrow;
     }
 
     return true;
@@ -127,7 +193,9 @@ const Dashboard = () => {
         <div className="bg-white p-6 rounded-xl shadow">
           <h4 className="text-gray-500">Revenue</h4>
 
-          <p className="font-bold mt-3">₹{Number(stats.revenue || 0).toFixed(2)}</p>
+          <p className="font-bold mt-3">
+            ₹{Number(stats.revenue || 0).toFixed(2)}
+          </p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow">
