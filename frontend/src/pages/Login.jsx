@@ -82,23 +82,14 @@ const Login = () => {
 
         {/* HEADING */}
 
-        <div className="text-center mb-9">
-          <p className="text-[#A78652] text-[11px] tracking-[0.25em] uppercase font-semibold mb-3">
-            Welcome Back
-          </p>
-
-          <h1 className="text-[36px] sm:text-[42px] font-serif text-[#28202A] leading-tight">
-            Welcome to
+        <div className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl font-serif font-semibold text-[#30212A]">
+            CRM Login
           </h1>
 
-          <h2 className="text-[34px] sm:text-[40px] font-serif italic font-semibold text-[#781D32] mt-1">
-            ARM Pearl CRM.
-          </h2>
-
-          <p className="text-[#8B8582] text-sm mt-4 leading-6">
-            Sign in to access your business operations,
-            <br className="hidden sm:block" />
-            orders and marketplace insights.
+          <p className="text-[#8B8582] text-sm mt-3">
+            Sign in to manage your business operations, orders and marketplace
+            insights.
           </p>
         </div>
 
