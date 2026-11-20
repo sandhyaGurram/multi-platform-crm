@@ -104,8 +104,20 @@ export const fetchShopifyProducts = async () => {
 
     // SAVE / UPDATE PRODUCTS IN MONGODB
 
+
+
+
+    // SAVE / UPDATE PRODUCTS IN MONGODB
+
     let updatedCount = 0;
     let importedCount = 0;
+    let skippedCount = 0;
+
+    const normalizeTitle = (title) =>
+      title
+        ?.trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
 
     for (const product of products) {
       const variant = product.variants?.edges?.[0]?.node;
@@ -114,51 +126,57 @@ export const fetchShopifyProducts = async () => {
         variant?.sku ||
         `SHOPIFY-${variant?.id || product.id}`;
 
-      // ACTUAL SHOPIFY STATUS
-
       const status = product.status.toLowerCase();
-
-      // ACTUAL SHOPIFY CATEGORY
 
       const category =
         product.category?.name || "Uncategorized";
 
       const productData = {
         productName: product.title,
-
         sku,
-
         status,
-
         category,
-
         vendor: product.vendor || "",
-
         price: Number(variant?.price || 0),
-
-        comparePrice: Number(
-          variant?.compareAtPrice || 0
-        ),
+        comparePrice: Number(variant?.compareAtPrice || 0),
       };
 
-      // CHECK EXISTING PRODUCT
+      // MATCH USING PRODUCT TITLE
+      const normalizedTitle = normalizeTitle(product.title);
 
-      const existingProduct = await Product.findOne({
-        sku,
+      const matchingProducts = await Product.find({
+        productName: {
+          $regex: `^${normalizedTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+          $options: "i",
+        },
       });
 
-      if (existingProduct) {
+      if (matchingProducts.length > 1) {
+        console.log(
+          `SKIPPED: Duplicate title found - ${product.title}`
+        );
+        skippedCount++;
+        continue;
+      }
+
+      if (matchingProducts.length === 1) {
+        const existingProduct = matchingProducts[0];
+
         await Product.findByIdAndUpdate(
           existingProduct._id,
           {
             $set: {
+              productName: productData.productName,
+              sku: productData.sku,
               status: productData.status,
               category: productData.category,
-              productName: productData.productName,
+              vendor: productData.vendor,
+              price: productData.price,
+              comparePrice: productData.comparePrice,
             },
           },
           {
-            new: true,
+            returnDocument: "after",
             runValidators: true,
           }
         );
@@ -195,7 +213,101 @@ export const fetchShopifyProducts = async () => {
     console.log(`Total Products: ${products.length}`);
     console.log(`Updated Products: ${updatedCount}`);
     console.log(`New Products: ${importedCount}`);
+    console.log(`Skipped Duplicate Titles: ${skippedCount}`);
     console.log("====================================");
+
+    // let updatedCount = 0;
+    // let importedCount = 0;
+
+    // for (const product of products) {
+    //   const variant = product.variants?.edges?.[0]?.node;
+
+    //   const sku =
+    //     variant?.sku ||
+    //     `SHOPIFY-${variant?.id || product.id}`;
+
+    //   // ACTUAL SHOPIFY STATUS
+
+    //   const status = product.status.toLowerCase();
+
+    //   // ACTUAL SHOPIFY CATEGORY
+
+    //   const category =
+    //     product.category?.name || "Uncategorized";
+
+    //   const productData = {
+    //     productName: product.title,
+
+    //     sku,
+
+    //     status,
+
+    //     category,
+
+    //     vendor: product.vendor || "",
+
+    //     price: Number(variant?.price || 0),
+
+    //     comparePrice: Number(
+    //       variant?.compareAtPrice || 0
+    //     ),
+    //   };
+
+    //   // CHECK EXISTING PRODUCT
+
+    //   const existingProduct = await Product.findOne({
+    //     sku,
+    //   });
+
+    //   if (existingProduct) {
+    //     await Product.findByIdAndUpdate(
+    //       existingProduct._id,
+    //       {
+    //         $set: {
+    //           status: productData.status,
+    //           category: productData.category,
+    //           productName: productData.productName,
+    //         },
+    //       },
+    //       {
+    //         new: true,
+    //         runValidators: true,
+    //       }
+    //     );
+
+    //     updatedCount++;
+
+    //     console.log(
+    //       `UPDATED: ${product.title} | Status: ${status} | Category: ${category}`
+    //     );
+
+    //   } else {
+    //     await Product.create({
+    //       ...productData,
+
+    //       warehouseStock: {
+    //         shopify: 0,
+    //         hyderabad: 0,
+    //         nalgonda: 0,
+    //         warehouseOne: 0,
+    //         warehouseTwo: 0,
+    //       },
+    //     });
+
+    //     importedCount++;
+
+    //     console.log(
+    //       `IMPORTED: ${product.title} | Status: ${status} | Category: ${category}`
+    //     );
+    //   }
+    // }
+
+    // console.log("====================================");
+    // console.log("SHOPIFY PRODUCT SYNC COMPLETED");
+    // console.log(`Total Products: ${products.length}`);
+    // console.log(`Updated Products: ${updatedCount}`);
+    // console.log(`New Products: ${importedCount}`);
+    // console.log("====================================");
 
     return products;
 

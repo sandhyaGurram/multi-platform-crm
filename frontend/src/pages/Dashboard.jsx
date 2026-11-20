@@ -15,6 +15,7 @@ const Dashboard = () => {
     amazonOrders: 0,
     flipkartOrders: 0,
     meeshoOrders: 0,
+    myntraOrders: 0,
     depositeOrders: 0,
   });
 
@@ -242,6 +243,14 @@ const Dashboard = () => {
           <h4 className="text-pink-700 font-semibold">Meesho Orders</h4>
 
           <p className="font-bold mt-3">{stats.meeshoOrders}</p>
+        </div>
+
+        {/* Myntra */}
+
+        <div className="bg-purple-100 p-6 rounded-xl shadow">
+          <h4 className="text-purple-700 font-semibold">Myntra Orders</h4>
+
+          <p className="font-bold mt-3">{stats.myntraOrders || 0}</p>
         </div>
 
         {/* Deposites */}

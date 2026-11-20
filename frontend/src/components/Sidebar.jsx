@@ -12,6 +12,7 @@ import {
   FaChevronRight,
   FaStore,
   FaAmazon,
+  FaTags,
   FaShoppingBag,
   FaMoneyBillWave,
 } from "react-icons/fa";
@@ -621,9 +622,33 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, collapsed, setCollapsed }) => {
           }
         `}
                 >
-                  <FaShoppingBag size={12} className="shrink-0" />
+                  <FaStore size={13} className="shrink-0" />
 
                   <span>Meesho Orders</span>
+                </NavLink>
+
+                {/* Myntra */}
+
+                <NavLink
+                  to="/orders/myntra"
+                  className={({ isActive }) => `
+    flex
+    items-center
+    gap-3
+    px-3
+    py-[9px]
+    rounded-[8px]
+    text-[12px]
+    transition-all
+    ${
+      isActive
+        ? "bg-[#292033] text-[#D8B9E8]"
+        : "text-[#7F8998] hover:bg-[#1A212B] hover:text-[#D8B9E8]"
+    }
+  `}
+                >
+                  <FaTags size={13} className="shrink-0" />
+                  <span>Myntra Orders</span>
                 </NavLink>
 
                 {/* Deposit */}

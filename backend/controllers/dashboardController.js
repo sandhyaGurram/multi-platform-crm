@@ -89,6 +89,7 @@ export const getDashboardStats = async (req, res) => {
             amazonOrders: countPlatform("Amazon"),
             flipkartOrders: countPlatform("Flipkart"),
             meeshoOrders: countPlatform("Meesho"),
+            myntraOrders: countPlatform("Myntra"),
             depositeOrders: countPlatform("Deposite"),
         });
 
