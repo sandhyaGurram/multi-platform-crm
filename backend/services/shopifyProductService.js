@@ -104,107 +104,142 @@ export const fetchShopifyProducts = async () => {
 
     // SAVE / UPDATE PRODUCTS IN MONGODB
 
-
-
-
     // SAVE / UPDATE PRODUCTS IN MONGODB
 
     let updatedCount = 0;
     let importedCount = 0;
     let skippedCount = 0;
+    let errorCount = 0;
 
+    // Normalize product titles
     const normalizeTitle = (title) =>
-      title
-        ?.trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+      title?.trim().toLowerCase().replace(/\s+/g, " ") || "";
+
+    // Escape special regex characters
+    const escapeRegex = (value) =>
+      value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     for (const product of products) {
-      const variant = product.variants?.edges?.[0]?.node;
+      try {
+        const variant = product.variants?.edges?.[0]?.node;
 
-      const sku =
-        variant?.sku ||
-        `SHOPIFY-${variant?.id || product.id}`;
+        const sku =
+          variant?.sku?.trim() ||
+          `SHOPIFY-${variant?.id || product.id}`;
 
-      const status = product.status.toLowerCase();
+        const status = product.status?.toLowerCase() || "unknown";
 
-      const category =
-        product.category?.name || "Uncategorized";
+        const category =
+          product.category?.name || "Uncategorized";
 
-      const productData = {
-        productName: product.title,
-        sku,
-        status,
-        category,
-        vendor: product.vendor || "",
-        price: Number(variant?.price || 0),
-        comparePrice: Number(variant?.compareAtPrice || 0),
-      };
+        const productData = {
+          productName: product.title,
+          sku,
+          status,
+          category,
+          vendor: product.vendor || "",
+          price: Number(variant?.price || 0),
+          comparePrice: Number(variant?.compareAtPrice || 0),
+        };
 
-      // MATCH USING PRODUCT TITLE
-      const normalizedTitle = normalizeTitle(product.title);
+        // 1. Find product by normalized title
+        const normalizedTitle = normalizeTitle(product.title);
 
-      const matchingProducts = await Product.find({
-        productName: {
-          $regex: `^${normalizedTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
-          $options: "i",
-        },
-      });
+        const titlePattern = normalizedTitle
+          .split(" ")
+          .map(escapeRegex)
+          .join("\\s+");
 
-      if (matchingProducts.length > 1) {
-        console.log(
-          `SKIPPED: Duplicate title found - ${product.title}`
-        );
-        skippedCount++;
-        continue;
-      }
-
-      if (matchingProducts.length === 1) {
-        const existingProduct = matchingProducts[0];
-
-        await Product.findByIdAndUpdate(
-          existingProduct._id,
-          {
-            $set: {
-              productName: productData.productName,
-              sku: productData.sku,
-              status: productData.status,
-              category: productData.category,
-              vendor: productData.vendor,
-              price: productData.price,
-              comparePrice: productData.comparePrice,
-            },
-          },
-          {
-            returnDocument: "after",
-            runValidators: true,
-          }
-        );
-
-        updatedCount++;
-
-        console.log(
-          `UPDATED: ${product.title} | Status: ${status} | Category: ${category}`
-        );
-
-      } else {
-        await Product.create({
-          ...productData,
-
-          warehouseStock: {
-            shopify: 0,
-            hyderabad: 0,
-            nalgonda: 0,
-            warehouseOne: 0,
-            warehouseTwo: 0,
+        const matchingProducts = await Product.find({
+          productName: {
+            $regex: `^\\s*${titlePattern}\\s*$`,
+            $options: "i",
           },
         });
 
-        importedCount++;
+        // 2. Find document that currently owns this SKU
+        const skuOwner = await Product.findOne({ sku });
 
-        console.log(
-          `IMPORTED: ${product.title} | Status: ${status} | Category: ${category}`
+        // 3. More than one title match: skip safely
+        if (matchingProducts.length > 1) {
+          console.log(
+            `SKIPPED: Multiple products have the title "${product.title}"`
+          );
+
+          skippedCount++;
+          continue;
+        }
+
+        let existingProduct = null;
+
+        if (matchingProducts.length === 1) {
+          existingProduct = matchingProducts[0];
+
+          // SKU belongs to a different document
+          if (
+            skuOwner &&
+            skuOwner._id.toString() !== existingProduct._id.toString()
+          ) {
+            console.error(
+              `SKU CONFLICT: ${sku} already belongs to "${skuOwner.productName}". ` +
+              `Skipping "${product.title}".`
+            );
+
+            skippedCount++;
+            continue;
+          }
+        } else if (skuOwner) {
+          // Title may have changed, but SKU identifies an existing document
+          existingProduct = skuOwner;
+        }
+
+        // 4. Update existing product
+        if (existingProduct) {
+          await Product.updateOne(
+            { _id: existingProduct._id },
+            {
+              $set: productData,
+            },
+            {
+              runValidators: true,
+            }
+          );
+
+          updatedCount++;
+
+          console.log(
+            `UPDATED: ${product.title} | SKU: ${sku} | Status: ${status} | Category: ${category}`
+          );
+        }
+
+        // 5. Import only if neither title nor SKU exists
+        else {
+          await Product.create({
+            ...productData,
+            warehouseStock: {
+              shopify: 0,
+              hyderabad: 0,
+              nalgonda: 0,
+              warehouseOne: 0,
+              warehouseTwo: 0,
+            },
+          });
+
+          importedCount++;
+
+          console.log(
+            `IMPORTED: ${product.title} | SKU: ${sku} | Status: ${status} | Category: ${category}`
+          );
+        }
+      } catch (productError) {
+        errorCount++;
+
+        console.error(
+          `PRODUCT ERROR: ${product.title} | ${productError.message}`
         );
+
+        // Continue processing the next Shopify product
+        continue;
       }
     }
 
@@ -213,101 +248,10 @@ export const fetchShopifyProducts = async () => {
     console.log(`Total Products: ${products.length}`);
     console.log(`Updated Products: ${updatedCount}`);
     console.log(`New Products: ${importedCount}`);
-    console.log(`Skipped Duplicate Titles: ${skippedCount}`);
+    console.log(`Skipped Products: ${skippedCount}`);
+    console.log(`Failed Products: ${errorCount}`);
     console.log("====================================");
 
-    // let updatedCount = 0;
-    // let importedCount = 0;
-
-    // for (const product of products) {
-    //   const variant = product.variants?.edges?.[0]?.node;
-
-    //   const sku =
-    //     variant?.sku ||
-    //     `SHOPIFY-${variant?.id || product.id}`;
-
-    //   // ACTUAL SHOPIFY STATUS
-
-    //   const status = product.status.toLowerCase();
-
-    //   // ACTUAL SHOPIFY CATEGORY
-
-    //   const category =
-    //     product.category?.name || "Uncategorized";
-
-    //   const productData = {
-    //     productName: product.title,
-
-    //     sku,
-
-    //     status,
-
-    //     category,
-
-    //     vendor: product.vendor || "",
-
-    //     price: Number(variant?.price || 0),
-
-    //     comparePrice: Number(
-    //       variant?.compareAtPrice || 0
-    //     ),
-    //   };
-
-    //   // CHECK EXISTING PRODUCT
-
-    //   const existingProduct = await Product.findOne({
-    //     sku,
-    //   });
-
-    //   if (existingProduct) {
-    //     await Product.findByIdAndUpdate(
-    //       existingProduct._id,
-    //       {
-    //         $set: {
-    //           status: productData.status,
-    //           category: productData.category,
-    //           productName: productData.productName,
-    //         },
-    //       },
-    //       {
-    //         new: true,
-    //         runValidators: true,
-    //       }
-    //     );
-
-    //     updatedCount++;
-
-    //     console.log(
-    //       `UPDATED: ${product.title} | Status: ${status} | Category: ${category}`
-    //     );
-
-    //   } else {
-    //     await Product.create({
-    //       ...productData,
-
-    //       warehouseStock: {
-    //         shopify: 0,
-    //         hyderabad: 0,
-    //         nalgonda: 0,
-    //         warehouseOne: 0,
-    //         warehouseTwo: 0,
-    //       },
-    //     });
-
-    //     importedCount++;
-
-    //     console.log(
-    //       `IMPORTED: ${product.title} | Status: ${status} | Category: ${category}`
-    //     );
-    //   }
-    // }
-
-    // console.log("====================================");
-    // console.log("SHOPIFY PRODUCT SYNC COMPLETED");
-    // console.log(`Total Products: ${products.length}`);
-    // console.log(`Updated Products: ${updatedCount}`);
-    // console.log(`New Products: ${importedCount}`);
-    // console.log("====================================");
 
     return products;
 
